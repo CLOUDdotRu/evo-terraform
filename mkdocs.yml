@@ -1,5 +1,9 @@
 site_name: Cloud.ru Evolution Terraform Provider
 
+nav:
+  - Знакомство с Terraform: index.md
+  - Обратная связь: feedback.md
+
 theme:
   name: material
   palette:
