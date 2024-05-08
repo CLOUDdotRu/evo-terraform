@@ -5,20 +5,10 @@ Terraform позволяет быстро разворачивать и подд
 
 Terraform полезен инженерам и администраторам, которые хотят упростить и автоматизировать управление большим количеством облачных ресурсов.
 
-Исполняемые файлы провайдера доступны здесь: [evo-terraform](https://github.com/CLOUDdotRu/evo-terraform/releases){target=_blank} 
 
-  <div class="grid cards" markdown>
+## Установка провайдера
 
-  - :fontawesome-brands-html5: __HTML__ for content and structure
-  - :fontawesome-brands-js: __JavaScript__ for interactivity
-  - :fontawesome-brands-css3: __CSS__ for text running out of boxes
-  - :fontawesome-brands-internet-explorer: __Internet Explorer__ ... huh?
-
-  </div>
-
-## Установка провайдеров
-
-
+☝🏻Исполняемые файлы провайдера доступны здесь: [evo-terraform](https://github.com/CLOUDdotRu/evo-terraform/releases){target=_blank} 
 
 ## Работа с IaaS
 
@@ -33,3 +23,6 @@ Terraform полезен инженерам и администраторам, �
 
 
 ## Работа с CloudPlatform
+
+
+[Обратная связь](#){ .[md-button](https://github.com/CLOUDdotRu/evo-terraform/issues)}
