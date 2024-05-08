@@ -1,6 +1,6 @@
 # Добро пожаловать на страницу Cloud.ru Evolution Terraform Provider
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+Исполняемые файлы провайдера доступны здесь: (https://github.com/CLOUDdotRu/evo-terraform/releases)
 
 ## Commands
 
