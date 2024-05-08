@@ -1,3 +1,6 @@
 site_name: Cloud.ru Evolution Terraform Provider
 theme:
   name: material
+  markdown_extensions: 
+    - attr_list
+    - md_in_html
