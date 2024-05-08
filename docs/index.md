@@ -24,5 +24,3 @@ Terraform полезен инженерам и администраторам, �
 
 ## Работа с CloudPlatform
 
-
-[Обратная связь](#){ .[md-button](https://github.com/CLOUDdotRu/evo-terraform/issues)}
