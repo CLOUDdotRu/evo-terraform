@@ -1,6 +1,6 @@
 # Добро пожаловать на страницу Cloud.ru Evolution Terraform Provider
 
-Исполняемые файлы провайдера доступны здесь: (https://github.com/CLOUDdotRu/evo-terraform/releases)
+Исполняемые файлы провайдера доступны здесь: https://github.com/CLOUDdotRu/evo-terraform/releases
 
 ## Установка провайдеров
 
