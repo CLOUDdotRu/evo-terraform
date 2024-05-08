@@ -1,6 +1,11 @@
 site_name: Cloud.ru Evolution Terraform Provider
+
 theme:
   name: material
+  features:
+    - content.action.edit
+    - content.action.view
+    - navigation.footer
 markdown_extensions: 
   - attr_list
   - md_in_html
