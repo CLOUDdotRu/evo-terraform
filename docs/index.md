@@ -5,7 +5,7 @@ Terraform позволяет быстро разворачивать и подд
 
 Terraform полезен инженерам и администраторам, которые хотят упростить и автоматизировать управление большим количеством облачных ресурсов.
 
-Исполняемые файлы провайдера доступны здесь: https://github.com/CLOUDdotRu/evo-terraform/releases
+Исполняемые файлы провайдера доступны здесь: [evo-terraform](https://github.com/CLOUDdotRu/evo-terraform/releases){target=_blank} 
 
   <div class="grid cards" markdown>
 
