@@ -8,6 +8,25 @@ Terraform полезен инженерам и администраторам, �
 
 ## Установка провайдера
 
+В рамках beta-тестирования, установка Terraform-провайдера Cloud.ru Evolution производится через File system mirror. В зависимости от архитектуры и ОС вашего компьютера, выберите нужный вариант.
+
+### Mac(Apple)
+
+Для скачивания текущей версии провайдера, выполните следующую команду:
+
+``` bash
+cd \
+  curl --create-dirs -O --output-dir .terraform.d/plugins/cloud.ru/cloudru/cloud/0.1.0/darwin_arm64 \
+  https://github.com/CLOUDdotRu/evo-terraform/releases/download/0.1.0/terraform-provider-cloud_0.1.0_darwin_arm64 \
+  && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/0.1.0/darwin_arm64/terraform-provider-cloud_0.1.0_darwin_arm64
+```
+
+Далее, перейдите в каталог с вашими .tf файлами и выполните команду:
+
+``` bash
+terraform init
+```
+
 ☝🏻Исполняемые файлы провайдера доступны здесь: [evo-terraform](https://github.com/CLOUDdotRu/evo-terraform/releases){target=_blank} 
 
 ## Работа с IaaS
