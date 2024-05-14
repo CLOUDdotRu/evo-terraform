@@ -1,0 +1,13 @@
+# Возвращает kubeconfig для кластера
+data "cloudru_k8s_kubeconfig" "kubeconfig" {
+  # Идентификатор кластера
+  cluster_id = "00000000-0000-0000-0000-000000000000"
+
+  # Тип сети, для которой нужно вернуть kubeconfig
+  network_type = "NETWORK_TYPE_PRIVATE"
+}
+
+output "mycluster_kubeconfig" {
+  value     = data.cloudru_k8s_kubeconfig.kubeconfig
+  sensitive = true
+}
