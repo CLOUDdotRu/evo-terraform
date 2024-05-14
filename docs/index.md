@@ -27,6 +27,44 @@ cd \
 terraform init
 ```
 
+### Mac(Intel)
+
+Для скачивания текущей версии провайдера, выполните следующую команду:
+
+``` bash
+cd \  
+  && curl --create-dirs -O --output-dir .terraform.d/plugins/cloud.ru/cloudru/cloud/0.1.0/darwin_amd64 \
+  https://github.com/CLOUDdotRu/evo-terraform/releases/download/0.1.0/terraform-provider-cloud_0.1.0_darwin_amd64 \
+  && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/0.1.0/darwin_amd64/terraform-provider-cloud_0.1.0_darwin_amd64
+```
+
+Далее, перейдите в каталог с вашими .tf файлами и выполните команду:
+
+``` bash
+terraform init
+```
+
+### Linux(x64)
+
+Для скачивания текущей версии провайдера, выполните следующую команду:
+
+``` bash
+cd \
+  && curl --create-dirs -O --output-dir .terraform.d/plugins/cloud.ru/cloudru/cloud/0.1.0/linux_amd64 \
+  https://github.com/CLOUDdotRu/evo-terraform/releases/download/0.1.0/terraform-provider-cloud_0.1.0_linux_amd64 \
+  && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/0.1.0/linux_amd64/terraform-provider-cloud_0.1.0_linux_amd64
+```
+
+Далее, перейдите в каталог с вашими .tf файлами и выполните команду:
+
+``` bash
+terraform init
+```
+
+### Windows(x64)
+
+
+
 ☝🏻Исполняемые файлы провайдера доступны здесь: [evo-terraform](https://github.com/CLOUDdotRu/evo-terraform/releases){target=_blank} 
 
 ## Работа с IaaS
