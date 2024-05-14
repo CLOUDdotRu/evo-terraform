@@ -19,7 +19,7 @@ Terraform полезен инженерам и администраторам, �
 
 ``` bash
 cd \
-  curl --create-dirs -O --output-dir .terraform.d/plugins/cloud.ru/cloudru/cloud/0.1.0/darwin_arm64 \
+  && curl --create-dirs -O --output-dir .terraform.d/plugins/cloud.ru/cloudru/cloud/0.1.0/darwin_arm64 \
   https://github.com/CLOUDdotRu/evo-terraform/releases/download/0.1.0/terraform-provider-cloud_0.1.0_darwin_arm64 \
   && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/0.1.0/darwin_arm64/terraform-provider-cloud_0.1.0_darwin_arm64
 ```
