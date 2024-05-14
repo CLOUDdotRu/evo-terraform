@@ -14,6 +14,7 @@ theme:
     - content.action.edit
     - content.action.view
     - navigation.footer
+    - content.tabs.link
 
 markdown_extensions: 
   - attr_list
