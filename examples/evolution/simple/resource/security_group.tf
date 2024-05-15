@@ -23,7 +23,7 @@ resource "cloudru_evolution_security_group" "test_security_group" {
     id = "00000000-0000-0000-0000-000000000000"
 
     # NOTE: Это вычисляемый параметр
-    # name = "SSD"
+    # name = "ru.AZ-1"
   }
 
   # NOTE: Это вычисляемый параметр
