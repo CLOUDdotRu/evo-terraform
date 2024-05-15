@@ -17,7 +17,7 @@ resource "cloudru_evolution_subnet" "test_subnet" {
     id = "00000000-0000-0000-0000-000000000000"
 
     # NOTE: Это вычисляемый параметр
-    # name = "SDS"
+    # name = "ru.AZ-1"
   }
 
   # NOTE: Это опциональный параметр, по умолчанию используется project_id указанный в секции provider
