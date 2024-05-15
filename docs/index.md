@@ -66,7 +66,7 @@ terraform init
 
 ### Windows(x64)
 
-
+TBD
 
 ☝🏻Исполняемые файлы провайдера доступны здесь: [evo-terraform](https://github.com/CLOUDdotRu/evo-terraform/releases){target=_blank} 
 
