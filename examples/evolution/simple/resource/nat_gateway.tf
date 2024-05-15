@@ -23,7 +23,7 @@ resource "cloudru_evolution_nat_gateway" "gateway" {
     id = "00000000-0000-0000-0000-000000000000"
 
     # NOTE: Это вычисляемый параметр
-    # name = "Demo-AZ"
+    # name = "ru.AZ-1"
   }
 
   # NOTE: Это опциональный параметр, по умолчанию используется project_id указанный в секции provider
@@ -43,7 +43,7 @@ resource "cloudru_evolution_nat_gateway" "gateway" {
   # NOTE: Это вычисляемый параметр
   # id = "00000000-0000-0000-0000-000000000000"
   # NOTE: Это вычисляемый параметр
-  # ip_address = "188.72.117.149"
+  # ip_address = "0.0.0.0"
   # NOTE: Это вычисляемый параметр
   # state = "in_use"
   #}
