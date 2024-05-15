@@ -1,27 +1,27 @@
 # Создание департамента
-resource "cloudru_organization_unit" "meat-department" {
+resource "cloudru_organization_unit" "test-department" {
   # Название департамента
   # Обязательный параметр
-  name = "Мясной департамент"
+  name = "Тестовый департамент"
 
   # Описание департамента
   # Не обязательный параметр
-  description = "Департамент"
+  description = "Тестовый департамент"
 }
 
 # Создание проекта
-resource "cloudru_project" "soy_meat" {
+resource "cloudru_project" "test_project" {
   # Название проекта
   # Обязательный параметр
-  name = "Проект соевого мясо"
+  name = "Тестовый проект"
 
   # Описание проекта
   # Не обязательный параметр
-  description = "Проект"
+  description = "Тестовый проект"
 
   # ID департамента
   # Обязательный параметр
-  organization_unit_id = cloudru_organization_unit.meat-department.id
+  organization_unit_id = cloudru_organization_unit.test-department.id
 }
 
 # Список департаментов у клиента
