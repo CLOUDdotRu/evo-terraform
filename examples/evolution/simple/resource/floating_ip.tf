@@ -23,7 +23,7 @@ resource "cloudru_evolution_fip" "fip" {
     id = "00000000-0000-0000-0000-000000000000"
 
     # NOTE: Это вычисляемый параметр
-    # name = "Demo-AZ"
+    # name = "ru.AZ-1"
   }
 
   # NOTE: Это опциональный параметр
@@ -35,7 +35,7 @@ resource "cloudru_evolution_fip" "fip" {
     # name = "test_interface"
 
     # NOTE: Это вычисляемый параметр
-    # ip_address = "188.72.117.149"
+    # ip_address = "0.0.0.0"
   # }
 
   # NOTE: Это вычисляемый параметр
@@ -60,7 +60,7 @@ resource "cloudru_evolution_fip" "fip" {
   # }
 
   # NOTE: Это вычисляемый параметр
-  # ip_address = "188.72.117.149"
+  # ip_address = "0.0.0.0"
 
   # NOTE: Это опциональный параметр
    tags {
