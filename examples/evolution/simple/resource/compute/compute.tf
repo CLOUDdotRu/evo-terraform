@@ -115,7 +115,7 @@ resource "cloudru_evolution_compute" "test_compute" {
       id = local.demo_security_group.id
 
       # NOTE: Это вычисляемый параметр
-      # name = "sg-816839"
+      # name = "sg-****"
 
       # NOTE: Это вычисляемый параметр
       # state = "created"
@@ -133,7 +133,7 @@ resource "cloudru_evolution_compute" "test_compute" {
       # ip_address = "10.0.0.5"
 
       # NOTE: Это вычисляемый параметр
-      # name = "ni-816839"
+      # name = "ni-****"
 
       # NOTE: Это вычисляемый параметр
       # state = "created"
@@ -146,10 +146,10 @@ resource "cloudru_evolution_compute" "test_compute" {
     # id = "00000000-0000-0000-0000-000000000000"
 
     # NOTE: Это опциональный параметр
-    # name = "ni-816839"
+    # name = "ni-****"
 
     # NOTE: Это опциональный параметр
-    # description = "ni-816839-description"
+    # description = "ni-****-description"
 
     # NOTE: Это вычисляемый параметр
     # type = "regular"
@@ -191,7 +191,7 @@ resource "cloudru_evolution_compute" "test_compute" {
     # id = "00000000-0000-0000-0000-000000000000"
 
     # NOTE: Это обязательный параметр
-    name = "pd37"
+    name = "ru.AZ-1"
   }
 
   # NOTE: Это вычисляемый параметр
