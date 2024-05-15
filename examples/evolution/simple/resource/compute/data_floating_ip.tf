@@ -23,7 +23,7 @@ data "cloudru_evolution_fip" "fips" {
 
 locals {
   demo_fips = [
-    for s in data.cloudru_evolution_fip.fips.resources : s if s.name == "fip-4e785c"
+    for s in data.cloudru_evolution_fip.fips.resources : s if s.name == "fip-****"
   ]
 
   demo_fip = local.demo_fips.0
