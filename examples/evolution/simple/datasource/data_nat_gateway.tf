@@ -8,7 +8,7 @@ data "cloudru_evolution_nat_gateway" "gateways" {
     availability_zone_id = "00000000-0000-0000-0000-000000000000"
 
     # NOTE: это опциональный параметр
-    name = "gateway-eda25a"
+    name = ""
   }
 }
 
