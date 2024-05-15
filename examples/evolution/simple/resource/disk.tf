@@ -39,7 +39,7 @@ resource "cloudru_evolution_disk" "system" {
     id = demo_az.id
 
     # NOTE: Это вычисляемый параметр
-    # name = "SDS"
+    # name = "SSD"
   }
 
   # NOTE: Это обязательный параметр
@@ -48,7 +48,7 @@ resource "cloudru_evolution_disk" "system" {
     id = "00000000-0000-0000-0000-000000000000"
 
     # NOTE: Это вычисляемый параметр
-    # name = "SDS"
+    # name = "SSD"
   }
 
   # NOTE: Это опциональный параметр, по умолчанию используется project_id указанный в секции provider
