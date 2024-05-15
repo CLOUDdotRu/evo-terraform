@@ -8,7 +8,7 @@ data "cloudru_evolution_availability_zone" "azs" {
 
 locals {
   demo_azs = [
-    for s in data.cloudru_evolution_availability_zone.azs.resources : s if s.name == "Demo-AZ"
+    for s in data.cloudru_evolution_availability_zone.azs.resources : s if s.name == "ru.AZ-1"
   ]
   demo_az = local.demo_azs.0
 }
