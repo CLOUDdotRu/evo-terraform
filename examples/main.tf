@@ -30,7 +30,7 @@ provider "cloudru" {
   k8s_endpoint = "mk8s.api.cloud.ru:443"
 
   # NOTE: Это опциональный параметр, требуется для работы с Evolution
-  evolution_endpoint = "https://console.cloud.ru/api/svp/svc"
+  evolution_endpoint = "https://console.cloud.ru/api/svp"
 
   # NOTE: Это опциональный параметр, требуется для работы с CloudPlatform
   cloudplatform_endpoint = "https://organization.api.cloud.ru"
