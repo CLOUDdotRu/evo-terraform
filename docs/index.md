@@ -7,7 +7,7 @@ Terraform полезен инженерам и администраторам, �
 
 ## Установка terraform
 
-☝🏻Перед началом работы, убедитель что у Вас установлен terraform: [evo-terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli){target=_blank} 
+☝🏻Перед началом работы, убедитель что у Вас установлен terraform: [terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli){target=_blank} 
 
 ## Установка провайдера
 
