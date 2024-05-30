@@ -42,8 +42,8 @@ resource "cloudru_evolution_subnet" "test_subnet" {
   # NOTE: Это опциональный параметр
   # dns_servers =  []
 
-  # NOTE: Это обязательный параметр
-  tags {
+  # NOTE: Это опциональный параметр
+  # tags {
     # NOTE: Это опциональный параметр
     # id = "00000000-0000-0000-0000-000000000000"
 
@@ -52,7 +52,7 @@ resource "cloudru_evolution_subnet" "test_subnet" {
 
     # NOTE: Это вычисляемый параметр
     # color = "test_color"
-  }
+  # }
 
   # NOTE: Это опциональный параметр
   # default = false
