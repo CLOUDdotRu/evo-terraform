@@ -5,8 +5,8 @@ resource "cloudru_evolution_subnet" "test_subnet" {
   # NOTE: Это обязательный параметр
   name = "test_subnet"
 
-  # NOTE: Это опциональный параметр
-  # subnet_address = "10.1.2.0/24"
+  # NOTE: Это обязательный параметр
+    subnet_address = "10.1.2.0/24"
 
   # NOTE: Это опциональный параметр
   # prefix_length = 1
@@ -24,9 +24,6 @@ resource "cloudru_evolution_subnet" "test_subnet" {
   project {
     # NOTE: Это опциональный параметр
     # id = "00000000-0000-0000-0000-000000000000"
-
-    # NOTE: Это вычисляемый параметр
-    # product_instance_id = "00000000-0000-0000-0000-000000000000"
   }
 
 
