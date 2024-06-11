@@ -30,9 +30,6 @@ resource "cloudru_evolution_nat_gateway" "gateway" {
   project {
     # NOTE: Это опциональный параметр
     id = "00000000-0000-0000-0000-000000000000"
-
-    # NOTE: Это вычисляемый параметр
-    # product_instance_id = "00000000-0000-0000-0000-000000000000"
   }
 
   # NOTE: Это обязательный параметр
