@@ -33,5 +33,5 @@ provider "cloudru" {
   evolution_endpoint = "https://console.cloud.ru/api/svp"
 
   # NOTE: Это опциональный параметр, требуется для работы с CloudPlatform
-  cloudplatform_endpoint = "https://organization.api.cloud.ru"
+  cloudplatform_endpoint = "organization.api.cloud.ru:443"
 }
