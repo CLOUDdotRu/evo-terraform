@@ -36,7 +36,7 @@ terraform init
 
 ``` bash
 cd \  
-  && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/0.1.1/darwin_amd64 \
+  && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/0.1.1/darwin_amd64/terraform-provider-cloud_0.1.1_darwin_amd64 \
   https://github.com/CLOUDdotRu/evo-terraform/releases/download/0.1.1/terraform-provider-cloud_0.1.1_darwin_amd64 \
   && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/0.1.1/darwin_amd64/terraform-provider-cloud_0.1.1_darwin_amd64
 ```
@@ -53,7 +53,7 @@ terraform init
 
 ``` bash
 cd \
-  && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/0.1.1/linux_amd64 \
+  && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/0.1.1/linux_amd64/terraform-provider-cloud_0.1.1_linux_amd64 \
   https://github.com/CLOUDdotRu/evo-terraform/releases/download/0.1.1/terraform-provider-cloud_0.1.1_linux_amd64 \
   && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/0.1.1/linux_amd64/terraform-provider-cloud_0.1.1_linux_amd64
 ```
