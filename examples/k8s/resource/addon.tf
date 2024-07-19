@@ -1,14 +1,18 @@
-resource "cloudru_k8s_cluster_addon" "istio" {
+resource "cloudru_k8s_addon" "istio" {
 
+  # NOTE: Это обязательный параметр
   # Идентификатор кластера.
   cluster_id             = "00000000000000000000000000"
 
+  # NOTE: Это обязательный параметр
   # Название плагина.
   name                   = "calico"
 
+  # NOTE: Это обязательный параметр
   # Версия плагина в формате SemVer.
   version                = "1.18.0"
 
+  # NOTE: Это обязательный параметр
   # Режим разрешения конфликтов.
   # Должен быть один из: RESOLVE_CONFLICTS_MODE_NONE, RESOLVE_CONFLICTS_MODE_OVERWRITE
   resolve_conflicts_mode = "RESOLVE_CONFLICTS_MODE_OVERWRITE"
@@ -43,7 +47,7 @@ resource "cloudru_k8s_cluster_addon" "istio" {
   # id     = "00000000000000000000000000"
 
   # NOTE: Это вычисляемый параметр
-  # Статус плагина в кластере
+  # Статус плагина в кластере.
   # status = "ADDON_STATUS_ACTIVE"
 
   # NOTE: Это вычисляемый параметр

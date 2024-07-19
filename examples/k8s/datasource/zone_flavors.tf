@@ -1,4 +1,4 @@
-data "cloudru_k8s_zone_flavors" "flavors" {
+data "cloudru_k8s_zone_flavors" "k8s_flavors" {
 
   # NOTE: Это опциональный параметр, если указан project_id в конфигурации провайдера.
   # Если project_id не указан в конфигурации провайдера или его требуется переопределить, то project_id должен быть указан.
@@ -7,5 +7,5 @@ data "cloudru_k8s_zone_flavors" "flavors" {
 }
 
 output "flavors" {
-  value = data.cloudru_k8s_zone_flavors.flavors
+  value = data.cloudru_k8s_zone_flavors.k8s_flavors
 }
