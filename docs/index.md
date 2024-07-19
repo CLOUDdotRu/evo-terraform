@@ -19,9 +19,9 @@ Terraform полезен инженерам и администраторам, �
 
 ``` bash
 cd \
-  && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/0.1.1/darwin_arm64/terraform-provider-cloud_0.1.1_darwin_arm64 \
-  https://github.com/CLOUDdotRu/evo-terraform/releases/download/0.1.1/terraform-provider-cloud_0.1.1_darwin_arm64 \
-  && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/0.1.1/darwin_arm64/terraform-provider-cloud_0.1.1_darwin_arm64
+  && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/0.2.0/darwin_arm64/terraform-provider-cloud_0.2.0_darwin_arm64 \
+  https://github.com/CLOUDdotRu/evo-terraform/releases/download/0.2.0/terraform-provider-cloud_0.2.0_darwin_arm64 \
+  && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/0.2.0/darwin_arm64/terraform-provider-cloud_0.2.0_darwin_arm64
 ```
 
 Далее, перейдите в каталог с вашими .tf файлами и выполните команду:
@@ -36,9 +36,9 @@ terraform init
 
 ``` bash
 cd \  
-  && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/0.1.1/darwin_amd64/terraform-provider-cloud_0.1.1_darwin_amd64 \
-  https://github.com/CLOUDdotRu/evo-terraform/releases/download/0.1.1/terraform-provider-cloud_0.1.1_darwin_amd64 \
-  && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/0.1.1/darwin_amd64/terraform-provider-cloud_0.1.1_darwin_amd64
+  && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/0.2.0/darwin_amd64/terraform-provider-cloud_0.2.0_darwin_amd64 \
+  https://github.com/CLOUDdotRu/evo-terraform/releases/download/0.2.0/terraform-provider-cloud_0.2.0_darwin_amd64 \
+  && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/0.2.0/darwin_amd64/terraform-provider-cloud_0.2.0_darwin_amd64
 ```
 
 Далее, перейдите в каталог с вашими .tf файлами и выполните команду:
@@ -53,9 +53,9 @@ terraform init
 
 ``` bash
 cd \
-  && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/0.1.1/linux_amd64/terraform-provider-cloud_0.1.1_linux_amd64 \
-  https://github.com/CLOUDdotRu/evo-terraform/releases/download/0.1.1/terraform-provider-cloud_0.1.1_linux_amd64 \
-  && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/0.1.1/linux_amd64/terraform-provider-cloud_0.1.1_linux_amd64
+  && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/0.2.0/linux_amd64/terraform-provider-cloud_0.2.0_linux_amd64 \
+  https://github.com/CLOUDdotRu/evo-terraform/releases/download/0.2.0/terraform-provider-cloud_0.2.0_linux_amd64 \
+  && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/0.2.0/linux_amd64/terraform-provider-cloud_0.2.0_linux_amd64
 ```
 
 Далее, перейдите в каталог с вашими .tf файлами и выполните команду:
