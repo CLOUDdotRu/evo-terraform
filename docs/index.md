@@ -19,9 +19,9 @@ Terraform полезен инженерам и администраторам, �
 
 ``` bash
 cd \
-  && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/0.2.0/darwin_arm64/terraform-provider-cloud_0.2.0_darwin_arm64 \
-  https://github.com/CLOUDdotRu/evo-terraform/releases/download/0.2.0/terraform-provider-cloud_0.2.0_darwin_arm64 \
-  && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/0.2.0/darwin_arm64/terraform-provider-cloud_0.2.0_darwin_arm64
+  && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/0.2.1/darwin_arm64/terraform-provider-cloud_0.2.1_darwin_arm64 \
+  https://github.com/CLOUDdotRu/evo-terraform/releases/download/0.2.1/terraform-provider-cloud_0.2.1_darwin_arm64 \
+  && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/0.2.1/darwin_arm64/terraform-provider-cloud_0.2.1_darwin_arm64
 ```
 
 Далее, перейдите в каталог с вашими .tf файлами и выполните команду:
@@ -36,9 +36,9 @@ terraform init
 
 ``` bash
 cd \  
-  && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/0.2.0/darwin_amd64/terraform-provider-cloud_0.2.0_darwin_amd64 \
-  https://github.com/CLOUDdotRu/evo-terraform/releases/download/0.2.0/terraform-provider-cloud_0.2.0_darwin_amd64 \
-  && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/0.2.0/darwin_amd64/terraform-provider-cloud_0.2.0_darwin_amd64
+  && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/0.2.0/darwin_amd64/terraform-provider-cloud_0.2.1_darwin_amd64 \
+  https://github.com/CLOUDdotRu/evo-terraform/releases/download/0.2.1/terraform-provider-cloud_0.2.1_darwin_amd64 \
+  && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/0.2.1/darwin_amd64/terraform-provider-cloud_0.2.1_darwin_amd64
 ```
 
 Далее, перейдите в каталог с вашими .tf файлами и выполните команду:
@@ -53,9 +53,9 @@ terraform init
 
 ``` bash
 cd \
-  && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/0.2.0/linux_amd64/terraform-provider-cloud_0.2.0_linux_amd64 \
-  https://github.com/CLOUDdotRu/evo-terraform/releases/download/0.2.0/terraform-provider-cloud_0.2.0_linux_amd64 \
-  && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/0.2.0/linux_amd64/terraform-provider-cloud_0.2.0_linux_amd64
+  && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/0.2.1/linux_amd64/terraform-provider-cloud_0.2.1_linux_amd64 \
+  https://github.com/CLOUDdotRu/evo-terraform/releases/download/0.2.1/terraform-provider-cloud_0.2.1_linux_amd64 \
+  && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/0.2.1/linux_amd64/terraform-provider-cloud_0.2.1_linux_amd64
 ```
 
 Далее, перейдите в каталог с вашими .tf файлами и выполните команду:
@@ -93,17 +93,17 @@ project_id можно скопировать из адрессной строк�
 Управлять пользователями отдельного проекта или всего облака могут пользователи с соответствующими административными ролями.
 Чтобы узнать подробнее о доступных действиях для каждой роли изучите статью [Роли](https://cloud.ru/ru/docs/administration/ug/topics/concepts__roles.html){target=_blank} 
 
-Файлы примеров для работы с IAM расположены в каталоге: [IAM Examples](https://github.com/CLOUDdotRu/evo-terraform/tree/main/examples/iam/simple)
+Файлы примеров для работы с IAM расположены в каталоге: [IAM Examples](https://github.com/CLOUDdotRu/evo-terraform/tree/main/examples/iam)
 
 ## Работа с CloudPlatform
 С помощью Terraform возможно создание и управление проектами. Проекты позволяют распределять облачные ресурсы между проектными задачами и командами. В каждом проекте можно подключать только нужные платформы и сервисы.
 
-Файлы примеров для работы с CloudPlatform расположены в каталоге: [CloudPlatform Examples](https://github.com/CLOUDdotRu/evo-terraform/tree/main/examples/cloudplatform/simple)
+Файлы примеров для работы с CloudPlatform расположены в каталоге: [CloudPlatform Examples](https://github.com/CLOUDdotRu/evo-terraform/tree/main/examples/cloudplatform)
 
 ## Работа с Compute
 При работе с сервисом Compute  через Terraform можно создавать и управлять виртуальными машинами различной конфигурации. Виртуальные машины — виртуальные серверы, развернутые на вычислительных ресурсах платформы виртуализации Evolution.
 
-Файлы примеров для работы с Compute расположены в каталоге: [Compute Examples](https://github.com/CLOUDdotRu/evo-terraform/tree/main/examples/evolution/simple)
+Файлы примеров для работы с Compute расположены в каталоге: [Compute Examples](https://github.com/CLOUDdotRu/evo-terraform/tree/main/examples/compute)
 
 ## Работа с Managed Kubernetes
 
