@@ -34,4 +34,10 @@ provider "cloudru" {
 
   # NOTE: Это опциональный параметр, требуется для работы с CloudPlatform
   cloudplatform_endpoint = "organization.api.cloud.ru:443"
+
+  # NOTE: Это опциональный параметр, требуется для работы с DBaaS
+  dbaas_endpoint = "dbaas.api.cloud.ru:443"
+
+
+
 }
