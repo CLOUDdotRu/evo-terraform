@@ -7,7 +7,7 @@ data "cloudru_infrastructure_disk" "pg_disk" {
 
 locals {
   demo_postgres_disks = [
-    for s in data.cloudru_infrastructure_disk.pg_disk.disks : s if s.display_name == "SSD 32768G"
+    for s in data.cloudru_infrastructure_disk.pg_disk.disks : s if s.display_name == "SSD 16384G"
   ]
   demo_postgres_disk_ssd = local.demo_postgres_disks.0
 }
