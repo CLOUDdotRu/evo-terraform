@@ -17,7 +17,8 @@ resource "cloudru_k8s_cluster" "example-cluster" {
     # NOTE: Это обязательный параметр
     # Взаимодействует с флагом multizonal.
     # Указывает в каких зонах будут размещены узлы управления.
-    # Доступен к получению через datasource cloudru_k8s_zone_flavors
+    # Доступен к получению через datasource cloudru_k8s_zone_flavors, например:
+    # zones = [data.cloudru_k8s_zone_flavors.k8s_flavors.availability_zones[1].id]
     zones = [
       "00000000-0000-0000-0000-000000000000",
     ]
@@ -41,7 +42,7 @@ resource "cloudru_k8s_cluster" "example-cluster" {
 
     # NOTE: Это обязательный параметр
     # Версия Kubernetes.
-    version = "v1.26.7"
+    version = "v1.28.13"
   }
 
   # NOTE: Это обязательный параметр
@@ -56,10 +57,13 @@ resource "cloudru_k8s_cluster" "example-cluster" {
     # NOTE: Это обязательный параметр, если не указан параметр nodes_subnet_id
     # Адрес подсети узлов плоскости управления.
     # Не должен пересекаться с сетью сервисов или сетью подов.
+    # Если через TF создаются одновременно и master nodes и node pool, то необходимо
+    # отдельно создать subnet через cloudru_evolution_subnet ресурс
     nodes_subnet_cidr = "192.168.20.0/24"
 
     # NOTE: Это обязательный параметр, если не указан nodes_subnet_cidr
     # Идентификатор существующей сети узлов. Указывается либо он либо nodes_subnet_cidr
+    # Доступен к получению через datasource: cloudru_evolution_subnet.k8s_nodes_subnet.id
     # nodes_subnet_id = "00000000-0000-0000-0000-000000000000"
 
     # NOTE: Это обязательный параметр
