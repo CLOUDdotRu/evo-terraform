@@ -64,9 +64,13 @@ cd \
 terraform init
 ```
 
-### Windows(x64)
+### Windows 10/11(x64)
 
-TBD
+``` bash
+curl -L -o terraform-provider-cloud_0.2.2_windows_amd64 https://github.com/CLOUDdotRu/evo-terraform/releases/download/0.2.2/terraform-provider-cloud_0.2.2_windows_amd64
+mkdir -p %APPDATA%\terraform.d\plugins\cloud.ru\cloudru\cloud\0.2.2\windows_amd64
+move terraform-provider-cloud_0.2.2_windows_amd64 %APPDATA%\terraform.d\plugins\cloud.ru\cloudru\cloud\0.2.2\windows_amd64\
+```
 
 ☝🏻Исполняемые файлы провайдера доступны здесь: [evo-terraform](https://github.com/CLOUDdotRu/evo-terraform/releases){target=_blank} 
 
