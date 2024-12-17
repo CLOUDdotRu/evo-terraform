@@ -3,6 +3,7 @@ page_title: "cloudru_k8s_cluster Resource - cloudru"
 subcategory: "k8s"
 description: "Управление кластерами Kubernetes"
   Evolution Kubernetes Cluster
+
 ---
 
 # Управление кластерами cloudru_k8s_cluster (Resource)
