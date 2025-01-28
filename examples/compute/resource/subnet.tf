@@ -20,7 +20,7 @@ resource "cloudru_evolution_subnet" "test_subnet" {
   # NOTE: Это обязательный параметр
   default_gateway = "10.1.2.1"
 
-  # NOTE: Это опциональный параметр если пункт routed_network = false
+  # NOTE: Это опциональный параметр, если routed_network = false
   # Если routed_network = true, то без указания DNS сервереров не будут резолвится адреса
   # и это повлияет на работу ВМ, Managed Kubernetes и других сервисов
   # dns_servers = []
