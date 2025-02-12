@@ -92,7 +92,7 @@ resource "cloudru_k8s_addon" "istio" {
 
 - `cluster_id` (String) Идентификатор кластера.
 - `name` (String) Название плагина, например cilium.
-- `resolve_conflicts_mode` (String) Режим разрешения конфликтов. Возможные значения: `RESOLVE_CONFLICTS_MODE_OVERWRITE` `RESOLVE_CONFLICTS_MODE_PRESERVE` `RESOLVE_CONFLICTS_MODE_UNSPECIFIED` `RESOLVE_CONFLICTS_MODE_NONE`.
+- `resolve_conflicts_mode` (String) Режим разрешения конфликтов. Возможные значения: `RESOLVE_CONFLICTS_MODE_UNSPECIFIED` `RESOLVE_CONFLICTS_MODE_NONE` `RESOLVE_CONFLICTS_MODE_OVERWRITE` `RESOLVE_CONFLICTS_MODE_PRESERVE`.
 - `version` (String) Версия плагина в формате SemVer.
 
 ### Optional
@@ -116,7 +116,7 @@ resource "cloudru_k8s_addon" "istio" {
 Optional:
 
 - `create` (String) По умолчанию 40m0s.
-- `delete` (String) По умолчанию 30m0s.
+- `delete` (String) По умолчанию 40m0s.
 - `read` (String) По умолчанию 15s.
 - `update` (String) По умолчанию 30m0s.
 
@@ -132,8 +132,8 @@ Read-Only:
 - `issues` (Attributes List) Список проблем, возникших при выполнении действия. (see [below for nested schema](#nestedatt--action_history--issues))
 - `namespace` (String) Пространство имен, в пределах которого выполняется действие над плагином.
 - `params` (Attributes List) Список параметров, используемых при выполнении действия над плагином. (see [below for nested schema](#nestedatt--action_history--params))
-- `status` (String) Статус действия, может быть одним из: `ADDON_ACTION_STATUS_UNSPECIFIED` `ADDON_ACTION_STATUS_IN_PROGRESS` `ADDON_ACTION_STATUS_COMPLETED` `ADDON_ACTION_STATUS_FAILED` `ADDON_ACTION_STATUS_PENDING`.
-- `type` (String) Тип действия над плагином. Возможные значения: `ADDON_ACTION_TYPE_DELETE` `ADDON_ACTION_TYPE_UNSPECIFIED` `ADDON_ACTION_TYPE_ADD` `ADDON_ACTION_TYPE_UPDATE`.
+- `status` (String) Статус действия, может быть одним из: `ADDON_ACTION_STATUS_PENDING` `ADDON_ACTION_STATUS_UNSPECIFIED` `ADDON_ACTION_STATUS_IN_PROGRESS` `ADDON_ACTION_STATUS_COMPLETED` `ADDON_ACTION_STATUS_FAILED`.
+- `type` (String) Тип действия над плагином. Возможные значения: `ADDON_ACTION_TYPE_UNSPECIFIED` `ADDON_ACTION_TYPE_ADD` `ADDON_ACTION_TYPE_UPDATE` `ADDON_ACTION_TYPE_DELETE`.
 
 <a id="nestedatt--action_history--issues"></a>
 ### Nested Schema for `action_history.issues`

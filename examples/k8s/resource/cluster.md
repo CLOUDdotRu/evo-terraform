@@ -3,7 +3,6 @@ page_title: "cloudru_k8s_cluster Resource - cloudru"
 subcategory: "k8s"
 description: "Управление кластерами Kubernetes"
   Evolution Kubernetes Cluster
-
 ---
 
 # Управление кластерами cloudru_k8s_cluster (Resource)
@@ -12,7 +11,7 @@ description: "Управление кластерами Kubernetes"
 
 ## Примеры использования
 
-Примеры описывают несколько вариантов создания кластера:
+Примеры описывают несколько вариантов создания кластера: 
 
 - только с обязательными настройками;
 - с расширенными настройками;
@@ -46,7 +45,7 @@ resource "cloudru_k8s_cluster" "example-cluster" {
 
     # NOTE: Обязательный параметр.
     # Версия Kubernetes.
-    version = "v1.26.7"
+    version = "v1.29.9"
   }
 
   # NOTE: Обязательный параметр.
@@ -102,18 +101,12 @@ resource "cloudru_k8s_cluster" "example-cluster" {
   # Конфигурация плоскости управления.
   control_plane = {
 
-    # NOTE: Обязательный параметр.
-    # Взаимодействует с флагом multizonal.
+    # NOTE: Опциональный параметр.
     # Указывает в каких зонах будут размещены узлы управления.
     # Доступен к получению через datasource cloudru_k8s_zone_flavors
     zones = [
       "00000000-0000-0000-0000-000000000000",
     ]
-
-    # NOTE: Обязательный параметр.
-    # Поддержка мультизональности.
-    # Зависит от поля zones.
-    multizonal = false
 
     # NOTE: Обязательный параметр.
     # Количество узлов плоскости управления.
@@ -125,7 +118,7 @@ resource "cloudru_k8s_cluster" "example-cluster" {
 
     # NOTE: Обязательный параметр.
     # Версия Kubernetes.
-    version = "v1.26.7"
+    version = "v1.29.9"
   }
 
   # NOTE: Обязательный параметр.
@@ -140,11 +133,11 @@ resource "cloudru_k8s_cluster" "example-cluster" {
 
     # NOTE: Обязательный параметр, если не указан nodes_subnet_cidr.
     # Идентификатор существующей сети узлов. Указывается либо он, либо nodes_subnet_cidr.
-    nodes_subnet_id = "00000000-0000-0000-0000-000000000000"
+    nodes_subnet_id = "fe447d9e-41cb-49f9-bb75-d61c498baee7"
 
     # NOTE: Обязательный параметр.
     # Адрес подсети подов.
-    # Должен принадлежать диапазонам 10.0.0.0/8–24, 172.16.0.0/12–24 или 192.168.0.0/16–24.
+    # Должен принадлежать диапазонам 10.0.0.0/8–24, 172.16.0.0/12–24 или 192.168.0.0/16–24.  
     # Не должен пересекаться с сетью сервисов или сетью узлов.
     pods_subnet_cidr = "172.16.0.0/12"
 
@@ -185,13 +178,28 @@ resource "cloudru_k8s_cluster" "example-cluster" {
   # Аудит-логирование событий компонентов кластера.
   audit_service = {
 
-    # NOTE: Опциональный параметр
+    # NOTE: Опциональный параметр.
     # Включение/выключение аудит-логирования событий компонентов кластера.
     # Возможные значения: true — аудит-логирование включено, false — аудит-логирование выключено.
     # По умолчанию аудит-логирование включено.
     enabled = true
   }
 
+  # NOTE: Опциональный параметр.
+  # Релизный канал, на который подписан кластер.
+  # Возможные значения: RELEASE_CHANNEL_REGULAR, RELEASE_CHANNEL_RAPID, RELEASE_CHANNEL_STABLE.
+  release_channel = "RELEASE_CHANNEL_STABLE"
+
+  # NOTE: Опциональный параметр.
+  # Конфигурация сервисного аккаунта кластера, который используется для интеграции с сервисами облака Evolution. Например, с Artifact Registry, Object Storage, сервисами логирования и мониторинга.
+  identity_configuration = {
+
+    # NOTE: Обязательный параметр.
+    # Идентификатор сервисного аккаунта.
+    # ID можно скопировать в личном кабинете из URL на странице сервисного аккаунта или получить через API.
+    # Подробнее: https://cloud.ru/docs/console_api/ug/topics/guides__service_accounts_view.html 
+    cluster_sa_id = "00000000-0000-0000-0000-000000000000"
+  }
 
   # NOTE: Опциональный параметр.
   timeouts = {
@@ -199,7 +207,7 @@ resource "cloudru_k8s_cluster" "example-cluster" {
     # NOTE: Опциональный параметр.
     # Ограничение по времени создания объекта.
     # Если объект не успел создаться за указанное время, то вернется ошибка, при этом автоматического удаления не последует.
-    # Время создания плоскости управления кластера в числе прочих факторов зависит и от количество узлов.
+    # Время создания плоскости управления кластера в числе прочих факторов зависит и от количество узлов. 
     # Чем больше узлов, тем дольше группа узлов будет создаваться.
     create = "50m"
 
@@ -230,7 +238,7 @@ resource "cloudru_k8s_cluster" "example-cluster" {
 # Источник данных для получения существующих подсетей для заданного проекта.
 data "cloudru_evolution_subnet" "subnets" {}
 
-# Источник данных для получения информации о зонах доступности
+# Источник данных для получения информации о зонах доступности.
 data "cloudru_k8s_zone_flavors" "k8s_zones" {}
 
 resource "cloudru_k8s_cluster" "example-cluster" {
@@ -239,7 +247,7 @@ resource "cloudru_k8s_cluster" "example-cluster" {
   control_plane = {
     count   = 1
     type    = "MASTER_TYPE_SMALL"
-    version = "v1.26.7"
+    version = "v1.29.9"
 
     # NOTE: Обязательный параметр.
     # Взаимодействует с флагом multizonal.
@@ -277,9 +285,11 @@ resource "cloudru_k8s_cluster" "example-cluster" {
 ### Optional
 
 - `audit_service` (Attributes) Аудит-логирование событий компонентов кластера. (see [below for nested schema](#nestedatt--audit_service))
+- `identity_configuration` (Attributes) Настройки для сервисного аккаунта. (see [below for nested schema](#nestedatt--identity_configuration))
 - `logging_service` (Attributes) Параметры логирования событий компонентов кластера. (see [below for nested schema](#nestedatt--logging_service))
 - `monitoring_service` (Attributes) Мониторинг компонентов кластера. (see [below for nested schema](#nestedatt--monitoring_service))
 - `project_id` (String) Идентификатор проекта. Может быть указан для ресурса. Если указан и в настройках провайдера, и в описании ресурса, будет использован указанный в описании ресурса.
+- `release_channel` (String) Релизный канал может быть одним из: `RELEASE_CHANNEL_UNSPECIFIED` `RELEASE_CHANNEL_RAPID` `RELEASE_CHANNEL_REGULAR` `RELEASE_CHANNEL_STABLE` .
 - `timeouts` (Attributes) (see [below for nested schema](#nestedatt--timeouts))
 
 ### Read-Only
@@ -288,10 +298,11 @@ resource "cloudru_k8s_cluster" "example-cluster" {
 - `created_by` (String) Идентификатор пользователя, создавшего кластер.
 - `id` (String) Идентификатор кластера. Присваивается автоматически при создании кластера.
 - `nodepools_info` (Attributes) Информация о группах узлов. (see [below for nested schema](#nestedatt--nodepools_info))
-- `state` (String) Состояние кластера (мастеров). Возможные значения: `OBJECT_STATE_SUSPENDING` `OBJECT_STATE_SUSPENDED` `OBJECT_STATE_RUNNING` `OBJECT_STATE_PAUSED` `OBJECT_STATE_UPDATING` `OBJECT_STATE_ERROR` `OBJECT_STATE_SCALING_UP` `OBJECT_STATE_PROVISIONING` `OBJECT_STATE_SCALING_DOWN` `OBJECT_STATE_STOPPING` `OBJECT_STATE_DELETING` `OBJECT_STATE_UNSPECIFIED` `OBJECT_STATE_PENDING` `OBJECT_STATE_PAUSING` `OBJECT_STATE_RESUMING` `OBJECT_STATE_STOPPED`.
+- `state` (String) Состояние кластера (мастеров). Возможные значения: `OBJECT_STATE_UPGRADING` `OBJECT_STATE_PAUSED` `OBJECT_STATE_RESUMING` `OBJECT_STATE_STOPPING` `OBJECT_STATE_SCALING_DOWN` `OBJECT_STATE_SUSPENDING` `OBJECT_STATE_UNSPECIFIED` `OBJECT_STATE_PENDING` `OBJECT_STATE_ERROR` `OBJECT_STATE_RUNNING` `OBJECT_STATE_UPDATING` `OBJECT_STATE_SCALING_UP` `OBJECT_STATE_STOPPED` `OBJECT_STATE_SUSPENDED` `OBJECT_STATE_PROVISIONING` `OBJECT_STATE_PAUSING` `OBJECT_STATE_DELETING`.
 - `task_id` (String) Идентификатор задачи.
 - `updated_at` (String) Время последнего редактирования кластера.
 - `updated_by` (String) Идентификатор пользователя, который редактировал кластер последним.
+- `version_upgrade` (Attributes) Информация о доступных версиях Kubernetes для обновления плоскости управления кластера. (see [below for nested schema](#nestedatt--version_upgrade))
 
 <a id="nestedatt--control_plane"></a>
 ### Nested Schema for `control_plane`
@@ -299,8 +310,7 @@ resource "cloudru_k8s_cluster" "example-cluster" {
 Required:
 
 - `count` (Number) Количество узлов плоскости управления. Возможные значения: `1`, `3`, `5`.
-- `multizonal` (Boolean, Deprecated) Поддержка мультизональности.
-- `type` (String) Тип узла плоскости управления. Возможные значения: `MASTER_TYPE_UNSPECIFIED` `MASTER_TYPE_SMALL` `MASTER_TYPE_MEDIUM` `MASTER_TYPE_LARGE` `MASTER_TYPE_EXTRALARGE`.
+- `type` (String) Тип узла плоскости управления. Возможные значения: `MASTER_TYPE_EXTRALARGE` `MASTER_TYPE_UNSPECIFIED` `MASTER_TYPE_SMALL` `MASTER_TYPE_MEDIUM` `MASTER_TYPE_LARGE`.
 - `version` (String) Версия Kubernetes. Список доступных версий может быть получен через источник данных k8s_version_datasource Версия должна быть в формате SemVer и начинаться с *v*: **v1.2.3**.
 
 Optional:
@@ -324,7 +334,7 @@ Optional:
 
 Read-Only:
 
-- `control_plane_endpoints` (Map of String) Множество адресов, где ключ это тип сети. Возможные значения:`NETWORK_TYPE_UNSPECIFIED` `NETWORK_TYPE_PRIVATE` `NETWORK_TYPE_PUBLIC` и значения это адреса узлов управления в формате [https://domain:port](https://domain:port).
+- `control_plane_endpoints` (Map of String) Множество адресов, где ключ это тип сети. Возможные значения:`NETWORK_TYPE_PUBLIC` `NETWORK_TYPE_UNSPECIFIED` `NETWORK_TYPE_PRIVATE` и значения это адреса узлов управления в формате [https://domain:port](https://domain:port).
 
 
 <a id="nestedatt--audit_service"></a>
@@ -333,6 +343,14 @@ Read-Only:
 Optional:
 
 - `enabled` (Boolean) Включение/выключение аудит-логирования событий компонентов кластера. Возможные значения: **true** — аудит-логирование включено, **false** — аудит-логирование выключено. По умолчанию аудит-логирование **включено**.
+
+
+<a id="nestedatt--identity_configuration"></a>
+### Nested Schema for `identity_configuration`
+
+Optional:
+
+- `cluster_sa_id` (String) Конфигурация сервисного аккаунта кластера, который используется для интеграции с сервисами облака Evolution.  Например, с Artifact Registry, Object Storage, сервисами логирования и мониторинга. ID сервисного аккаунта можно скопировать в личном кабинете из URL на странице сервисного аккаунта или получить через API — https://cloud.ru/docs/console_api/ug/topics/guides__service_accounts_view.html.
 
 
 <a id="nestedatt--logging_service"></a>
@@ -358,7 +376,7 @@ Optional:
 Optional:
 
 - `create` (String) По умолчанию 40m0s.
-- `delete` (String) По умолчанию 30m0s.
+- `delete` (String) По умолчанию 40m0s.
 - `read` (String) По умолчанию 15s.
 - `update` (String) По умолчанию 30m0s.
 
@@ -372,6 +390,15 @@ Read-Only:
 - `cpu` (Number) Количество ядер процессора виртуальных машин.
 - `disk_size` (Number) Размер подключаемых дисков в ГБ.
 - `ram` (Number) Оперативная память виртуальных машин в ГБ.
+
+
+<a id="nestedatt--version_upgrade"></a>
+### Nested Schema for `version_upgrade`
+
+Read-Only:
+
+- `available_versions` (List of String) Список доступных версий Kubernetes для обновления кластера.
+- `upgrade_available` (Boolean) Флаг доступности новой версии Kubernetes.
 
 ## Импорт
 
@@ -397,7 +424,7 @@ resource "cloudru_k8s_cluster" "example-cluster" {
   control_plane = {
     count   = 1
     type    = "MASTER_TYPE_SMALL"
-    version = "v1.26.7"
+    version = "v1.29.9"
   }
 
   network_configuration = {

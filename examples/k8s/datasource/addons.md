@@ -69,6 +69,6 @@ Read-Only:
 - `added_by` (String) Идентификатор пользователя, который добавил плагин в кластер.
 - `id` (String) Идентификатор плагина.
 - `name` (String) Название плагина, например cilium.
-- `status` (String) Статус плагина в кластере. Возможные значения: `ADDON_ACTION_STATUS_IN_PROGRESS` `ADDON_ACTION_STATUS_COMPLETED` `ADDON_ACTION_STATUS_FAILED` `ADDON_ACTION_STATUS_PENDING` `ADDON_ACTION_STATUS_UNSPECIFIED`.
+- `status` (String) Статус плагина в кластере. Возможные значения: `ADDON_ACTION_STATUS_UNSPECIFIED` `ADDON_ACTION_STATUS_IN_PROGRESS` `ADDON_ACTION_STATUS_COMPLETED` `ADDON_ACTION_STATUS_FAILED` `ADDON_ACTION_STATUS_PENDING`.
 - `updated_at` (String) Дата и время последнего изменения плагина.
 - `version` (String) Версия плагина в формате SemVer.

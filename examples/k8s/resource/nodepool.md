@@ -130,6 +130,38 @@ resource "cloudru_k8s_nodepool" "example-nodepool" {
     "key2" = "value2"
   }
 
+  # NOTE: Опциональный параметр.
+  # Конфигурация удаленного доступа к виртуальной машине в группе (RemoteAccess).
+  remote_access = {
+    # Идентификатор SSH-ключа.
+    ssh_key_id = "00000000-0000-0000-0000-000000000000"
+    # Имя пользователя.
+    username = "your_username"
+  }
+
+  # NOTE: Опциональный параметр.
+  # Зона доступности, в которой будут размещены узлы группы.
+  zone = "00000000-0000-0000-0000-000000000000"
+
+  # NOTE: Опциональный параметр.
+  # Конфигурация обновления группы узлов.
+  update_configuration = {
+
+    # NOTE: Обязательный параметр.
+    # Стратегия обновления.
+    strategy = "NODE_POOL_UPDATE_STRATEGY_ROLLING_UPDATE"
+
+    # Опциональный блок.
+    # Параметры политики обновления RollingUpdate.
+    rolling_update_policy = {
+      # Максимальное количество дополнительных узлов (%). Обязательный параметр при наличии rolling_update_policy.
+      max_surge = 10
+
+      # Максимальное количество одновременно недоступных узлов (%). Обязательный параметр при наличии rolling_update_policy.
+      max_unavailable = 20
+    }
+  }
+
   depends_on = [
     cloudru_k8s_cluster.example-cluster
   ]
@@ -278,19 +310,24 @@ resource "cloudru_k8s_nodepool" "example-nodepool" {
 ### Optional
 
 - `labels` (Map of String) Набор меток (labels), которые будут применены к узлам в группе. Метки добавляются в дополнение к стандартным меткам, которые может применить Kubernetes. В случае конфликтов поведение неопределенно и может меняться в зависимости от версии Kubernetes, поэтому лучше избегать таких конфликтов. Подробнее см. [в документации Kubernetes](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
-- `taints` (Attributes List) Список ограничений (taints), применяемых к узлам в группе, Подробнее см. [в документации Kubernetes](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) (see [below for nested schema](#nestedatt--taints))
+- `remote_access` (Attributes) Конфигурация удаленного доступа к виртуальной машине в группе. (see [below for nested schema](#nestedatt--remote_access))
+- `taints` (Attributes List) Список ограничений (taints), применяемых к узлам в группе. Подробнее см. [в документации Kubernetes](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) (see [below for nested schema](#nestedatt--taints))
 - `timeouts` (Attributes) (see [below for nested schema](#nestedatt--timeouts))
+- `update_configuration` (Attributes) Политика обновления группы узлов. (see [below for nested schema](#nestedatt--update_configuration))
+- `zone` (String) Зона доступности, в которой будут размещены узлы группы. Если значение не указано, будет выбрана зона доступности, в которой расположены мастер-узлы.
 
 ### Read-Only
 
 - `created_at` (String) Время создания группы узлов.
 - `created_by` (String) Идентификатор пользователя, создавшего группу узлов.
 - `id` (String) Идентификатор группы узлов.
-- `state` (String) Состояние группы узлов. Возможные значения: `OBJECT_STATE_UNSPECIFIED` `OBJECT_STATE_PENDING` `OBJECT_STATE_PAUSING` `OBJECT_STATE_RESUMING` `OBJECT_STATE_STOPPED` `OBJECT_STATE_SUSPENDED` `OBJECT_STATE_RUNNING` `OBJECT_STATE_PAUSED` `OBJECT_STATE_UPDATING` `OBJECT_STATE_ERROR` `OBJECT_STATE_SCALING_UP` `OBJECT_STATE_SUSPENDING` `OBJECT_STATE_PROVISIONING` `OBJECT_STATE_SCALING_DOWN` `OBJECT_STATE_STOPPING` `OBJECT_STATE_DELETING`.
+- `state` (String) Состояние группы узлов. Возможные значения: `OBJECT_STATE_PAUSING` `OBJECT_STATE_UPDATING` `OBJECT_STATE_SCALING_UP` `OBJECT_STATE_SCALING_DOWN` `OBJECT_STATE_STOPPED` `OBJECT_STATE_UPGRADING` `OBJECT_STATE_RESUMING` `OBJECT_STATE_SUSPENDED` `OBJECT_STATE_PENDING` `OBJECT_STATE_PROVISIONING` `OBJECT_STATE_RUNNING` `OBJECT_STATE_PAUSED` `OBJECT_STATE_SUSPENDING` `OBJECT_STATE_UNSPECIFIED` `OBJECT_STATE_DELETING` `OBJECT_STATE_ERROR` `OBJECT_STATE_STOPPING`.
 - `task_id` (String) Информация о задаче, связанной с группой узлов.
 - `updated_at` (String) Время последнего обновления группы узлов.
 - `updated_by` (String) Идентификатор пользователя, обновившего группу узлов.
+- `upgrade_info` (Attributes) Информация о процессе обновления группы узлов. (see [below for nested schema](#nestedatt--upgrade_info))
 - `version` (String) Версия Kubernetes, которая используется на узлах группы. Список доступных версий может быть получен через k8s_version_datasource.
+- `version_upgrade` (Attributes) Информация о доступных версиях Kubernetes для обновления группы узлов. (see [below for nested schema](#nestedatt--version_upgrade))
 
 <a id="nestedatt--hardware_compute"></a>
 ### Nested Schema for `hardware_compute`
@@ -298,7 +335,7 @@ resource "cloudru_k8s_nodepool" "example-nodepool" {
 Required:
 
 - `disk_size` (Number) Размер подключаемого диска в ГБ. Размер диска от 10 до 64 ГБ. Если не указан, то размер диска по умолчанию для кластера — 10 ГБ.
-- `disk_type` (String) Тип диска. Возможные значения: `DISK_TYPE_UNSPECIFIED` `DISK_TYPE_SSD_NVME`.
+- `disk_type` (String) Тип диска. Возможные значения: `DISK_TYPE_SSD_NVME`.
 - `flavor_id` (String) Идентификатор шаблона конфигурации.
 
 
@@ -339,6 +376,15 @@ Required:
 
 
 
+<a id="nestedatt--remote_access"></a>
+### Nested Schema for `remote_access`
+
+Optional:
+
+- `ssh_key_id` (String) Идентификатор SSH ключа из сервиса SSH-ключи.
+- `username` (String) Имя пользователя.
+
+
 <a id="nestedatt--taints"></a>
 ### Nested Schema for `taints`
 
@@ -355,9 +401,45 @@ Required:
 Optional:
 
 - `create` (String) По умолчанию 40m0s.
-- `delete` (String) По умолчанию 30m0s.
+- `delete` (String) По умолчанию 40m0s.
 - `read` (String) По умолчанию 15s.
 - `update` (String) По умолчанию 30m0s.
+
+
+<a id="nestedatt--update_configuration"></a>
+### Nested Schema for `update_configuration`
+
+Optional:
+
+- `rolling_update_policy` (Attributes) Параметры политики обновления RollingUpdate. (see [below for nested schema](#nestedatt--update_configuration--rolling_update_policy))
+- `strategy` (String) Стратегия обновления. В настоящий момент поддерживается только Rolling Update. Возможные значения: `NODE_POOL_UPDATE_STRATEGY_ROLLING_UPDATE`.
+
+<a id="nestedatt--update_configuration--rolling_update_policy"></a>
+### Nested Schema for `update_configuration.rolling_update_policy`
+
+Optional:
+
+- `max_surge` (Number) Максимальное количество дополнительных узлов в процентах от общего числа узлов в группе.Обязательный параметр при наличии rolling_update_policy.
+- `max_unavailable` (Number) Максимальное количество одновременно недоступных узлов при обновлении.Обязательный параметр при наличии rolling_update_policy.
+
+
+
+<a id="nestedatt--upgrade_info"></a>
+### Nested Schema for `upgrade_info`
+
+Read-Only:
+
+- `desired_version` (String) Версия Kubernetes, на которую выполняется обновление.
+- `phase` (String) Стадия обновления.
+
+
+<a id="nestedatt--version_upgrade"></a>
+### Nested Schema for `version_upgrade`
+
+Read-Only:
+
+- `available_versions` (List of String) Список доступных версий Kubernetes для обновления кластера.
+- `upgrade_available` (Boolean) Флаг доступности новой версии Kubernetes.
 
 ## Импорт
 

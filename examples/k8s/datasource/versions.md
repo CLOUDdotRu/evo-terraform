@@ -44,5 +44,5 @@ Optional:
 
 Read-Only:
 
-- `support_mode` (String) Режим поддержки версий. Возможные значения: `SUPPORT_MODE_ACTIVE` `SUPPORT_MODE_EXPERIMENTAL` `SUPPORT_MODE_END_OF_SUPPORT` `SUPPORT_MODE_END_OF_LIFE` `SUPPORT_MODE_INACTIVE` `SUPPORT_MODE_UNSPECIFIED`
+- `support_mode` (String) Режим поддержки версий. Возможные значения: `SUPPORT_MODE_END_OF_SUPPORT` `SUPPORT_MODE_END_OF_LIFE` `SUPPORT_MODE_INACTIVE` `SUPPORT_MODE_UNSPECIFIED` `SUPPORT_MODE_ACTIVE` `SUPPORT_MODE_EXPERIMENTAL`
 - `version` (String) Версия Kubernetes.
