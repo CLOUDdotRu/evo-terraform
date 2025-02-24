@@ -1,4 +1,4 @@
-# Cloud.ru Evolution Terraform Provider 1.0.0
+# Cloud.ru Evolution Terraform Provider 1.1.0
 Terraform позволяет быстро разворачивать и поддерживать инфраструктуру в облаке Cloud.ru Evolution с помощью конфигурационных файлов. Вы описываете в коде виртуальные машины, подсети, группы безопасности и другие облачные ресурсы в виде объектов с параметрами, а Terraform исполняет этот код и создает объекты инфраструктуры или обновляет их, если конфигурация изменилась. Такой подход ускоряет подготовку инфраструктуры и минимизирует ошибки, связанные с человеческим фактором.
 
 Конфигурационные файлы пишутся на языке HCL, который поддерживает переменные, условия, циклы, функции и другие конструкции. Это позволяет использовать один конфигурационный файл для разных сред. Например, для тестовой и промышленной среды можно задавать разное количество воркеров Kubernetes® или виртуальных машин для фронтенда приложения.
@@ -7,7 +7,7 @@ Terraform полезен инженерам и администраторам, �
 
 ## Установка terraform
 
-☝🏻Перед началом работы, убедитель что у Вас установлен terraform: [terraform](https://developer.hashicorp.com/terraform/install){target=_blank} 
+☝🏻Перед началом работы, убедитель что у Вас установлен terraform: [terraform](https://developer.hashicorp.com/terraform/install)
 
 ## Установка провайдера
 
@@ -19,9 +19,9 @@ Terraform полезен инженерам и администраторам, �
 
 ``` bash
 cd \
-  && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/1.0.0/darwin_arm64/terraform-provider-cloud_1.0.0_darwin_arm64 \
-  https://github.com/CLOUDdotRu/evo-terraform/releases/download/1.0.0/terraform-provider-cloud_1.0.0_darwin_arm64 \
-  && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/1.0.0/darwin_arm64/terraform-provider-cloud_1.0.0_darwin_arm64
+  && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/1.1.0/darwin_arm64/terraform-provider-cloud_1.1.0_darwin_arm64 \
+  https://github.com/CLOUDdotRu/evo-terraform/releases/download/1.1.0/terraform-provider-cloud_1.1.0_darwin_arm64 \
+  && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/1.1.0/darwin_arm64/terraform-provider-cloud_1.1.0_darwin_arm64
 ```
 
 Далее, перейдите в каталог с вашими .tf файлами и выполните команду:
@@ -36,9 +36,9 @@ terraform init
 
 ``` bash
 cd \  
-  && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/1.0.0/darwin_amd64/terraform-provider-cloud_1.0.0_darwin_amd64 \
-  https://github.com/CLOUDdotRu/evo-terraform/releases/download/1.0.0/terraform-provider-cloud_1.0.0_darwin_amd64 \
-  && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/1.0.0/darwin_amd64/terraform-provider-cloud_1.0.0_darwin_amd64
+  && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/1.1.0/darwin_amd64/terraform-provider-cloud_1.1.0_darwin_amd64 \
+  https://github.com/CLOUDdotRu/evo-terraform/releases/download/1.1.0/terraform-provider-cloud_1.1.0_darwin_amd64 \
+  && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/1.1.0/darwin_amd64/terraform-provider-cloud_1.1.0_darwin_amd64
 ```
 
 Далее, перейдите в каталог с вашими .tf файлами и выполните команду:
@@ -53,9 +53,9 @@ terraform init
 
 ``` bash
 cd \
-  && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/1.0.0/linux_amd64/terraform-provider-cloud_1.0.0_linux_amd64 \
-  https://github.com/CLOUDdotRu/evo-terraform/releases/download/1.0.0/terraform-provider-cloud_1.0.0_linux_amd64 \
-  && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/1.0.0/linux_amd64/terraform-provider-cloud_1.0.0_linux_amd64
+  && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/1.1.0/linux_amd64/terraform-provider-cloud_1.1.0_linux_amd64 \
+  https://github.com/CLOUDdotRu/evo-terraform/releases/download/1.1.0/terraform-provider-cloud_1.1.0_linux_amd64 \
+  && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/1.1.0/linux_amd64/terraform-provider-cloud_1.1.0_linux_amd64
 ```
 
 Далее, перейдите в каталог с вашими .tf файлами и выполните команду:
@@ -67,9 +67,9 @@ terraform init
 ### Windows 10/11(x64)
 
 ``` bash
-curl -L -o terraform-provider-cloud_1.0.0_windows_amd64 https://github.com/CLOUDdotRu/evo-terraform/releases/download/1.0.0/terraform-provider-cloud_1.0.0_windows_amd64
-mkdir -p %APPDATA%\terraform.d\plugins\cloud.ru\cloudru\cloud\1.0.0\windows_amd64
-move terraform-provider-cloud_1.0.0_windows_amd64 %APPDATA%\terraform.d\plugins\cloud.ru\cloudru\cloud\1.0.0\windows_amd64\
+curl -L -o terraform-provider-cloud_1.1.0_windows_amd64 https://github.com/CLOUDdotRu/evo-terraform/releases/download/1.1.0/terraform-provider-cloud_1.1.0_windows_amd64
+mkdir -p %APPDATA%\terraform.d\plugins\cloud.ru\cloudru\cloud\1.1.0\windows_amd64
+move terraform-provider-cloud_1.1.0_windows_amd64 %APPDATA%\terraform.d\plugins\cloud.ru\cloudru\cloud\1.1.0\windows_amd64\
 ```
 
 Далее, перейдите в каталог с вашими .tf файлами и выполните команду:
