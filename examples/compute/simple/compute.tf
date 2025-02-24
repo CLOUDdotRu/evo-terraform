@@ -23,6 +23,12 @@ resource "cloudru_evolution_compute" "test_compute" {
     name = "ru.AZ-1"
   }
 
+  # NOTE: Это опциональный параметр
+  # placement_group {
+  #    NOTE: Это обязательный параметр
+  #    name = "placement-group"
+  # }
+
   # NOTE: Это обязательный параметр
   image {
     # NOTE: Это обязательный параметр
