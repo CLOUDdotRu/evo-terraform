@@ -1,7 +1,8 @@
 ---
 page_title: "cloudru_k8s_nodepool Resource - cloudru"
 subcategory: "k8s"
-description: "Управление группами узлами в кластере Kubernetes"
+description: |
+  Управление группами узлами в кластере Kubernetes
   Evolution Kubernetes NodePool
 ---
 
@@ -321,7 +322,7 @@ resource "cloudru_k8s_nodepool" "example-nodepool" {
 - `created_at` (String) Время создания группы узлов.
 - `created_by` (String) Идентификатор пользователя, создавшего группу узлов.
 - `id` (String) Идентификатор группы узлов.
-- `state` (String) Состояние группы узлов. Возможные значения: `OBJECT_STATE_PAUSING` `OBJECT_STATE_UPDATING` `OBJECT_STATE_SCALING_UP` `OBJECT_STATE_SCALING_DOWN` `OBJECT_STATE_STOPPED` `OBJECT_STATE_UPGRADING` `OBJECT_STATE_RESUMING` `OBJECT_STATE_SUSPENDED` `OBJECT_STATE_PENDING` `OBJECT_STATE_PROVISIONING` `OBJECT_STATE_RUNNING` `OBJECT_STATE_PAUSED` `OBJECT_STATE_SUSPENDING` `OBJECT_STATE_UNSPECIFIED` `OBJECT_STATE_DELETING` `OBJECT_STATE_ERROR` `OBJECT_STATE_STOPPING`.
+- `state` (String) Состояние группы узлов. Возможные значения: `OBJECT_STATE_SCALING_UP` `OBJECT_STATE_SCALING_DOWN` `OBJECT_STATE_STOPPING` `OBJECT_STATE_STOPPED` `OBJECT_STATE_UNSPECIFIED` `OBJECT_STATE_ERROR` `OBJECT_STATE_SUSPENDED` `OBJECT_STATE_UPGRADING` `OBJECT_STATE_PROVISIONING` `OBJECT_STATE_RUNNING` `OBJECT_STATE_PAUSED` `OBJECT_STATE_DELETING` `OBJECT_STATE_RESUMING` `OBJECT_STATE_UPDATING` `OBJECT_STATE_SUSPENDING` `OBJECT_STATE_EDITING` `OBJECT_STATE_PENDING` `OBJECT_STATE_PAUSING`.
 - `task_id` (String) Информация о задаче, связанной с группой узлов.
 - `updated_at` (String) Время последнего обновления группы узлов.
 - `updated_by` (String) Идентификатор пользователя, обновившего группу узлов.

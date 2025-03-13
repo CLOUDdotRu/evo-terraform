@@ -1,8 +1,9 @@
 ---
 page_title: "cloudru_k8s_cluster Resource - cloudru"
 subcategory: "k8s"
-description: "Управление кластерами Kubernetes"
-  Evolution Kubernetes Cluster
+description: |
+  Управление кластерами Kubernetes 
+    Evolution Kubernetes Cluster
 ---
 
 # Управление кластерами cloudru_k8s_cluster (Resource)
@@ -298,7 +299,7 @@ resource "cloudru_k8s_cluster" "example-cluster" {
 - `created_by` (String) Идентификатор пользователя, создавшего кластер.
 - `id` (String) Идентификатор кластера. Присваивается автоматически при создании кластера.
 - `nodepools_info` (Attributes) Информация о группах узлов. (see [below for nested schema](#nestedatt--nodepools_info))
-- `state` (String) Состояние кластера (мастеров). Возможные значения: `OBJECT_STATE_UPGRADING` `OBJECT_STATE_PAUSED` `OBJECT_STATE_RESUMING` `OBJECT_STATE_STOPPING` `OBJECT_STATE_SCALING_DOWN` `OBJECT_STATE_SUSPENDING` `OBJECT_STATE_UNSPECIFIED` `OBJECT_STATE_PENDING` `OBJECT_STATE_ERROR` `OBJECT_STATE_RUNNING` `OBJECT_STATE_UPDATING` `OBJECT_STATE_SCALING_UP` `OBJECT_STATE_STOPPED` `OBJECT_STATE_SUSPENDED` `OBJECT_STATE_PROVISIONING` `OBJECT_STATE_PAUSING` `OBJECT_STATE_DELETING`.
+- `state` (String) Состояние кластера (мастеров). Возможные значения: `OBJECT_STATE_PAUSED` `OBJECT_STATE_DELETING` `OBJECT_STATE_PENDING` `OBJECT_STATE_PAUSING` `OBJECT_STATE_RESUMING` `OBJECT_STATE_UPDATING` `OBJECT_STATE_SUSPENDING` `OBJECT_STATE_EDITING` `OBJECT_STATE_UNSPECIFIED` `OBJECT_STATE_ERROR` `OBJECT_STATE_SCALING_UP` `OBJECT_STATE_SCALING_DOWN` `OBJECT_STATE_STOPPING` `OBJECT_STATE_STOPPED` `OBJECT_STATE_PROVISIONING` `OBJECT_STATE_RUNNING` `OBJECT_STATE_SUSPENDED` `OBJECT_STATE_UPGRADING`.
 - `task_id` (String) Идентификатор задачи.
 - `updated_at` (String) Время последнего редактирования кластера.
 - `updated_by` (String) Идентификатор пользователя, который редактировал кластер последним.
@@ -334,7 +335,7 @@ Optional:
 
 Read-Only:
 
-- `control_plane_endpoints` (Map of String) Множество адресов, где ключ это тип сети. Возможные значения:`NETWORK_TYPE_PUBLIC` `NETWORK_TYPE_UNSPECIFIED` `NETWORK_TYPE_PRIVATE` и значения это адреса узлов управления в формате [https://domain:port](https://domain:port).
+- `control_plane_endpoints` (Map of String) Множество адресов, где ключ это тип сети. Возможные значения:`NETWORK_TYPE_UNSPECIFIED` `NETWORK_TYPE_PRIVATE` `NETWORK_TYPE_PUBLIC` и значения это адреса узлов управления в формате [https://domain:port](https://domain:port).
 
 
 <a id="nestedatt--audit_service"></a>
@@ -350,7 +351,7 @@ Optional:
 
 Optional:
 
-- `cluster_sa_id` (String) Конфигурация сервисного аккаунта кластера, который используется для интеграции с сервисами облака Evolution.  Например, с Artifact Registry, Object Storage, сервисами логирования и мониторинга. ID сервисного аккаунта можно скопировать в личном кабинете из URL на странице сервисного аккаунта или получить через API — https://cloud.ru/docs/console_api/ug/topics/guides__service_accounts_view.html.
+- `cluster_sa_id` (String) Конфигурация сервисного аккаунта кластера, который используется для интеграции с сервисами облака Evolution.Например, с Artifact Registry, Object Storage, сервисами логирования и мониторинга. ID сервисного аккаунта можно скопировать в личном кабинете из URL на странице сервисного аккаунта или получить через API — https://cloud.ru/docs/console_api/ug/topics/guides__service_accounts_view.html.
 
 
 <a id="nestedatt--logging_service"></a>

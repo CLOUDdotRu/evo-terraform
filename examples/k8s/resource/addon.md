@@ -26,25 +26,21 @@ resource "cloudru_k8s_addon" "istio" {
   # Название плагина.
   name = "istio"
 
-  # NOTE: Обязательный параметр.
-  # Версия плагина в формате SemVer.
+  # Обязательный параметр, если не указана версия приложения.
   version = "1.18.0"
 
   # NOTE: Обязательный параметр.
   # Режим разрешения конфликтов.
-  # Должен быть один из: RESOLVE_CONFLICTS_MODE_NONE, RESOLVE_CONFLICTS_MODE_OVERWRITE
+  # Должен быть один из: RESOLVE_CONFLICTS_MODE_NONE, RESOLVE_CONFLICTS_MODE_OVERWRITE.
+  # Режим RESOLVE_CONFLICTS_MODE_PRESERVE доступен только для обновлений плагина,
+  # но не применим для операций добавления плагина.
   resolve_conflicts_mode = "RESOLVE_CONFLICTS_MODE_OVERWRITE"
-
-  # NOTE: Опциональный параметр.
-  # Если флаг установлен, то при вызове удаления сервис не будет управлять плагином,
-  # но плагин не будет удален из кластера.
-  preserve = false
 }
 ```
 
 > **NOTE**: Некоторые плагины автоматически устанавливаются в кластер. Чтобы получить список уже установленных плагинов, используйте источник данных `cloudru_k8_addons`. Доступные к установке плагины можно получить через источники данных `cloudru_k8s_available_addons` и `cloudru_k8s_addon_releases`.
 
-## Настройка конфигурации плагина
+### Настройка конфигурации плагина
 
 ```terraform
 resource "cloudru_k8s_addon" "istio" {
@@ -92,14 +88,15 @@ resource "cloudru_k8s_addon" "istio" {
 
 - `cluster_id` (String) Идентификатор кластера.
 - `name` (String) Название плагина, например cilium.
-- `resolve_conflicts_mode` (String) Режим разрешения конфликтов. Возможные значения: `RESOLVE_CONFLICTS_MODE_UNSPECIFIED` `RESOLVE_CONFLICTS_MODE_NONE` `RESOLVE_CONFLICTS_MODE_OVERWRITE` `RESOLVE_CONFLICTS_MODE_PRESERVE`.
-- `version` (String) Версия плагина в формате SemVer.
+- `resolve_conflicts_mode` (String) Режим разрешения конфликтов. Возможные значения: `RESOLVE_CONFLICTS_MODE_OVERWRITE` `RESOLVE_CONFLICTS_MODE_PRESERVE` `RESOLVE_CONFLICTS_MODE_UNSPECIFIED` `RESOLVE_CONFLICTS_MODE_NONE`.
 
 ### Optional
 
+- `app_version` (String) Версия приложения в формате SemVer согласно версионированию поставщика.
 - `configuration` (String) Пользовательская конфигурация плагина в JSON-формате согласно схеме. Поддерживает переменные автоподстановки, заключенные в символы {{ и }}: **{{clusterID}}** — уникальный идентификатор кластера; **{{clusterName}}** — программное имя кластера; **{{projectID}}** — идентификатор проекта **{{nodeCIDR}}** — CIDR сети узлов **{{serviceCIDR}}** — CIDR сервисной сети.
-- `preserve` (Boolean) Используется только во время удаления плагина. Если флаг установлен, то сервис не будет управлять плагином, но плагин не будет удален из кластера.
+- `preserve` (Boolean) Используется при удалении плагина.Если значение параметра true, плагин останется в кластере, однако сервис не будет им управлять.
 - `timeouts` (Attributes) (see [below for nested schema](#nestedatt--timeouts))
+- `version` (String) Версия плагина в формате SemVer согласно версионированию Managed Kubernetes.
 
 ### Read-Only
 
@@ -107,7 +104,7 @@ resource "cloudru_k8s_addon" "istio" {
 - `added_at` (String) Дата и время добавления плагина в кластер.
 - `added_by` (String) Идентификатор пользователя, который добавил плагин в кластер.
 - `id` (String) Идентификатор плагина.
-- `status` (String) Статус плагина в кластере. Возможные значения: `ADDON_ACTION_STATUS_UNSPECIFIED` `ADDON_ACTION_STATUS_IN_PROGRESS` `ADDON_ACTION_STATUS_COMPLETED` `ADDON_ACTION_STATUS_FAILED` `ADDON_ACTION_STATUS_PENDING`.
+- `status` (String) Статус плагина в кластере. Возможные значения: `ADDON_ACTION_STATUS_COMPLETED` `ADDON_ACTION_STATUS_FAILED` `ADDON_ACTION_STATUS_PENDING` `ADDON_ACTION_STATUS_UNSPECIFIED` `ADDON_ACTION_STATUS_IN_PROGRESS`.
 - `updated_at` (String) Дата и время последнего изменения плагина.
 
 <a id="nestedatt--timeouts"></a>
@@ -132,7 +129,7 @@ Read-Only:
 - `issues` (Attributes List) Список проблем, возникших при выполнении действия. (see [below for nested schema](#nestedatt--action_history--issues))
 - `namespace` (String) Пространство имен, в пределах которого выполняется действие над плагином.
 - `params` (Attributes List) Список параметров, используемых при выполнении действия над плагином. (see [below for nested schema](#nestedatt--action_history--params))
-- `status` (String) Статус действия, может быть одним из: `ADDON_ACTION_STATUS_PENDING` `ADDON_ACTION_STATUS_UNSPECIFIED` `ADDON_ACTION_STATUS_IN_PROGRESS` `ADDON_ACTION_STATUS_COMPLETED` `ADDON_ACTION_STATUS_FAILED`.
+- `status` (String) Статус действия, может быть одним из: `ADDON_ACTION_STATUS_IN_PROGRESS` `ADDON_ACTION_STATUS_COMPLETED` `ADDON_ACTION_STATUS_FAILED` `ADDON_ACTION_STATUS_PENDING` `ADDON_ACTION_STATUS_UNSPECIFIED`.
 - `type` (String) Тип действия над плагином. Возможные значения: `ADDON_ACTION_TYPE_UNSPECIFIED` `ADDON_ACTION_TYPE_ADD` `ADDON_ACTION_TYPE_UPDATE` `ADDON_ACTION_TYPE_DELETE`.
 
 <a id="nestedatt--action_history--issues"></a>
