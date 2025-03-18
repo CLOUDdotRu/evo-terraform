@@ -103,9 +103,9 @@ terraform init
 - `auth_secret`
 - `project_id`
 
-Чтобы получить `auth_key_id и` `auth_secret`, необходимо сгенерировать ключ доступа по следующей [инструкции](https://cloud.ru/ru/docs/console_api/ug/topics/guides__service_accounts_key.html#guides-service-accounts-key-create)
+Чтобы получить `auth_key_id и` `auth_secret`, необходимо сгенерировать ключ доступа по следующей [инструкции.](https://cloud.ru/ru/docs/console_api/ug/topics/guides__service_accounts_key.html#guides-service-accounts-key-create)
 
-`project_id` можно скопировать из адрессной строки своего проекта в веб-консоли console.cloud.ru
+`project_id` можно скопировать из адресной строки своего проекта в веб-консоли console.cloud.ru
 
 Далее, необходимо записать эти значения в файле main.tf в соответствующие поля, и расположить его в том же каталоге, что и другие .tf файлы.
 
