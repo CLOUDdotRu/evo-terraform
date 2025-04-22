@@ -21,7 +21,7 @@ provider "cloudru" {
   auth_secret         = "********************************"
 
   # NOTE: Это опциональный параметр, требуется для работы с IAM (в следующей версии станет обязательным)
-  iam_endpoint = "api.iam.cloud.ru:443"
+  iam_endpoint = "iam.api.cloud.ru:443"
 
   # NOTE: Это опциональный параметр, требуется для работы с K8S
   k8s_endpoint = "mk8s.api.cloud.ru:443"
