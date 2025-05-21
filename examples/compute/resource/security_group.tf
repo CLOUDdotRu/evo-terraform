@@ -70,8 +70,11 @@ resource "cloudru_evolution_security_group" "test_security_group" {
     # NOTE: Это обязательный параметр
     port_range = "any"
 
-    # NOTE: Это обязательный параметр
+    # NOTE: Это опциональный параметр
     remote_ip_prefix = "::/0"
+    
+    # NOTE: Это опциональный параметр
+    remote_security_group = "00000000-0000-0000-0000-000000000000"
 
     # NOTE: Это опциональный параметр
     # description = ""
@@ -96,8 +99,11 @@ resource "cloudru_evolution_security_group" "test_security_group" {
     # NOTE: Это обязательный параметр
     port_range = "80:80"
 
-    # NOTE: Это обязательный параметр
+    # NOTE: Это опциональный параметр
     remote_ip_prefix = "0.0.0.0/0"
+
+    # NOTE: Это опциональный параметр
+    remote_security_group = "00000000-0000-0000-0000-000000000000"
 
     # NOTE: Это опциональный параметр
     description = "HTTP"

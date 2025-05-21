@@ -117,6 +117,22 @@ resource "cloudru_k8s_cluster" "example-cluster" {
   # Должен быть один из: RELEASE_CHANNEL_REGULAR, RELEASE_CHANNEL_RAPID,  RELEASE_CHANNEL_STABLE.
   # release_channel = "RELEASE_CHANNEL_STABLE".
 
+  # NOTE: Опциональный параметр.
+  # Шифрование ресурсов кластера.
+  # key_management_service = {
+
+  # NOTE: Опциональный параметр.
+  # Включение шифрования etcd.
+  # Возможные значения: true — шифрование включено, false — шифрование выключено.
+  # По умолчанию шифрование выключено.
+  # Если установлен параметр false, идентификатор ключа шифрования ключа (KEK — Key Encryption Key) игнорируется.
+  # enabled = true
+
+  # NOTE: Опциональный параметр.
+  # Идентификатор ключа шифрования ключа (KEK — Key Encryption Key) из сервиса Key Management.
+  # kek_id = "00000000-0000-0000-0000-000000000000"
+  # }
+
   # NOTE: Опциональный параметр
   timeouts = {
 
@@ -151,5 +167,3 @@ resource "cloudru_k8s_cluster" "example-cluster" {
   # Состояние кластера.
   # state = "OBJECT_STATE_RUNNING"
 }
-
-

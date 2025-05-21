@@ -203,6 +203,22 @@ resource "cloudru_k8s_cluster" "example-cluster" {
   }
 
   # NOTE: Опциональный параметр.
+  # Шифрование ресурсов кластера.
+  key_management_service = {
+
+    # NOTE: Опциональный параметр.
+    # Включение шифрования etcd.
+    # Возможные значения: true — шифрование включено, false — шифрование выключено.
+    # По умолчанию шифрование выключено.
+    # Если установлен параметр false, идентификатор ключа шифрования ключа (KEK — Key Encryption Key) игнорируется.
+    enabled = true
+
+    # NOTE: Опциональный параметр.
+    # Идентификатор ключа шифрования ключа (KEK — Key Encryption Key) из сервиса Key Management.
+    kek_id = "00000000-0000-0000-0000-000000000000"
+  }
+
+  # NOTE: Опциональный параметр.
   timeouts = {
 
     # NOTE: Опциональный параметр.
@@ -287,6 +303,7 @@ resource "cloudru_k8s_cluster" "example-cluster" {
 
 - `audit_service` (Attributes) Аудит-логирование событий компонентов кластера. (see [below for nested schema](#nestedatt--audit_service))
 - `identity_configuration` (Attributes) Настройки для сервисного аккаунта. (see [below for nested schema](#nestedatt--identity_configuration))
+- `key_management_service` (Attributes) Шифрование etcd. (see [below for nested schema](#nestedatt--key_management_service))
 - `logging_service` (Attributes) Параметры логирования событий компонентов кластера. (see [below for nested schema](#nestedatt--logging_service))
 - `monitoring_service` (Attributes) Мониторинг компонентов кластера. (see [below for nested schema](#nestedatt--monitoring_service))
 - `project_id` (String) Идентификатор проекта. Может быть указан для ресурса. Если указан и в настройках провайдера, и в описании ресурса, будет использован указанный в описании ресурса.
@@ -299,7 +316,7 @@ resource "cloudru_k8s_cluster" "example-cluster" {
 - `created_by` (String) Идентификатор пользователя, создавшего кластер.
 - `id` (String) Идентификатор кластера. Присваивается автоматически при создании кластера.
 - `nodepools_info` (Attributes) Информация о группах узлов. (see [below for nested schema](#nestedatt--nodepools_info))
-- `state` (String) Состояние кластера (мастеров). Возможные значения: `OBJECT_STATE_PAUSED` `OBJECT_STATE_DELETING` `OBJECT_STATE_PENDING` `OBJECT_STATE_PAUSING` `OBJECT_STATE_RESUMING` `OBJECT_STATE_UPDATING` `OBJECT_STATE_SUSPENDING` `OBJECT_STATE_EDITING` `OBJECT_STATE_UNSPECIFIED` `OBJECT_STATE_ERROR` `OBJECT_STATE_SCALING_UP` `OBJECT_STATE_SCALING_DOWN` `OBJECT_STATE_STOPPING` `OBJECT_STATE_STOPPED` `OBJECT_STATE_PROVISIONING` `OBJECT_STATE_RUNNING` `OBJECT_STATE_SUSPENDED` `OBJECT_STATE_UPGRADING`.
+- `state` (String) Состояние кластера (мастеров). Возможные значения: `OBJECT_STATE_RESUMING` `OBJECT_STATE_ERROR` `OBJECT_STATE_SCALING_UP` `OBJECT_STATE_SCALING_DOWN` `OBJECT_STATE_SUSPENDING` `OBJECT_STATE_UNSPECIFIED` `OBJECT_STATE_PAUSING` `OBJECT_STATE_UPDATING` `OBJECT_STATE_STOPPING` `OBJECT_STATE_UPGRADING` `OBJECT_STATE_EDITING` `OBJECT_STATE_DELETING` `OBJECT_STATE_STOPPED` `OBJECT_STATE_SUSPENDED` `OBJECT_STATE_PENDING` `OBJECT_STATE_PROVISIONING` `OBJECT_STATE_RUNNING` `OBJECT_STATE_PAUSED`.
 - `task_id` (String) Идентификатор задачи.
 - `updated_at` (String) Время последнего редактирования кластера.
 - `updated_by` (String) Идентификатор пользователя, который редактировал кластер последним.
@@ -311,7 +328,7 @@ resource "cloudru_k8s_cluster" "example-cluster" {
 Required:
 
 - `count` (Number) Количество узлов плоскости управления. Возможные значения: `1`, `3`, `5`.
-- `type` (String) Тип узла плоскости управления. Возможные значения: `MASTER_TYPE_EXTRALARGE` `MASTER_TYPE_UNSPECIFIED` `MASTER_TYPE_SMALL` `MASTER_TYPE_MEDIUM` `MASTER_TYPE_LARGE`.
+- `type` (String) Тип узла плоскости управления. Возможные значения: `MASTER_TYPE_MEDIUM` `MASTER_TYPE_LARGE` `MASTER_TYPE_EXTRALARGE` `MASTER_TYPE_UNSPECIFIED` `MASTER_TYPE_SMALL`.
 - `version` (String) Версия Kubernetes. Список доступных версий может быть получен через источник данных k8s_version_datasource Версия должна быть в формате SemVer и начинаться с *v*: **v1.2.3**.
 
 Optional:
@@ -352,6 +369,15 @@ Optional:
 Optional:
 
 - `cluster_sa_id` (String) Конфигурация сервисного аккаунта кластера, который используется для интеграции с сервисами облака Evolution.Например, с Artifact Registry, Object Storage, сервисами логирования и мониторинга. ID сервисного аккаунта можно скопировать в личном кабинете из URL на странице сервисного аккаунта или получить через API — https://cloud.ru/docs/console_api/ug/topics/guides__service_accounts_view.html.
+
+
+<a id="nestedatt--key_management_service"></a>
+### Nested Schema for `key_management_service`
+
+Optional:
+
+- `enabled` (Boolean) Включение шифрования ресурсов кластера. Возможные значения: **true** — шифрование включено, **false** — шифрование выключено. По умолчанию шифрование выключено. Если установлен параметр false, идентификатор ключа шифрования ключа (KEK — Key Encryption Key) игнорируется.
+- `kek_id` (String) Идентификатор ключа шифрования ключа (KEK — Key Encryption Key) из сервиса Key Managment. Подробнее см. [Шифрование etcd в Managed Kubernetes](https://cloud.ru/docs/kubernetes-evolution/ug/topics/concepts__encryption).
 
 
 <a id="nestedatt--logging_service"></a>
