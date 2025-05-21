@@ -322,7 +322,7 @@ resource "cloudru_k8s_nodepool" "example-nodepool" {
 - `created_at` (String) Время создания группы узлов.
 - `created_by` (String) Идентификатор пользователя, создавшего группу узлов.
 - `id` (String) Идентификатор группы узлов.
-- `state` (String) Состояние группы узлов. Возможные значения: `OBJECT_STATE_SCALING_UP` `OBJECT_STATE_SCALING_DOWN` `OBJECT_STATE_STOPPING` `OBJECT_STATE_STOPPED` `OBJECT_STATE_UNSPECIFIED` `OBJECT_STATE_ERROR` `OBJECT_STATE_SUSPENDED` `OBJECT_STATE_UPGRADING` `OBJECT_STATE_PROVISIONING` `OBJECT_STATE_RUNNING` `OBJECT_STATE_PAUSED` `OBJECT_STATE_DELETING` `OBJECT_STATE_RESUMING` `OBJECT_STATE_UPDATING` `OBJECT_STATE_SUSPENDING` `OBJECT_STATE_EDITING` `OBJECT_STATE_PENDING` `OBJECT_STATE_PAUSING`.
+- `state` (String) Состояние группы узлов. Возможные значения: `OBJECT_STATE_UNSPECIFIED` `OBJECT_STATE_PAUSING` `OBJECT_STATE_UPDATING` `OBJECT_STATE_STOPPING` `OBJECT_STATE_UPGRADING` `OBJECT_STATE_EDITING` `OBJECT_STATE_DELETING` `OBJECT_STATE_STOPPED` `OBJECT_STATE_SUSPENDED` `OBJECT_STATE_PENDING` `OBJECT_STATE_PROVISIONING` `OBJECT_STATE_RUNNING` `OBJECT_STATE_PAUSED` `OBJECT_STATE_RESUMING` `OBJECT_STATE_ERROR` `OBJECT_STATE_SCALING_UP` `OBJECT_STATE_SCALING_DOWN` `OBJECT_STATE_SUSPENDING`.
 - `task_id` (String) Информация о задаче, связанной с группой узлов.
 - `updated_at` (String) Время последнего обновления группы узлов.
 - `updated_by` (String) Идентификатор пользователя, обновившего группу узлов.
@@ -335,7 +335,7 @@ resource "cloudru_k8s_nodepool" "example-nodepool" {
 
 Required:
 
-- `disk_size` (Number) Размер подключаемого диска в ГБ. Размер диска от 10 до 64 ГБ. Если не указан, то размер диска по умолчанию для кластера — 10 ГБ.
+- `disk_size` (Number) Размер подключаемого диска в ГБ. Размер диска от 10 до 16 384 ГБ. Если не указан, то размер диска по умолчанию для кластера — 10 ГБ.
 - `disk_type` (String) Тип диска. Возможные значения: `DISK_TYPE_SSD_NVME`.
 - `flavor_id` (String) Идентификатор шаблона конфигурации.
 
