@@ -1,0 +1,26 @@
+users:
+  - name: terraform
+    gecos: terraform
+    primary_group: hashicorp
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, admin
+    ssh_import_id:
+    lock_passwd: false
+    ssh_authorized_keys:
+      -  # Paste your created SSH key here
+
+yum_repos:
+  # The name of the repository
+  epel-testing:
+    # Any repository configuration options
+    # See: man yum.conf
+    #
+    # At least one of 'baseurl' or 'metalink' or 'mirrorlist' is required!
+    baseurl: http://download.fedoraproject.org/pub/epel/testing/5/$basearch
+    metalink: https://mirrors.fedoraproject.org/metalink?repo=epel-$releasever&arch=$basearch&infra=$infra&content=$contentdir
+    mirrorlist: https://mirrors.fedoraproject.org/metalink?repo=fedora-$releasever&
+    enabled: false
+    failovermethod: priority
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL
+    name: Extra Packages for Enterprise Linux 5 - Testing
