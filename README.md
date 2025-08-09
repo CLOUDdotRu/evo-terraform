@@ -78,10 +78,11 @@ terraform init
 ```
 
 ### Windows 10/11(x64)
+В командной строке cmd.exe запустить
 
-``` bash
+``` cmd
 curl -L -o terraform-provider-cloud_1.5.0_windows_amd64 https://github.com/CLOUDdotRu/evo-terraform/releases/download/1.5.0/terraform-provider-cloud_1.5.0_windows_amd64
-mkdir -p %APPDATA%\terraform.d\plugins\cloud.ru\cloudru\cloud\1.5.0\windows_amd64
+mkdir  %APPDATA%\terraform.d\plugins\cloud.ru\cloudru\cloud\1.5.0\windows_amd64
 move terraform-provider-cloud_1.5.0_windows_amd64 %APPDATA%\terraform.d\plugins\cloud.ru\cloudru\cloud\1.5.0\windows_amd64\
 ```
 
