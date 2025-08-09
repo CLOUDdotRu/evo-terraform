@@ -78,6 +78,7 @@ terraform init
 ```
 
 ### Windows 10/11(x64)
+В командной строке cmd.exe запустить
 
 ``` cmd
 curl -L -o terraform-provider-cloud_1.5.0_windows_amd64 https://github.com/CLOUDdotRu/evo-terraform/releases/download/1.5.0/terraform-provider-cloud_1.5.0_windows_amd64
