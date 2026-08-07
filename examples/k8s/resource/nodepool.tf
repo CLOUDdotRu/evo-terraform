@@ -52,7 +52,7 @@ resource "cloudru_k8s_nodepool" "example-nodepool" {
     # Размер подключаемого диска в ГБ.
     disk_size = 10
 
-    # NOTE: Опциональный параметр. По умолчанию будет выбран DISK_TYPE_SSD_NVME.
+    # NOTE: Обязательный параметр. По умолчанию будет выбран DISK_TYPE_SSD_NVME.
     # Тип диска.
     disk_type = "DISK_TYPE_SSD_NVME"
 
