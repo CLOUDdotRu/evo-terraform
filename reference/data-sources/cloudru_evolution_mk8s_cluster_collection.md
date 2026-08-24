@@ -1,4 +1,3 @@
-
 # cloudru_evolution_mk8s_cluster_collection (Data Source)
 
 
@@ -11,6 +10,15 @@ data "cloudru_evolution_mk8s_cluster_collection" "datasource_cluster" {
   page_size  = 10
   filter     = "masterCount = 1"
   order_by   = "displayName desc"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-cluster" {
@@ -30,10 +38,19 @@ output "data-cluster" {
 - `filter` (String) Параметры фильтрации списка кластеров в виде "field condition value" или "field:value"(include). Возможные значения для field: displayName, status, kubeAPIInternet, masterCount, nodePoolCount, createdAt. Возможные значения для condition: =, !=, >, >=, <, <=.
 - `order_by` (String) Сортировка списка кластеров в виде "field direction". Возможные значения для field: displayName, masterCount, nodePoolCount, createdAt. Возможные значения для direction: asc, desc.
 - `page_size` (Number) Максимальное количество результатов на странице.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `clusters` (Attributes List) Список кластеров. (see [below for nested schema](#nestedatt--clusters))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--clusters"></a>
 ### Nested Schema for `clusters`
@@ -162,8 +179,8 @@ Read-Only:
 - `cp_endpoints` (Attributes List) Адреса плоскости управления. (see [below for nested schema](#nestedatt--clusters--network_configuration--cp_endpoints))
 - `kube_api_internet` (Boolean) Признак публикации kube-apiserver в интернет.
 - `network_plugin` (Attributes) Плагин CNI для обеспечения сетевой связности и сетевых политик в кластере. (see [below for nested schema](#nestedatt--clusters--network_configuration--network_plugin))
-- `nodes_subnet_cidr` (String) Адрес подсети узлов плоскости управления.
-- `nodes_subnet_id` (String) Идентификатор подсети узлов плоскости управления.
+- `nodes_subnet_cidr` (String, Deprecated) Адрес подсети узлов плоскости управления.
+- `nodes_subnet_id` (String, Deprecated) Идентификатор подсети узлов плоскости управления.
 - `pods_subnet_cidr` (String) Адрес подсети подов.
 - `private_vip_subnet_id` (String) Идентификатор подсети, из которой выделен внутренний IP-адрес.
 - `services_subnet_cidr` (String) Адрес подсети сервисов.

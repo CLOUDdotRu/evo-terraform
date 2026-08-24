@@ -1,4 +1,3 @@
-
 # cloudru_evolution_compute_security_group_rule (Resource)
 
 
@@ -7,25 +6,36 @@
 
 ```terraform
 resource "cloudru_evolution_compute_security_group_rule" "resource_security_group_rule" {
-  description = "75968b12-6c0d-400c-b8d4-197bb69ebba0"
+  description = "bea325fd-8e94-4e05-9198-3b725e491736"
   # Варианты значений параметра direction:
   # TRAFFIC_DIRECTION_INGRESS, TRAFFIC_DIRECTION_EGRESS
-  direction = "TRAFFIC_DIRECTION_INGRESS"
+  direction = "TRAFFIC_DIRECTION_EGRESS"
   # Варианты значений параметра ether_type:
   # ETHER_TYPE_IPV4, ETHER_TYPE_IPV6
-  ether_type = "ETHER_TYPE_IPV6"
+  ether_type = "ETHER_TYPE_IPV4"
   # Варианты значений параметра ip_protocol:
   # IP_PROTOCOL_TCP, IP_PROTOCOL_UDP, IP_PROTOCOL_ICMP, IP_PROTOCOL_ANY
-  ip_protocol      = "IP_PROTOCOL_ANY"
-  port_range       = "ae0827c3-f8d0-40f7-9dc3-1674b77f4d77"
-  remote_ip_prefix = "758aabb6-776d-4cd3-bd39-2f0eddc77d6b"
+  ip_protocol      = "IP_PROTOCOL_UDP"
+  port_range       = "ddb92cc0-2e2b-4563-95d9-fb90d40cecbb"
+  remote_ip_prefix = "06d0fc4b-1489-42ea-996d-12e581aafdb7"
   # Нужно заполнить одно из значений - remote_security_group
   remote_security_group = {
     # Нужно заполнить одно из значений - id, name.
-    id   = "d80f0cad-bdd7-416b-bd45-b8010d9f9bf6"
-    name = "da2db9bb-0e0c-4e4b-a622-0ce2390a3c5c"
+    id   = "0d0f884c-4b76-413d-bf33-5832ac91bc0d"
+    name = "9cefb7ab-317c-43e2-af13-547d7bd9587a"
   }
-  security_group_id = "ee0d6d86-2fbf-4cf6-9b6a-ca9725f7e3de"
+  security_group_id = "06059bf0-9d71-4e50-b81c-735b0f6cb31a"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -45,6 +55,7 @@ resource "cloudru_evolution_compute_security_group_rule" "resource_security_grou
 - `description` (String) Описание правила.
 - `remote_ip_prefix` (String) Префикс IP-адреса.
 - `remote_security_group` (Attributes) Параметры группы безопасности. (see [below for nested schema](#nestedatt--remote_security_group))
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
@@ -63,6 +74,16 @@ Optional:
 Read-Only:
 
 - `status` (String) Статус группы безопасности.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
 
 
 <a id="nestedatt--security_group"></a>

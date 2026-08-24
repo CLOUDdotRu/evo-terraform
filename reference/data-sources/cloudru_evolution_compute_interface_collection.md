@@ -1,4 +1,3 @@
-
 # cloudru_evolution_compute_interface_collection (Data Source)
 
 
@@ -7,9 +6,18 @@
 
 ```terraform
 data "cloudru_evolution_compute_interface_collection" "datasource_interface" {
-  project_id = "112228b5-a13b-401f-a1ba-3729dd25bb2c"
-  page_size  = 6297931383209692942
-  filter     = "f3aa5858-4688-4fc8-a874-1dfcce4fbe4a"
+  project_id = "7c530d2f-77a7-43cf-a9ff-ff7b3708d4d3"
+  page_size  = 271251722118177520
+  filter     = "d1ca0118-c562-419a-b0a3-08bf840ad5f8"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-interface" {
@@ -28,10 +36,19 @@ output "data-interface" {
 
 - `filter` (String) Выражение фильтрующее ответ.
 - `page_size` (Number) Максимальное количество результатов на странице ответа.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `interfaces` (Attributes List) Список интерфейсов. (see [below for nested schema](#nestedatt--interfaces))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--interfaces"></a>
 ### Nested Schema for `interfaces`

@@ -1,4 +1,3 @@
-
 # cloudru_evolution_kafka_user (Resource)
 
 
@@ -9,10 +8,21 @@
 resource "cloudru_evolution_kafka_user" "resource_user" {
   name = "some_user-1"
   roles = {
-    value = ["82b44280-7d96-4335-93cd-3a78cbc2cccc", "2c2d1de8-5cd1-47e0-adb5-6e4b796f2628", "69a24143-4c4e-4ba0-925e-77cb47294cf2", "6a3bbf95-97bf-4146-99aa-b3a6148affb1", "4d2c60b5-5ca6-4c6a-ae3d-db642402980a", "cfb52f90-e2bc-44b6-bed9-ba0295fed0b0", "024d3cf3-5934-41c8-8368-e6a8d99a3a6f", "7fef238b-2094-4149-8ce8-9abe70ecabd7", "42bc6729-b367-46c1-b07d-667e73de745c", "82c0bf99-aa73-455b-b586-68fe2e2f8804"]
+    value = ["3dbaf1a2-bfb1-4b7c-a5c8-031a0cfd2660", "51b7f33d-53ba-481d-bd97-740f53b3fcb0", "a4db1baf-5a5b-471f-b390-15e48013b45c", "bcb52eb2-3d32-4e91-b692-6bb108ef12b2", "d5bc44e0-3aee-45ac-98f8-a79cba5f2dcc", "c4818011-9523-4bc2-9543-46bb822282b7", "39842dcd-aa85-4b88-ac2f-92abac60515c", "65add4f9-0c4a-4371-986c-b0690c093f70", "864ad00c-9124-4be5-bc03-4359554ddfcb", "aa23a585-e750-4133-9c36-efde22a7d0cf"]
   }
   cluster_id = "00000000-0000-0000-0000-000000000000"
   password   = "some_pass"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -28,6 +38,7 @@ resource "cloudru_evolution_kafka_user" "resource_user" {
 ### Optional
 
 - `roles` (Attributes) Список ролей, назначенных пользователю. Если список пуст, пользователь не может выполнять никакие действия. (see [below for nested schema](#nestedatt--roles))
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 <a id="nestedatt--roles"></a>
 ### Nested Schema for `roles`
@@ -35,3 +46,13 @@ resource "cloudru_evolution_kafka_user" "resource_user" {
 Optional:
 
 - `value` (List of String) The repeated string value.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).

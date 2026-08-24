@@ -1,4 +1,3 @@
-
 # cloudru_evolution_spark_spark_collection (Data Source)
 
 
@@ -11,6 +10,15 @@ data "cloudru_evolution_spark_spark_collection" "datasource_spark" {
   project_id = "0000-0000-0000-0000-0000"
   page_size  = 100
   filter     = "name=spark-instance"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-spark" {
@@ -24,16 +32,25 @@ output "data-spark" {
 ### Required
 
 - `cluster_id` (String) Идентификатор кластера.
-- `project_id` (String) Идентификатор проекта, в котором установлены экземпляры Spark.
+- `project_id` (String) Идентификатор проекта, в котором установлены инстансы Managed Spark.
 
 ### Optional
 
-- `filter` (String) Фильтр для фильтриции списка кластеров. Фильтрацию можно произвести по полю [Spark.name]. Пример: name=<spark-name>.
+- `filter` (String) Фильтр для списка инстансов. Фильтровать можно по полю [Spark.name]. Пример: name=spark-instance-name.
 - `page_size` (Number) Максимальное количество результатов на странице ответа. Если значение больше [page_size], сервис возвращает [next_page_token], который используется в [ListSparksResponse]. Значение [page_size] по умолчанию 1000.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
-- `sparks` (Attributes List) Список spark. (see [below for nested schema](#nestedatt--sparks))
+- `sparks` (Attributes List) Список инстансов Managed Spark. (see [below for nested schema](#nestedatt--sparks))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--sparks"></a>
 ### Nested Schema for `sparks`
@@ -43,25 +60,25 @@ Read-Only:
 - `cluster_id` (String) Идентификатор кластера.
 - `compute_configuration` (Attributes) Параметры конфигурации вычислительных ресурсов. (see [below for nested schema](#nestedatt--sparks--compute_configuration))
 - `created_at` (String) Время создания.
-- `created_by` (String) Идентификатор пользователя, кем создан.
+- `created_by` (String) Идентификатор создавшего пользователя.
 - `description` (String) Описание.
 - `enabled_external_host` (Boolean) Флаг разрешает или запрещает внешний хост.
-- `external_s3_config` (Attributes) Конфигурация параметров внешнего s3. (see [below for nested schema](#nestedatt--sparks--external_s3_config))
-- `hs_external_host` (String) URL внешнего хоста spark history server.
-- `hs_internal_host` (String) URL внутреннего хоста spark history server.
-- `id` (String) Идентификатор spark.
-- `internal_s3_config` (Attributes) Конфигурация параметров внутреннего s3. (see [below for nested schema](#nestedatt--sparks--internal_s3_config))
+- `external_s3_config` (Attributes) Конфигурация параметров внешнего хранилища S3. (see [below for nested schema](#nestedatt--sparks--external_s3_config))
+- `hs_external_host` (String) URL внешнего хоста Spark History.
+- `hs_internal_host` (String) URL внутреннего хоста Spark History.
+- `id` (String) Идентификатор инстанса Managed Spark.
+- `internal_s3_config` (Attributes) Конфигурация параметров Object Storage. (see [below for nested schema](#nestedatt--sparks--internal_s3_config))
 - `log_group_id` (String) Идентификатор группы логирования.
 - `name` (String) Название.
 - `network_configuration` (Attributes) Конфигурация сети. (see [below for nested schema](#nestedatt--sparks--network_configuration))
 - `project_id` (String) Идентификатор проекта.
-- `s3_eventlog_url` (String) URL к директории spark логов в s3.
-- `spark_connect_id` (String) Идентификатор spark-connect, если существует.
-- `status` (String) Статус.
+- `s3_eventlog_url` (String) URL директории с логами Spark в хранилище S3.
+- `spark_connect_id` (String) Идентификатор Spark Connect.
+- `status` (String) Статус инстанса Managed Spark.
 - `updated_at` (String) Время обновления.
-- `updated_by` (String) Идентификатор пользователя, кем обновлен.
-- `user` (Attributes) Пользователь spark для доступа к spark history. (see [below for nested schema](#nestedatt--sparks--user))
-- `version` (Attributes) Spark version ID. (see [below for nested schema](#nestedatt--sparks--version))
+- `updated_by` (String) Идентификатор обновившего пользователя.
+- `user` (Attributes) Пользователь Managed Spark для доступа к Spark History. (see [below for nested schema](#nestedatt--sparks--user))
+- `version` (Attributes) Версия Managed Spark. (see [below for nested schema](#nestedatt--sparks--version))
 
 <a id="nestedatt--sparks--compute_configuration"></a>
 ### Nested Schema for `sparks.compute_configuration`
@@ -80,7 +97,7 @@ Read-Only:
 
 - `access_key_secret_id` (String) Access key в формате secret manager secret_id.
 - `bucket` (String) Имя бакета.
-- `endpoint` (String) Endpoint url.
+- `endpoint` (String) URL эндпоинта.
 - `region` (String) Регион, например, ru-central-1.
 - `secret_key_secret_id` (String) Secret key в формате secret manager secret_id.
 

@@ -1,4 +1,3 @@
-
 # cloudru_evolution_compute_external_ip_collection (Data Source)
 
 
@@ -7,10 +6,19 @@
 
 ```terraform
 data "cloudru_evolution_compute_external_ip_collection" "datasource_external_ip" {
-  project_id = "fbe992a0-883d-4a6a-b6e3-1cd22b371412"
-  page_size  = 7985616876915377796
-  filter     = "bd169786-0cb8-4516-a694-3651c9cb28f9"
-  order_by   = "b6834f4c-91ef-4244-898c-940e3671d965"
+  project_id = "d9b2ab42-dbfb-43dd-8076-10f14c612f35"
+  page_size  = 1921915553036934180
+  filter     = "28ea9197-de38-47b5-a0a0-3f06c5c4dbb1"
+  order_by   = "df9fd225-b35c-426f-b386-75dd8898cdd7"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-external_ip" {
@@ -30,10 +38,19 @@ output "data-external_ip" {
 - `filter` (String) Выражение фильтрующее ответ.
 - `order_by` (String) Имя поля по которому производится сортировка.
 - `page_size` (Number) Максимальное количество результатов на странице ответа.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `external_ips` (Attributes List) Список публичных IP-адресов. (see [below for nested schema](#nestedatt--external_ips))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--external_ips"></a>
 ### Nested Schema for `external_ips`

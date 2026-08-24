@@ -1,4 +1,3 @@
-
 # cloudru_evolution_iam_access_key_collection (Data Source)
 
 
@@ -7,7 +6,16 @@
 
 ```terraform
 data "cloudru_evolution_iam_access_key_collection" "datasource_access_key" {
-  service_account_id = "dcc1e78e-122b-48f1-91b9-5e59c77d113b"
+  service_account_id = "f752e7a6-fe8f-429c-b06d-e897ffbe16d8"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-access_key" {
@@ -22,9 +30,21 @@ output "data-access_key" {
 
 - `service_account_id` (String) ServiceAccountID - идентификатор сервисного аккаунта.
 
+### Optional
+
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
+
 ### Read-Only
 
 - `access_keys` (Attributes List) AccessKey - список ключей доступа. (see [below for nested schema](#nestedatt--access_keys))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--access_keys"></a>
 ### Nested Schema for `access_keys`

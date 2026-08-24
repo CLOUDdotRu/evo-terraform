@@ -1,4 +1,3 @@
-
 # cloudru_evolution_compute_vm (Resource)
 
 
@@ -7,37 +6,48 @@
 
 ```terraform
 resource "cloudru_evolution_compute_vm" "resource_vm" {
-  project_id = "163fd893-640d-444c-a58f-a48d36096822"
+  project_id = "1e499453-c3cc-446d-bad5-a0a1a658f181"
   zone = {
     # Нужно заполнить одно из значений - id, name.
-    id   = "d2b8f129-3ccd-43e9-aa9f-d29ad787cd4f"
-    name = "ed36fc35-16b2-46dc-8e68-5ed0ae28e8eb"
+    id   = "05e500d8-54e1-44d9-8adb-50faa4282cd1"
+    name = "f4d81062-9a7d-484a-bacc-2187d1ae84f0"
   }
-  name        = "7c76b22c-ebba-4a26-a82a-c9f664482038"
-  description = "afb63cec-f9a7-4a41-864e-8c99e946d26f"
+  name        = "29807b5a-da60-47cf-b5c7-f98ab067376b"
+  description = "bda94ac8-e5ce-4d39-86d5-30bb43f838c7"
   # Нужно заполнить одно из значений - flavor
   flavor = {
     # Нужно заполнить одно из значений - id, name.
-    id   = "679de12e-085d-4b5f-acd9-24fed9ddc895"
-    name = "889aeb19-324a-49ff-a562-c97d0e767e35"
+    id   = "d195d96d-68b3-4d64-8183-7fc9aae290fa"
+    name = "1656deb6-afaa-46fe-80a2-f6b3933c7858"
   }
   placement_group = {
-    id = "cf04bc74-4d4a-4e93-a370-e23015591b90"
+    id = "8d32e73c-82d9-4f77-96da-1e27d14ff24d"
   }
   network_interfaces = [{
-    id = "9e0f7eb1-fde0-43c4-b312-9257fa86754f"
+    id = "7c356299-ec55-4a2c-970c-1a20cd6a7893"
   }]
   disks = [{
-    id = "af38f894-293f-41da-a070-482652775e77"
+    id = "65b09adb-9815-403f-9dfe-07cbee761b5c"
   }]
-  cloud_init_userdata = "b967c305-ef4c-4338-938c-64eddecb9474"
+  cloud_init_userdata = "5c27fe66-debf-43cc-adc1-1a0b0167ce2e"
   image_metadata = {
-    "3147fdac-4eaa-4ed3-a43b-93f9bdd1dc33" = {
+    "d7e27636-97ea-4c09-ad46-e6c070a44d1d" = {
       # Нужно заполнить одно из значений - string_value, int_value, bool_value.
-      string_value = "8c19a66f-5042-4d2d-8be5-f1b0835f28ab"
-      int_value    = 758694264
+      string_value = "e439d86c-839f-4c8d-bfb9-59d07c63dd91"
+      int_value    = 1083538808
       bool_value   = false
   } }
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -59,6 +69,7 @@ resource "cloudru_evolution_compute_vm" "resource_vm" {
 - `image_metadata` (Attributes Map) Метаданные образа. Для некоторых образов поле является обязательным. (see [below for nested schema](#nestedatt--image_metadata))
 - `network_interfaces` (Attributes List) Параметры сетевого интерфейса. (see [below for nested schema](#nestedatt--network_interfaces))
 - `placement_group` (Attributes) Параметры группы размещения. (see [below for nested schema](#nestedatt--placement_group))
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
@@ -144,6 +155,16 @@ Optional:
 Read-Only:
 
 - `name` (String) Название группы размещения.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
 
 
 <a id="nestedatt--metadata_fields"></a>

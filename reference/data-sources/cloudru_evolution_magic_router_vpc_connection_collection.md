@@ -1,4 +1,3 @@
-
 # cloudru_evolution_magic_router_vpc_connection_collection (Data Source)
 
 
@@ -7,9 +6,18 @@
 
 ```terraform
 data "cloudru_evolution_magic_router_vpc_connection_collection" "datasource_vpc_connection" {
-  page_size       = 422651925
-  project_id      = "f56c09aa-56d2-405e-99ca-885c88024c5a"
-  magic_router_id = "db0be4ee-3674-40a6-a413-ef83c49d6ae9"
+  page_size       = 100
+  project_id      = "f47ac10b-58cc-0372-8567-0e02b2c3d479"
+  magic_router_id = "f47ac10b-58cc-0372-8567-0e02b2c3d479"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-vpc_connection" {
@@ -28,10 +36,19 @@ output "data-vpc_connection" {
 ### Optional
 
 - `page_size` (Number) Максимальное количество подключений на странице.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `vpc_connections` (Attributes List) Список подключений к VPC. (see [below for nested schema](#nestedatt--vpc_connections))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--vpc_connections"></a>
 ### Nested Schema for `vpc_connections`

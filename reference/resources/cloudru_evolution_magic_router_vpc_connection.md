@@ -1,4 +1,3 @@
-
 # cloudru_evolution_magic_router_vpc_connection (Resource)
 
 
@@ -7,9 +6,20 @@
 
 ```terraform
 resource "cloudru_evolution_magic_router_vpc_connection" "resource_vpc_connection" {
-  magic_router_id = "4d9acb5a-2b00-4610-8771-c41e01bcbe82"
-  vpc_id          = "04fa0f05-264d-4101-b346-6a32144e228b"
-  name            = "6d8647dc-6235-43bf-b56c-59c495454c7d"
+  magic_router_id = "f47ac10b-58cc-0372-8567-0e02b2c3d479"
+  vpc_id          = "f47ac10b-58cc-0372-8567-0e02b2c3d479"
+  name            = "vpc-connection-01"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -22,6 +32,10 @@ resource "cloudru_evolution_magic_router_vpc_connection" "resource_vpc_connectio
 - `name` (String) Название подключения.
 - `vpc_id` (String) Идентификатор VPC, которая подключена к Magic Router.
 
+### Optional
+
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
+
 ### Read-Only
 
 - `created_at` (String) Время создания подключения.
@@ -29,3 +43,12 @@ resource "cloudru_evolution_magic_router_vpc_connection" "resource_vpc_connectio
 - `status` (String) Статус подключения.
 - `type` (String) Тип подключения.
 - `updated_at` (String) Время последнего изменения подключения.
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).

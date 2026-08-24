@@ -1,4 +1,3 @@
-
 # cloudru_evolution_resource_manager_tag_collection (Data Source)
 
 
@@ -7,11 +6,20 @@
 
 ```terraform
 data "cloudru_evolution_resource_manager_tag_collection" "datasource_tag" {
-  key            = "03e4ef57-2d8d-43bb-9891-dba5c8b49956"
-  value          = "ad0d9f9c-00fe-4068-82c8-b2063afa690f"
-  project_id     = "d07605ff-dca6-4b47-b802-c61f02ba560b"
-  search_by_text = "97006a53-a7b5-4e2c-8779-5aac8f81ba58"
-  page_size      = 7294462507309269724
+  key            = "89cebe5e-e4bd-468b-8279-c5e29ac17d9e"
+  value          = "8babe775-253c-4fe1-aa0e-0d84228fc6b9"
+  project_id     = "bdce745e-8e58-4d94-8e41-2ac7c62320b1"
+  search_by_text = "d8649d74-c94f-4f52-9e01-80318824af51"
+  page_size      = 4230725515679125488
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-tag" {
@@ -31,11 +39,20 @@ output "data-tag" {
 - `key` (String) Фильтр по ключу тега.
 - `page_size` (Number) Максимальное количество результатов на странице ответа. Если значение больше [page_size], сервис возвращает [next_page_token], который используется в [ListTemplateResponse]. Значение [page_size] по умолчанию 1000.
 - `search_by_text` (String) Текстовый поиск по ключу тега, значению тега или по описанию тега.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 - `value` (String) Фильтр по значению тега.
 
 ### Read-Only
 
 - `tags` (Attributes List) Список тегов. (see [below for nested schema](#nestedatt--tags))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--tags"></a>
 ### Nested Schema for `tags`

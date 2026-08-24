@@ -1,4 +1,3 @@
-
 # cloudru_evolution_spark_spark_connect (Resource)
 
 
@@ -29,6 +28,17 @@ resource "cloudru_evolution_spark_spark_connect" "resource_spark_connect" {
     cores  = 1
     memory = "1g"
   }
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -39,26 +49,27 @@ resource "cloudru_evolution_spark_spark_connect" "resource_spark_connect" {
 
 - `executor` (Attributes) Конфигурация executor. (see [below for nested schema](#nestedatt--executor))
 - `server` (Attributes) Конфигурация server. (see [below for nested schema](#nestedatt--server))
-- `spark_id` (String) Идентификатор spark.
+- `spark_id` (String) Идентификатор инстанса Managed Spark.
 
 ### Optional
 
-- `base_image` (Attributes) Базовый образ. (see [below for nested schema](#nestedatt--base_image))
-- `configuration` (Attributes) Конфигурация spark connect. (see [below for nested schema](#nestedatt--configuration))
-- `custom_image` (Attributes) Кастомный образ. (see [below for nested schema](#nestedatt--custom_image))
+- `base_image` (Attributes) Параметры базового образа. (see [below for nested schema](#nestedatt--base_image))
+- `configuration` (Attributes) Параметры конфигурации Spark Connect. (see [below for nested schema](#nestedatt--configuration))
+- `custom_image` (Attributes) Параметры пользовательского образа. (see [below for nested schema](#nestedatt--custom_image))
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `created_at` (String) Время создания.
-- `created_by` (String) Идентификатор пользователя, кем создан spark connect.
-- `external_connect_url` (String) Url подключения из внешней сети.
-- `external_ui_url` (String) Url внешнего хоста.
-- `id` (String) Идентификатор spark connect.
-- `internal_connect_url` (String) Url подключения из внутренней сети.
-- `internal_ui_url` (String) Url внутреннего хоста.
-- `status` (String) Статус.
+- `created_by` (String) Идентификатор пользователя, создавшего Spark Connect.
+- `external_connect_url` (String) URL подключения из внешней сети.
+- `external_ui_url` (String) URL внешнего хоста.
+- `id` (String) Идентификатор Spark Connect.
+- `internal_connect_url` (String) URL подключения из внутренней сети.
+- `internal_ui_url` (String) URL внутреннего хоста.
+- `status` (String) Статусы Spark Connect.
 - `updated_at` (String) Время обновления.
-- `updated_by` (String) Идентификатор пользователя, кем обновлен spark connect.
+- `updated_by` (String) Идентификатор пользователя, обновившего Spark Connect.
 
 <a id="nestedatt--executor"></a>
 ### Nested Schema for `executor`
@@ -84,7 +95,7 @@ Required:
 
 Required:
 
-- `id` (String) Идентификатор id базового образа.
+- `id` (String) Идентификатор базового образа.
 
 Read-Only:
 
@@ -97,11 +108,11 @@ Read-Only:
 
 Optional:
 
-- `config_spark` (Map of String) Конфигурация spark, введенная пользователем.
+- `config_spark` (Map of String) Конфигурация Spark, введенная пользователем.
 
 Read-Only:
 
-- `config_spark_final` (Map of String) Конфигурация spark, введенная пользователем и дополненная дефолтными параметрами конфигурации.
+- `config_spark_final` (Map of String) Конфигурация Spark, введенная пользователем и дополненная параметрами по умолчанию.
 
 
 <a id="nestedatt--custom_image"></a>
@@ -109,4 +120,14 @@ Read-Only:
 
 Required:
 
-- `custom_image_uri` (String) Uri кастомного образа.
+- `custom_image_uri` (String) URI кастомного образа.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).

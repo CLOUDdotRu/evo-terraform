@@ -1,4 +1,3 @@
-
 # cloudru_evolution_compute_nat_gateway_collection (Data Source)
 
 
@@ -7,10 +6,19 @@
 
 ```terraform
 data "cloudru_evolution_compute_nat_gateway_collection" "datasource_nat_gateway" {
-  project_id = "6a62e342-6f9e-468f-bb86-501383b5bbb4"
-  page_size  = 4999746824314065626
-  filter     = "de02d33e-6db2-46be-8196-3c1ca269a6fd"
-  order_by   = "e5651ce4-b479-4e8c-a6a9-361ee1fa8f3c"
+  project_id = "053f198a-f5ec-4214-aeac-337ae9370b5b"
+  page_size  = 8878757891813535215
+  filter     = "6ca931f9-a1d4-4c28-9b23-47489d9a0673"
+  order_by   = "2799bb67-8f5e-422b-b707-784ae7f1f025"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-nat_gateway" {
@@ -30,10 +38,19 @@ output "data-nat_gateway" {
 - `filter` (String) Выражение фильтрующее ответ.
 - `order_by` (String) Имя поля по которому производится сортировка.
 - `page_size` (Number) Максимальное количество результатов на странице ответа.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `nat_gateways` (Attributes List) Список SNAT-шлюзов. (see [below for nested schema](#nestedatt--nat_gateways))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--nat_gateways"></a>
 ### Nested Schema for `nat_gateways`

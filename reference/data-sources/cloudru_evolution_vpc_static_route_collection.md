@@ -1,4 +1,3 @@
-
 # cloudru_evolution_vpc_static_route_collection (Data Source)
 
 
@@ -10,6 +9,15 @@ data "cloudru_evolution_vpc_static_route_collection" "datasource_static_route" {
   vpc_id    = "8fcc33c4-4580-4146-9b7f-e58943de078e"
   page_size = 100
   filter    = "ids in ['8fcc33c4-4580-4146-9b7f-e58943de078e']"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-static_route" {
@@ -28,10 +36,19 @@ output "data-static_route" {
 
 - `filter` (String) Поле filter - это cel-выражениe (https://github.com/google/cel-spec/blob/master/doc/langdef.md). состоящее из фильтрующих выражений, каждое выражение соединяется оператором && (логическое и). Поддерживаемые поля: 1. ids []string опциональное. Поддерживаемые операторы: 'in'. Пример выражения: ids in ['5e45ad32-7fca-4dd8-bab6-f334c9f8e553', "4507e4d1-0e92-438b-9c2e-2a5b91f2f755"].
 - `page_size` (Number) Максимальное количество элементов на странице.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `routes` (Attributes List) Список маршрутов. (see [below for nested schema](#nestedatt--routes))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--routes"></a>
 ### Nested Schema for `routes`

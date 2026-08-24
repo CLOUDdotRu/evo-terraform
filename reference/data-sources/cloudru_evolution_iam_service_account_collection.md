@@ -1,4 +1,3 @@
-
 # cloudru_evolution_iam_service_account_collection (Data Source)
 
 
@@ -9,11 +8,20 @@
 data "cloudru_evolution_iam_service_account_collection" "datasource_service_account" {
   target = {
     # Нужно заполнить одно из значений - customer_id, project_id.
-    customer_id = "7fdad8a8-5981-414d-99f5-da0b3c03ee60"
-    project_id  = "8cd999a4-e7c4-43e9-9403-99b48338ccd8"
+    customer_id = "dfb72053-48a8-4611-9d51-4575bce762bf"
+    project_id  = "eedbb7cc-8d20-4fda-b5da-4d54e00420d1"
   }
-  filter    = "9705b3cd-66f4-4f91-be46-1be73cd4f795"
-  page_size = 5471255040057767316
+  filter    = "060f182c-d7ce-4307-aea3-f1594761bba5"
+  page_size = 5717858689067845094
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-service_account" {
@@ -32,6 +40,7 @@ output "data-service_account" {
 
 - `filter` (String) Filter - фильтрующее выражение. name=my_sa_name - опциональный фильтр по имени сервисного аккаунта enabled=true - опциональный фильтр по флагу активности сервисного аккаунта Объединение фильтров: только AND оператор поддерживается Пример: name=my_sa_name AND enabled=false.
 - `page_size` (Number) PageSize - количество элементов на странице. TODO укажите дефолтное значение, в случае, если поле не передано.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
@@ -44,6 +53,14 @@ Optional:
 
 - `customer_id` (String) CustomerID - идентификатор организации, если сервисный аккаунт создан на уровне организации.
 - `project_id` (String) ProjectID - идентификатор проекта, если сервисный аккаунт создан на уровне проекта.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
 
 
 <a id="nestedatt--service_accounts"></a>

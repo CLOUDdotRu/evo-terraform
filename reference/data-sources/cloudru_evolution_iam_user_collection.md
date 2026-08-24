@@ -1,4 +1,3 @@
-
 # cloudru_evolution_iam_user_collection (Data Source)
 
 
@@ -7,9 +6,18 @@
 
 ```terraform
 data "cloudru_evolution_iam_user_collection" "datasource_user" {
-  customer_id = "e5dd2971-4725-4ad8-8113-6494141be87c"
-  filter      = "1f19b770-9392-43c4-bfa7-ca39b5033d3a"
-  page_size   = 2671078017751214806
+  customer_id = "3cb72466-f354-4a51-8f14-af2f2f8c90fd"
+  filter      = "fe03dabb-c580-4d0e-817e-2980de02afa6"
+  page_size   = 5354568544849307645
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-user" {
@@ -28,10 +36,19 @@ output "data-user" {
 
 - `filter` (String) Filter - фильтрующее выражение. email=user_email@test.com - фильтр по email (поддерживается частичный поиск). account_type=USER_ACCOUNT_TYPE_LOCAL - фильтр по типу учетной записи. Объединение фильтров: поддерживается только оператор AND.
 - `page_size` (Number) PageSize - количество элементов на странице.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `users` (Attributes List) Users - список пользователей. (see [below for nested schema](#nestedatt--users))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--users"></a>
 ### Nested Schema for `users`

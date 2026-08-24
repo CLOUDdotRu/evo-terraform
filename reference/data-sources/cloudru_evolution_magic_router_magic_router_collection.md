@@ -1,4 +1,3 @@
-
 # cloudru_evolution_magic_router_magic_router_collection (Data Source)
 
 
@@ -7,8 +6,17 @@
 
 ```terraform
 data "cloudru_evolution_magic_router_magic_router_collection" "datasource_magic_router" {
-  page_size  = 2832594739
-  project_id = "a488fe9d-3e13-4daf-8031-b76e16bb8290"
+  page_size  = 10
+  project_id = "f47ac10b-58cc-0372-8567-0e02b2c3d479"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-magic_router" {
@@ -26,10 +34,19 @@ output "data-magic_router" {
 ### Optional
 
 - `page_size` (Number) Максимальное количество элементов на странице.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `magic_routers` (Attributes List) Список Magic Router. (see [below for nested schema](#nestedatt--magic_routers))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--magic_routers"></a>
 ### Nested Schema for `magic_routers`

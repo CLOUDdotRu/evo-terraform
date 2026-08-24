@@ -1,4 +1,3 @@
-
 # cloudru_evolution_compute_security_group (Resource)
 
 
@@ -7,14 +6,25 @@
 
 ```terraform
 resource "cloudru_evolution_compute_security_group" "resource_security_group" {
-  project_id = "8fcd0752-3045-4c3f-8591-9e7c1daadf27"
+  project_id = "6b96eade-53cc-4023-a43b-4d35bdd52356"
   zone = {
     # Нужно заполнить одно из значений - id, name.
-    id   = "a8fc784f-10b9-47ba-abe8-46472c91a655"
-    name = "bb0c35fc-9b6d-4f71-867c-b2291cd01bc8"
+    id   = "93c16b3e-2a3c-433f-a723-f169a1ed2cdc"
+    name = "d1b2b60e-6a90-4fde-ba99-7f4a022653fe"
   }
-  name        = "f95fa41f-6b6c-405c-8267-4c5a3b5aec4d"
-  description = "8b733d1d-f823-47b6-a601-ad207b874d6f"
+  name        = "7cd29e26-9868-4c42-b601-39cf2daefbff"
+  description = "3ca8af78-5694-46e3-95b6-fd2c5531bd02"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -30,6 +40,7 @@ resource "cloudru_evolution_compute_security_group" "resource_security_group" {
 ### Optional
 
 - `description` (String) Описание группы безопасности.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
@@ -52,3 +63,13 @@ Optional:
 Read-Only:
 
 - `enabled` (Boolean) Флаг указывающий, доступна ли зона для использования.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).

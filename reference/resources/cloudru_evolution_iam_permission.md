@@ -1,4 +1,3 @@
-
 # cloudru_evolution_iam_permission (Resource)
 
 
@@ -7,13 +6,24 @@
 
 ```terraform
 resource "cloudru_evolution_iam_permission" "resource_permission" {
-  resource_id = "7d520435-9c8c-4b6c-a037-29118e9eed7a"
-  subject_id  = "2c755f07-03d4-483c-943d-0a5b453c814d"
-  expires_at  = "Fri, 24 Jul 2026 15:22:02 UTC"
+  resource_id = "895a55ec-bccf-4099-8dd3-72b8e7c1aeae"
+  subject_id  = "a904ab75-2b3b-4e81-8b79-e232d0a6b340"
+  expires_at  = "Fri, 14 Aug 2026 15:45:40 UTC"
   role_identifier = {
     # Нужно заполнить одно из значений - role_name, role_id.
-    role_name = "2e8fca2e-b5a5-4c3f-b40b-a42b01640071"
-    role_id   = "d46b4f22-6494-4065-bc06-60dd14b7d432"
+    role_name = "0007982c-25ef-4247-9dca-4cf2aa165f40"
+    role_id   = "d0e01657-4be1-449c-9b7a-7a59e241900f"
+  }
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
   }
 }
 ```
@@ -30,6 +40,7 @@ resource "cloudru_evolution_iam_permission" "resource_permission" {
 
 - `expires_at` (String) Дата и время истечения срока действия разрешения в формате RFC 3339. Например, `2025-12-31T23:59:59Z`.
 - `role_identifier` (Attributes) Роль для назначения. Обязательно должно быть указано одно из полей: `role` (deprecated), `role_name` или `role_id`. (see [below for nested schema](#nestedatt--role_identifier))
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
@@ -37,7 +48,7 @@ resource "cloudru_evolution_iam_permission" "resource_permission" {
 - `enabled` (Boolean) Флаг активности разрешения. Возможные значения: `true` — разрешение активно, доступ предоставлен. `false` — разрешение неактивно, доступ отозван.
 - `id` (String) Идентификатор разрешения.
 - `primary_role_id` (String) Идентификатор роли (uuid).
-- `role_id` (String) Идентификатор роли. Deprecated: используйте `role_name`/`primary_role_id`. Поле будет удалено в следующей версии.
+- `role_id` (String) Идентификатор роли.
 - `role_name` (String) Название роли.
 - `role_type` (String) Тип роли.
 - `subject_type` (String) Тип субъекта. Возможные значения: `user` — пользователь. `user_group` — группа пользователей. `service_account` — сервисный аккаунт.
@@ -50,3 +61,13 @@ Optional:
 
 - `role_id` (String) Идентификатор роли для назначения. Может использоваться для любой роли.
 - `role_name` (String) Название роли для назначения. Может использоваться для продуктовых ролей. В случае коллизии продуктовой и пользовательская роли по имени вернется ошибка, передавайте идентификатор роли.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).

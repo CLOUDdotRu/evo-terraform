@@ -1,4 +1,3 @@
-
 # cloudru_evolution_compute_security_group_collection (Data Source)
 
 
@@ -7,10 +6,19 @@
 
 ```terraform
 data "cloudru_evolution_compute_security_group_collection" "datasource_security_group" {
-  project_id = "1b7ea2f3-5023-4034-8703-651ece72ad67"
-  page_size  = 4263035427872913397
-  filter     = "770d64fd-1889-4279-b82f-2deb2f039f83"
-  order_by   = "4460b99f-d4f6-4cf5-bb66-125370f2037c"
+  project_id = "bf8e878d-17c1-4807-8d51-1482bfc425d3"
+  page_size  = 1544101581493027878
+  filter     = "40d86b95-2aa5-47d2-b8ce-d4f554dde6a4"
+  order_by   = "6bca0090-29dc-4ac5-9469-63648a0fa44c"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-security_group" {
@@ -30,10 +38,19 @@ output "data-security_group" {
 - `filter` (String) Выражение фильтрующее ответ.
 - `order_by` (String) Имя поля по которому производится сортировка.
 - `page_size` (Number) Максимальное количество результатов на странице ответа.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `security_groups` (Attributes List) Список групп безопасности. (see [below for nested schema](#nestedatt--security_groups))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--security_groups"></a>
 ### Nested Schema for `security_groups`

@@ -1,4 +1,3 @@
-
 # cloudru_evolution_compute_nat_gateway (Resource)
 
 
@@ -7,15 +6,26 @@
 
 ```terraform
 resource "cloudru_evolution_compute_nat_gateway" "resource_nat_gateway" {
-  project_id = "9c0ccc2f-6fb9-460c-ae07-d071f30384d4"
+  project_id = "e22b84a9-1a98-4a89-b12f-bea2a7ea5b35"
   zone = {
     # Нужно заполнить одно из значений - id, name.
-    id   = "66e52547-9755-4004-afaf-cb0d01b12a7b"
-    name = "6322bdd3-dc3d-4354-af9c-22db43f921b0"
+    id   = "8d1c7cb1-1f6a-4c58-b082-2042ad4c4bea"
+    name = "48c2637f-031c-4680-80f9-8edd0f5b5b00"
   }
-  name        = "b6622790-6e7b-4234-ab50-74ce6b8647fb"
-  description = "0aac340e-233e-40e5-a5cb-47c896bf2a2b"
-  vpc_id      = "3f79f236-8c1e-4d0d-ad02-4e65cfc26226"
+  name        = "a802a87d-0b86-46fc-a8cd-dcac7cdb698c"
+  description = "f21348db-5179-4360-bdc8-271f0be220ef"
+  vpc_id      = "c985e2fd-0da8-4e84-9573-4c7f12b40cb3"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -31,6 +41,7 @@ resource "cloudru_evolution_compute_nat_gateway" "resource_nat_gateway" {
 ### Optional
 
 - `description` (String) Описание SNAT-шлюза.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 - `vpc_id` (String) Идентификатор виртуальной сети (VPC).
 
 ### Read-Only
@@ -52,6 +63,16 @@ Optional:
 Read-Only:
 
 - `enabled` (Boolean) Флаг указывающий, доступна ли зона для использования.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
 
 
 <a id="nestedatt--external_ip"></a>

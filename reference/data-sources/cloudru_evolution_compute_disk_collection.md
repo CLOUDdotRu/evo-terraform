@@ -1,4 +1,3 @@
-
 # cloudru_evolution_compute_disk_collection (Data Source)
 
 
@@ -7,10 +6,19 @@
 
 ```terraform
 data "cloudru_evolution_compute_disk_collection" "datasource_disk" {
-  project_id = "3793a572-d311-4ce0-8007-39e982f13bce"
-  page_size  = 7458080105324862871
-  filter     = "91422e6c-b5d4-4f70-bd84-9707d9ab6407"
-  order_by   = "72e9681c-da72-487b-8d11-aa090a5835ec"
+  project_id = "c3e7cf72-226c-41eb-ba93-a0195e886ce7"
+  page_size  = 5212088896246143596
+  filter     = "23490005-f294-480c-a0e3-1574437c926a"
+  order_by   = "0dcd0cc5-91f1-4250-9d9b-c3af1aa6cc1a"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-disk" {
@@ -30,10 +38,19 @@ output "data-disk" {
 - `filter` (String) Выражение фильтрующее ответ.
 - `order_by` (String) Имя поля по которому производится сортировка.
 - `page_size` (Number) Максимальное количество результатов на странице ответа.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `disks` (Attributes List) Список дисков. (see [below for nested schema](#nestedatt--disks))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--disks"></a>
 ### Nested Schema for `disks`

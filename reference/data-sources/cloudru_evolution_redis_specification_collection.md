@@ -1,4 +1,3 @@
-
 # cloudru_evolution_redis_specification_collection (Data Source)
 
 
@@ -11,6 +10,15 @@ data "cloudru_evolution_redis_specification_collection" "datasource_specificatio
   availability_zone_id = "00000000-0000-0000-0000-000000000000"
   # Нужно заполнить одно из значений - cluster_id
   cluster_id = "00000000-0000-0000-0000-000000000000"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-specification" {
@@ -29,10 +37,19 @@ output "data-specification" {
 ### Optional
 
 - `cluster_id` (String) Идентификатор кластера. Укажите для получения спецификаций, доступных для вертикального масштабирования кластера.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `specifications` (Attributes List) Cписок спецификаций, доступных для определенной версии. (see [below for nested schema](#nestedatt--specifications))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--specifications"></a>
 ### Nested Schema for `specifications`
@@ -45,5 +62,5 @@ Read-Only:
 - `id` (String) Идентификатор спецификации.
 - `memory` (Number) Объем оперативной памяти в гигабайтах.
 - `min_storage_gb` (Number) Минимальный размер диска в гигабайтах.
-- `min_storage_gigs` (Number) Минимальный размер диска в гигабайтах. Используйте поле `min_storage_gb` вместо `min_storage_gigs`. Поле будет удалено в будущем.
+- `min_storage_gigs` (Number, Deprecated) Минимальный размер диска в гигабайтах. Используйте поле `min_storage_gb` вместо `min_storage_gigs`. Поле будет удалено в будущем.
 - `name` (String) Название спецификации.

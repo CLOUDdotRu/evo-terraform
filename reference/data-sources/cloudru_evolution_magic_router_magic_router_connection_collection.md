@@ -1,4 +1,3 @@
-
 # cloudru_evolution_magic_router_magic_router_connection_collection (Data Source)
 
 
@@ -7,9 +6,18 @@
 
 ```terraform
 data "cloudru_evolution_magic_router_magic_router_connection_collection" "datasource_magic_router_connection" {
-  page_size       = 4173358271
-  project_id      = "2c65ed2f-194c-40b8-abb3-9fb8d590c6f2"
-  magic_router_id = "00d20de1-d1ab-46f2-b660-c52927f5b1c1"
+  page_size       = 100
+  project_id      = "f47ac10b-58cc-0372-8567-0e02b2c3d479"
+  magic_router_id = "f47ac10b-58cc-0372-8567-0e02b2c3d479"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-magic_router_connection" {
@@ -28,10 +36,19 @@ output "data-magic_router_connection" {
 ### Optional
 
 - `page_size` (Number) Максимальное количество подключений на странице.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `magic_router_connections` (Attributes List) Список межпроектных подключений. (see [below for nested schema](#nestedatt--magic_router_connections))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--magic_router_connections"></a>
 ### Nested Schema for `magic_router_connections`

@@ -1,4 +1,3 @@
-
 # cloudru_evolution_compute_placement_group (Resource)
 
 
@@ -7,12 +6,23 @@
 
 ```terraform
 resource "cloudru_evolution_compute_placement_group" "resource_placement_group" {
-  project_id  = "34afafea-7d3c-45df-b86a-146343c5993b"
-  name        = "4c44a2af-f1fa-4f49-95b7-9d77a16bed82"
-  description = "76dd7f44-9066-49c2-b4b8-6d2d080e8fa6"
+  project_id  = "7538bce3-4459-45fc-8f2d-be106ddc8c04"
+  name        = "e3a954d1-eaa4-4231-9ae0-56741ce3a407"
+  description = "4f529171-a4c0-4e13-b68b-988c194d61e4"
   # Варианты значений параметра policy:
   # PLACEMENT_GROUP_POLICY_SOFT_ANTI_AFFINITY, PLACEMENT_GROUP_POLICY_ANTI_AFFINITY
-  policy = "PLACEMENT_GROUP_POLICY_SOFT_ANTI_AFFINITY"
+  policy = "PLACEMENT_GROUP_POLICY_ANTI_AFFINITY"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -28,6 +38,7 @@ resource "cloudru_evolution_compute_placement_group" "resource_placement_group" 
 ### Optional
 
 - `description` (String) Описание группы размещения.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
@@ -35,6 +46,16 @@ resource "cloudru_evolution_compute_placement_group" "resource_placement_group" 
 - `id` (String) Идентификатор группы размещения.
 - `updated_at` (String) Дата и время изменения группы размещения.
 - `zones` (Attributes List) Список зон, связанных с группой размещения. Зоны автоматически добавляются при создании первой виртуальной машины в группе. (see [below for nested schema](#nestedatt--zones))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--zones"></a>
 ### Nested Schema for `zones`

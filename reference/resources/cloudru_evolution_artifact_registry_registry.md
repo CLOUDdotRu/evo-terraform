@@ -1,4 +1,3 @@
-
 # cloudru_evolution_artifact_registry_registry (Resource)
 
 
@@ -9,7 +8,7 @@
 resource "cloudru_evolution_artifact_registry_registry" "resource_registry" {
   name = "my-registry"
   # Варианты значений параметра registry_type:
-  # DEBIAN, RPM, GENERIC, PYPI
+  # DEBIAN, RPM, GENERIC, PYPI, NPM
   registry_type               = "DOCKER"
   retention_policy_is_enabled = true
   retention_policy = {
@@ -26,8 +25,31 @@ resource "cloudru_evolution_artifact_registry_registry" "resource_registry" {
   quarantine_mode = "DISABLED"
   # Варианты значений параметра tariff:
   # PREMIUM
-  tariff     = "PREMIUM"
+  tariff = "PREMIUM"
+  # Варианты значений параметра registry_mode:
+  # REGISTRY_MODE_LOCAL, REGISTRY_MODE_REMOTE
+  registry_mode = "REGISTRY_MODE_LOCAL"
+  upstream = {
+    url          = "https://ghcr.io/"
+    login_id     = "0000-0000-0000-0000-0000"
+    password_id  = "0000-0000-0000-0000-0000"
+    metadata_ttl = 4800
+    artifact_ttl = 10000
+    mirror       = false
+    soft_delete  = false
+  }
   project_id = "0000-0000-0000-0000-0000"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -43,10 +65,13 @@ resource "cloudru_evolution_artifact_registry_registry" "resource_registry" {
 
 - `is_public` (Boolean) Флаг публичности реестра.
 - `quarantine_mode` (String) Настройки карантина артефактов реестра.
+- `registry_mode` (String) Режим реестра.
 - `registry_type` (String) Тип реестра.
 - `retention_policy` (Attributes) Настройки политики удаления артефактов для реестра. (see [below for nested schema](#nestedatt--retention_policy))
 - `retention_policy_is_enabled` (Boolean) Флаг включения политики удаления артефактов для реестра.
 - `tariff` (String) Тип тарифа для реестра.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
+- `upstream` (Attributes) Параметры настройки кэширующих реестров. (see [below for nested schema](#nestedatt--upstream))
 
 ### Read-Only
 
@@ -66,3 +91,27 @@ Optional:
 - `only_untagged` (Boolean) Флаг для учитывания только образов без тэга.
 - `unit` (String) Тип ограничения времени.
 - `value` (Number) Значение времени.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
+
+<a id="nestedatt--upstream"></a>
+### Nested Schema for `upstream`
+
+Optional:
+
+- `artifact_ttl` (Number) Время хранения артефактов, сек.
+- `login_id` (String) UUID логина для доступа к кэшируемому адресу из SCM.
+- `metadata_ttl` (Number) Время хранения метаданных артефактов, сек.
+- `mirror` (Boolean) Флаг режима зеркалирования.
+- `password_id` (String) UUID пароля для доступа к кэшируемому адресу из SCM.
+- `soft_delete` (Boolean) Флаг "мягкого" удаления артефактов.
+- `url` (String) Адрес, откуда будут браться артефакты.

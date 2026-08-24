@@ -1,4 +1,3 @@
-
 # cloudru_evolution_mk8s_addon_collection (Data Source)
 
 
@@ -11,6 +10,15 @@ data "cloudru_evolution_mk8s_addon_collection" "datasource_addon" {
   filter     = "isBillable = true"
   order_by   = "createdAt desc"
   project_id = "00000000-0000-0000-0000-000000000000"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-addon" {
@@ -30,10 +38,19 @@ output "data-addon" {
 - `filter` (String) Параметры фильтрации списка плагинов в виде "field condition value" или "field:value"(include). Возможные значения для field: name, displayName, categories, isBillable, createdAt. Возможные значения для condition: =, <=, >=, :.
 - `order_by` (String) Параметры сортировки списка плагинов в виде "field direction". Возможные значения для field: name, displayName, createdAt, updatedAt. Возможные значения для direction: asc, desc.
 - `page_size` (Number) Максимальное количество результатов на странице.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `addons` (Attributes List) Список доступных плагинов. (see [below for nested schema](#nestedatt--addons))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--addons"></a>
 ### Nested Schema for `addons`

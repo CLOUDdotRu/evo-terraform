@@ -1,4 +1,3 @@
-
 # cloudru_evolution_spark_base_image_collection (Data Source)
 
 
@@ -10,6 +9,15 @@ data "cloudru_evolution_spark_base_image_collection" "datasource_base_image" {
   project_id = "0000-0000-0000-0000-0000"
   page_size  = 100
   filter     = "name=base-image-1"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-base_image" {
@@ -26,12 +34,21 @@ output "data-base_image" {
 
 ### Optional
 
-- `filter` (String) Фильтр для фильтрации списка образов. Фильтрацию можно произвести по полю [BaseImage.name]. Пример: name=<image-name>.
+- `filter` (String) Фильтр для списка образов. Фильтровать можно по полю [BaseImage.name]. Пример: name=base-image-name.
 - `page_size` (Number) Максимальное количество результатов на странице ответа. Если значение больше [page_size], сервис возвращает [next_page_token], который используется в [ListBaseImagesResponse]. Значение [page_size] по умолчанию 1000.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
-- `base_images` (Attributes List) Список объектов BaseImage. (see [below for nested schema](#nestedatt--base_images))
+- `base_images` (Attributes List) Список базовых образов. (see [below for nested schema](#nestedatt--base_images))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--base_images"></a>
 ### Nested Schema for `base_images`
@@ -39,5 +56,5 @@ output "data-base_image" {
 Read-Only:
 
 - `description` (String) Описание.
-- `id` (String) Идентификатор id базового образа.
+- `id` (String) Идентификатор базового образа.
 - `name` (String) Название.

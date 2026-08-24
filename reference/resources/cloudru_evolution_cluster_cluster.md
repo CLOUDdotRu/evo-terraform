@@ -1,14 +1,21 @@
-# cloudru_evolution_vpc_vpc (Resource)
+
+# cloudru_evolution_cluster_cluster (Resource)
 
 
 
 ## Example Usage
 
 ```terraform
-resource "cloudru_evolution_vpc_vpc" "resource_vpc" {
-  name        = "my-vpc"
-  project_id  = "8fcc33c4-4580-4146-9b7f-e58943de078e"
-  description = "Main VPC for production"
+resource "cloudru_evolution_cluster_cluster" "resource_cluster" {
+  project_id  = "00000000-0000-0000-0000-000000000000"
+  name        = "Cluster-name"
+  description = "Cluster description"
+  network_configuration = {
+    zone_ids  = ["00000000-0000-0000-0000-000000000000"]
+    vpc_id    = "00000000-0000-0000-0000-000000000000"
+    subnet_id = "00000000-0000-0000-0000-000000000000"
+  }
+  service_account_id = "00000000-0000-0000-0000-000000000000"
   // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
   timeouts {
     create = "60m"
@@ -28,23 +35,34 @@ resource "cloudru_evolution_vpc_vpc" "resource_vpc" {
 
 ### Required
 
-- `name` (String) Название VPC.
-- `project_id` (String) ID проекта, к которому относится VPC.
+- `name` (String) Название кластера.
+- `network_configuration` (Attributes) Сетевые настройки кластера. (see [below for nested schema](#nestedatt--network_configuration))
+- `project_id` (String) Идентификатор проекта.
+- `service_account_id` (String) Идентификатор сервисного аккаунта, который будет использоваться в кластере.
 
 ### Optional
 
-- `description` (String) Описание VPC.
+- `description` (String) Описание кластера.
 - `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
-- `created_at` (String) Дата и время создания VPC.
-- `customer_id` (String) ID клиента (владельца VPC).
-- `default` (Boolean) Флаг, указывающий является ли VPC дефолтным.
-- `id` (String) Уникальный идентификатор VPC.
-- `product_instance_id` (String) ID экземпляра продукта.
-- `type` (String) Тип VPC (клиентский/сервисный).
-- `updated_at` (String) Дата и время последнего обновления VPC.
+- `created_at` (String) Время создания кластера.
+- `created_by` (String) Идентификатор пользователя, который создал кластер.
+- `id` (String) Идентификатор кластера.
+- `status` (String) Статус показывающий текущее состояние кластера.
+- `updated_at` (String) Время последнего обновления кластера.
+- `updated_by` (String) Идентификатор пользователя, который последним обновил кластер.
+
+<a id="nestedatt--network_configuration"></a>
+### Nested Schema for `network_configuration`
+
+Required:
+
+- `subnet_id` (String) Идентификатор подсети кластера.
+- `vpc_id` (String) Индентификатор VPC.
+- `zone_ids` (List of String) Список идентификаторов зон доступности.
+
 
 <a id="nestedblock--timeouts"></a>
 ### Nested Schema for `timeouts`

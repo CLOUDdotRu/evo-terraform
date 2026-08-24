@@ -1,4 +1,3 @@
-
 # cloudru_evolution_magic_router_static_route_collection (Data Source)
 
 
@@ -7,10 +6,19 @@
 
 ```terraform
 data "cloudru_evolution_magic_router_static_route_collection" "datasource_static_route" {
-  page_size       = 634060199
-  project_id      = "b54e52e8-0330-4946-ad1c-310a012a1305"
-  magic_router_id = "7f49e727-b4b6-4908-acc4-db9196b56a83"
-  filter          = "399d5a6d-9410-49f6-be1e-9e3a29e4f452"
+  page_size       = 100
+  project_id      = "f47ac10b-58cc-0372-8567-0e02b2c3d479"
+  magic_router_id = "f47ac10b-58cc-0372-8567-0e02b2c3d479"
+  filter          = "vpcConnectionId == \"e02474b8-b63e-4ac3-b2d8-4705fcd286c2\""
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-static_route" {
@@ -30,17 +38,26 @@ output "data-static_route" {
 
 - `filter` (String) Фильтр для поиска маршрутов. Поле filter — это CEL-выражение (https://github.com/google/cel-spec/blob/master/doc/langdef.md), состоящее из фильтров, объединенных оператором '&&' (логическое 'И'). Поддерживаемые поля: - vpcConnectionId (string, опционально). Поддерживаемый оператор: '=='. Комментарий: идентификатор VPC-соединения маршрута. Пример выражения: vpcConnectionId == "e02474b8-b63e-4ac3-b2d8-4705fcd286c2"
 - `page_size` (Number) Максимальное количество маршрутов на странице.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `routes` (Attributes List) Список статических маршрутов. (see [below for nested schema](#nestedatt--routes))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--routes"></a>
 ### Nested Schema for `routes`
 
 Read-Only:
 
-- `az_name` (String) Название зоны доступности (AZ), в которой создается маршрут. Устарело, используйте поле azName в nextHop.
+- `az_name` (String, Deprecated) Название зоны доступности (AZ), в которой создается маршрут. Устарело, используйте поле azName в nextHop.
 - `created_at` (String) Время создания маршрута.
 - `description` (String) Описание маршрута.
 - `id` (String) Идентификатор маршрута.
@@ -48,7 +65,7 @@ Read-Only:
 - `next_hop_magic_router` (Attributes) Заполняется для создания маршрута на межпроектном соединении. (see [below for nested schema](#nestedatt--routes--next_hop_magic_router))
 - `next_hop_type` (String) Тип следующего узла маршрута.
 - `next_hop_vpc` (Attributes) Идентификатор VPC. Заполняется при создании маршрута через соединение с VPC. (see [below for nested schema](#nestedatt--routes--next_hop_vpc))
-- `next_hop_vpc_id` (String) Идентификатор подключения к VPC. Устарело, используйте поле vpcConnectionId в nextHop.
+- `next_hop_vpc_id` (String, Deprecated) Идентификатор подключения к VPC. Устарело, используйте поле vpcConnectionId в nextHop.
 - `status` (String) Статус маршрута.
 - `subnet` (String) Адрес сети назначения (CIDR).
 - `updated_at` (String) Время последнего изменения маршрута.
@@ -59,7 +76,7 @@ Read-Only:
 Read-Only:
 
 - `az_name` (String) Имя зоны доступности (AZ), в которой создан маршрут.
-- `magic_router_connection_id` (String) Идентификатор Magic router, в проекте назначения.
+- `magic_router_connection_id` (String) Идентификатор соединения Magic Link.
 
 
 <a id="nestedatt--routes--next_hop_vpc"></a>
@@ -68,4 +85,4 @@ Read-Only:
 Read-Only:
 
 - `az_name` (String) Имя зоны доступности (AZ), в которой создан маршрут.
-- `vpc_connection_id` (String) Идентификатор VPC, в которой находится сеть назначения.
+- `vpc_connection_id` (String) Идентификатор VPC-соединения, в котором создан маршрут.

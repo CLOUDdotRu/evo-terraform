@@ -1,4 +1,3 @@
-
 # cloudru_evolution_compute_flavor_collection (Data Source)
 
 
@@ -7,10 +6,19 @@
 
 ```terraform
 data "cloudru_evolution_compute_flavor_collection" "datasource_flavor" {
-  project_id = "2a3204ca-3855-4068-b9a3-9f3638f7dfd0"
-  page_size  = 7805044533324207344
-  filter     = "b732c74e-58be-446e-868b-0bc77945d43a"
-  order_by   = "86f2e6fc-9ea0-442c-9c71-a402c35b0bd0"
+  project_id = "b2bcd86c-d7a8-450a-9333-12fffbaff05b"
+  page_size  = 1169143433794179057
+  filter     = "118aac27-5e4d-4b16-b3b3-479836d100a0"
+  order_by   = "41ce801c-5d24-4d4f-b0c9-7dbf2640003b"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-flavor" {
@@ -30,10 +38,19 @@ output "data-flavor" {
 - `filter` (String) Выражение фильтрующее ответ.
 - `order_by` (String) Имя поля по которому производится сортировка.
 - `page_size` (Number) Максимальное количество результатов на странице ответа.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `flavors` (Attributes List) Список флейворов. (see [below for nested schema](#nestedatt--flavors))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--flavors"></a>
 ### Nested Schema for `flavors`

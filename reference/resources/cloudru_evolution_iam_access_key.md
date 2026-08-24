@@ -1,4 +1,3 @@
-
 # cloudru_evolution_iam_access_key (Resource)
 
 
@@ -7,9 +6,20 @@
 
 ```terraform
 resource "cloudru_evolution_iam_access_key" "resource_access_key" {
-  service_account_id = "2d1f4b7a-d049-44c4-bd4b-0192ece6e546"
-  description        = "0e5caf62-e0c3-46d8-913c-b551b5abc469"
-  ttl                = "da15c7a7-961a-450f-89fe-9a562d0c7092"
+  service_account_id = "44ccf0cc-fda8-4360-947e-255f177cfab9"
+  description        = "ab303c28-f50e-420c-8224-ba5664998eec"
+  ttl                = "f908591b-026c-495c-8bb8-074edf6c5176"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -23,6 +33,7 @@ resource "cloudru_evolution_iam_access_key" "resource_access_key" {
 ### Optional
 
 - `description` (String) Description - описание ключа доступа.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 - `ttl` (String) Ttl - время жизни ключа доступа. - 5h - 5 часов - 1m - 1 минут - 10s - 10 секунд - 0 - бесконечный ключ доступа.
 
 ### Read-Only
@@ -33,3 +44,12 @@ resource "cloudru_evolution_iam_access_key" "resource_access_key" {
 - `key_id` (String) KeyID - login для получения токена доступа.
 - `secret` (String) Secret - секрет для получения токена доступа. Заполняется только в ответе на запрос создания ключа доступа.
 - `updated_at` (String) UpdatedAt - дата обновления ключа доступа.
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).

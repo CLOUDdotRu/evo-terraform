@@ -1,4 +1,3 @@
-
 # cloudru_evolution_compute_zone_collection (Data Source)
 
 
@@ -7,9 +6,18 @@
 
 ```terraform
 data "cloudru_evolution_compute_zone_collection" "datasource_zone" {
-  project_id = "e1feef87-1e68-4999-a2c0-0d3ceae482cc"
-  page_size  = 7558553523844831778
-  filter     = "528c55dd-4f33-42de-ba94-4c75fd78420b"
+  project_id = "2bd9a668-fb1b-45f9-9b64-44fa386ba6f3"
+  page_size  = 5908594145991959148
+  filter     = "20731d7a-f2ac-4293-8b9e-d70b77428543"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-zone" {
@@ -28,10 +36,19 @@ output "data-zone" {
 
 - `filter` (String) Выражение фильтрующее ответ.
 - `page_size` (Number) Максимальное количество результатов на странице ответа.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `zones` (Attributes List) Список зон доступности. (see [below for nested schema](#nestedatt--zones))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--zones"></a>
 ### Nested Schema for `zones`

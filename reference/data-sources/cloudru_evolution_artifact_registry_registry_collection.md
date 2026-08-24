@@ -1,4 +1,3 @@
-
 # cloudru_evolution_artifact_registry_registry_collection (Data Source)
 
 
@@ -11,6 +10,15 @@ data "cloudru_evolution_artifact_registry_registry_collection" "datasource_regis
   page_size  = 100
   filter     = "is_public=true"
   order_by   = "created_at desc"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-registry" {
@@ -30,10 +38,19 @@ output "data-registry" {
 - `filter` (String) Выражение фильтрующее ответ.
 - `order_by` (String) Имя поля по которому производится сортировка.
 - `page_size` (Number) Максимальное количество результатов на странице ответа.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `registries` (Attributes List) Список реестров. (see [below for nested schema](#nestedatt--registries))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--registries"></a>
 ### Nested Schema for `registries`
@@ -45,12 +62,14 @@ Read-Only:
 - `is_public` (Boolean) Флаг публичности реестра.
 - `name` (String) Название реестра.
 - `quarantine_mode` (String) Настройки карантина артефактов реестра.
+- `registry_mode` (String) Режим реестра.
 - `registry_type` (String) Тип реестра.
 - `retention_policy` (Attributes) Настройки политики удаления артефактов для реестра. (see [below for nested schema](#nestedatt--registries--retention_policy))
 - `retention_policy_is_enabled` (Boolean) Флаг включения политики удаления артефактов для реестра.
 - `status` (String) Статус реестра.
 - `tariff` (String) Тип тарифа для реестра.
 - `updated_at` (String) Время последнего обновления реестра.
+- `upstream` (Attributes) Параметры настройки кэширующих реестров. (see [below for nested schema](#nestedatt--registries--upstream))
 
 <a id="nestedatt--registries--retention_policy"></a>
 ### Nested Schema for `registries.retention_policy`
@@ -63,3 +82,17 @@ Read-Only:
 - `only_untagged` (Boolean) Флаг для учитывания только образов без тэга.
 - `unit` (String) Тип ограничения времени.
 - `value` (Number) Значение времени.
+
+
+<a id="nestedatt--registries--upstream"></a>
+### Nested Schema for `registries.upstream`
+
+Read-Only:
+
+- `artifact_ttl` (Number) Время хранения артефактов, сек.
+- `login_id` (String) UUID логина для доступа к кэшируемому адресу из SCM.
+- `metadata_ttl` (Number) Время хранения метаданных артефактов, сек.
+- `mirror` (Boolean) Флаг режима зеркалирования.
+- `password_id` (String) UUID пароля для доступа к кэшируемому адресу из SCM.
+- `soft_delete` (Boolean) Флаг "мягкого" удаления артефактов.
+- `url` (String) Адрес, откуда будут браться артефакты.

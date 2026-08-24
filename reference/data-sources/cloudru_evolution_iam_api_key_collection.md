@@ -1,4 +1,3 @@
-
 # cloudru_evolution_iam_api_key_collection (Data Source)
 
 
@@ -7,8 +6,17 @@
 
 ```terraform
 data "cloudru_evolution_iam_api_key_collection" "datasource_api_key" {
-  service_account_id = "a7879c30-072c-4507-b634-2eeb832619fc"
-  filter             = "8887caad-2d48-408d-946d-a7b36a22d227"
+  service_account_id = "33f1e12a-de3c-458e-b498-dfd4d229555c"
+  filter             = "096a777f-774e-4c99-852d-204206fc2918"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-api_key" {
@@ -26,10 +34,19 @@ output "data-api_key" {
 ### Optional
 
 - `filter` (String) Filter - выражение для фильтрации. enabled=true - опциональный фильтр по активности ключа.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `keys` (Attributes List) APIKeys - список API ключей. (see [below for nested schema](#nestedatt--keys))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--keys"></a>
 ### Nested Schema for `keys`
@@ -42,7 +59,7 @@ Read-Only:
 - `expires_at` (String) ExpiresAt - дата истечения API ключа.
 - `id` (String) ID - идентификатор API ключа.
 - `name` (String) Name - название API ключа.
-- `product_codes` (Set of String) ProductCodes - список кодов продуктов, для которых может быть применим API ключ.
+- `product_codes` (Set of String) ProductCodes - список кодов продуктов, для которых может быть применим API ключ. Все возможные варианты значения этого поля можно получить испоьзуя APIKeyProductService/List или datasource cloudru_evolution_iam_api_key_product_collection
 - `restrictions` (Attributes) Restrictions - ограничения использования API ключа. (see [below for nested schema](#nestedatt--keys--restrictions))
 - `secret` (String) Secret - секрет API ключа. Заполняется только в ответе на запрос создания API ключа.
 - `service_account_id` (String) ServiceAccountID - идентификатор сервисного аккаунта, для которого был выпущен API ключ.

@@ -1,4 +1,3 @@
-
 # cloudru_evolution_compute_security_group_rule_collection (Data Source)
 
 
@@ -7,10 +6,19 @@
 
 ```terraform
 data "cloudru_evolution_compute_security_group_rule_collection" "datasource_security_group_rule" {
-  security_group_id = "96a43b79-db75-48e1-be2e-16042d53e4c5"
-  page_size         = 138067074406791452
-  filter            = "3e8b53de-a581-4e6d-a9d5-d02c5814494e"
-  order_by          = "c449be95-0166-41cc-9749-1318136e5893"
+  security_group_id = "5832621d-cb4c-4eed-974d-621632baa967"
+  page_size         = 665698255872317308
+  filter            = "ebf3c3f6-0d53-4e1b-930c-1a5c1318cbd4"
+  order_by          = "7e41896d-7d82-4481-b561-a881f65a7195"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-security_group_rule" {
@@ -30,10 +38,19 @@ output "data-security_group_rule" {
 - `filter` (String) Выражение фильтрующее ответ.
 - `order_by` (String) Имя поля по которому производится сортировка.
 - `page_size` (Number) Максимальное количество результатов на странице ответа.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `security_group_rules` (Attributes List) Список правил группы безопасности. (see [below for nested schema](#nestedatt--security_group_rules))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--security_group_rules"></a>
 ### Nested Schema for `security_group_rules`

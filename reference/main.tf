@@ -2,7 +2,7 @@ terraform {
   required_providers {
     cloudru = {
       source  = "cloud.ru/cloudru/cloud"
-      version = "2.1.1"
+      version = "2.1.2"
     }
   }
 }
@@ -52,13 +52,13 @@ provider "cloudru" {
     vpc_endpoint = "vpc.api.cloud.ru:443"
 
     # Magic router
-    magic_router_endpoint = "magic-router.api.cloud.ru"
+    magic_router_endpoint = "magic-router.api.cloud.ru:443"
 
     # DNS
     dns_endpoint = "dns.api.cloud.ru:443"
 
     # Load balancer
-    nlb_endpoint = "nlb.api.cloud.ru"
+    nlb_endpoint = "nlb.api.cloud.ru:443"
     # ===
 
     # === Продукты группы DBaaS ===
@@ -88,5 +88,7 @@ provider "cloudru" {
 
     # Работа с организациями
     cloudplatform_endpoint = "organization.api.cloud.ru:443"
+
+    rm_endpoint = "resource-manager.api.cloud.ru"
   }
 }

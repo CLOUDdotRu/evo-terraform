@@ -1,4 +1,3 @@
-
 # cloudru_evolution_compute_placement_group_collection (Data Source)
 
 
@@ -7,10 +6,19 @@
 
 ```terraform
 data "cloudru_evolution_compute_placement_group_collection" "datasource_placement_group" {
-  project_id = "0b30aff0-0eea-46d9-9405-0281e732fdec"
-  page_size  = 891500080885326143
-  filter     = "ef154e55-eb91-4166-996a-35d6accc140c"
-  order_by   = "e71ae648-0fa3-4d99-91f1-44e781e06ec7"
+  project_id = "2641920c-4e6b-4187-94e2-8d5f4d7d3fb2"
+  page_size  = 822292612985697444
+  filter     = "83a00d50-3ea2-4e23-8b99-90b883a2bda9"
+  order_by   = "ee9cb3dd-23a6-4d3c-9b4d-7929eb9b1f01"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-placement_group" {
@@ -30,10 +38,19 @@ output "data-placement_group" {
 - `filter` (String) Выражение фильтрующее ответ.
 - `order_by` (String) Имя поля по которому производится сортировка.
 - `page_size` (Number) Максимальное количество результатов на странице ответа.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `placement_groups` (Attributes List) Список групп размещения. (see [below for nested schema](#nestedatt--placement_groups))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--placement_groups"></a>
 ### Nested Schema for `placement_groups`

@@ -1,4 +1,3 @@
-
 # cloudru_evolution_magic_router_received_route_collection (Data Source)
 
 
@@ -7,10 +6,19 @@
 
 ```terraform
 data "cloudru_evolution_magic_router_received_route_collection" "datasource_received_route" {
-  page_size       = 261690319
-  project_id      = "38957485-57fd-4111-acb8-29fba3bc8ed8"
-  magic_router_id = "901262b5-e465-4575-ab42-de511d58bc33"
-  filter          = "509ff5bf-e185-4abb-aff1-70844bd98b68"
+  page_size       = 100
+  project_id      = "f47ac10b-58cc-0372-8567-0e02b2c3d479"
+  magic_router_id = "f47ac10b-58cc-0372-8567-0e02b2c3d479"
+  filter          = "next_hop_type in [1, 2]"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-received_route" {
@@ -30,10 +38,19 @@ output "data-received_route" {
 
 - `filter` (String) Фильтр для поиска маршрутов. Поле filter — это CEL-выражение (https://github.com/google/cel-spec/blob/master/doc/langdef.md), состоящее из фильтров, объединенных оператором '&&' (логическое 'И'). Поддерживаемые поля: - nextHopType []int32 (опционально). Поддерживаемый оператор: 'in'. Комментарий: все возможные значения перечислены в enum RouteNextHopType. Пример выражения: next_hop_type in [1, 2]
 - `page_size` (Number) Максимальное количество маршрутов на странице.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `routes` (Attributes List) Список полученных маршрутов. (see [below for nested schema](#nestedatt--routes))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--routes"></a>
 ### Nested Schema for `routes`

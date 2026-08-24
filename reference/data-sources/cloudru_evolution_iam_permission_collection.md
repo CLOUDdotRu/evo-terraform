@@ -1,4 +1,3 @@
-
 # cloudru_evolution_iam_permission_collection (Data Source)
 
 
@@ -7,8 +6,17 @@
 
 ```terraform
 data "cloudru_evolution_iam_permission_collection" "datasource_permission" {
-  filter    = "b4b88f34-2c0f-4915-9c32-5b4ce864036d"
-  page_size = 632380535510115867
+  filter    = "7f643771-61ad-48f9-a6f4-a31d5938b54a"
+  page_size = 6632770701823427596
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-permission" {
@@ -21,15 +29,24 @@ output "data-permission" {
 
 ### Required
 
-- `filter` (String) Фильтрующее выражение. `resource_id=7233e6a4-cac8-409d-ae0c-1eece3022a7f` — обязательный фильтр. Deprecated: `role_id=platform.project.admin` — опциональный фильтр по названию роли (исторический идентификатор). Используйте `role_name`. `primary_role_id=3c6f726e-fc24-4b23-a770-168b71cb373d` — опциональный фильтр по UUID роли. `role_name=platform.project.admin` — опциональный фильтр по названию роли. `role_type=ROLE_TYPE_PRODUCT` — опциональный фильтр по типу роли (возможные значения: `ROLE_TYPE_UNSPECIFIED`, `ROLE_TYPE_PRODUCT`, `ROLE_TYPE_CUSTOM`). `subject_id=fcfaa582-e9c8-457b-b5bc-909b560a7e97` — опциональный фильтр по идентификатору субъекта. `subject_type=user` — опциональный фильтр по типу субъекта (возможные значения: `user`|`service_account`|`user_group`). Объединение фильтров: поддерживается только оператор `AND`. Пример: `resource_id=7233e6a4-cac8-409d-ae0c-1eece3022a7f AND role_id=platform.project.admin`.
+- `filter` (String) Фильтрующее выражение. `resource_id=7233e6a4-cac8-409d-ae0c-1eece3022a7f` — обязательный фильтр.
 
 ### Optional
 
 - `page_size` (Number) Количество элементов на странице. Максимальное значение: 1000. Значение по умолчанию: 100.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `permissions` (Attributes List) Список разрешений. (see [below for nested schema](#nestedatt--permissions))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--permissions"></a>
 ### Nested Schema for `permissions`
@@ -42,7 +59,7 @@ Read-Only:
 - `id` (String) Идентификатор разрешения.
 - `primary_role_id` (String) Идентификатор роли (uuid).
 - `resource_id` (String) Идентификатор ресурса.
-- `role_id` (String) Идентификатор роли. Deprecated: используйте `role_name`/`primary_role_id`. Поле будет удалено в следующей версии.
+- `role_id` (String) Идентификатор роли.
 - `role_name` (String) Название роли.
 - `role_type` (String) Тип роли.
 - `subject_id` (String) Идентификатор субъекта.

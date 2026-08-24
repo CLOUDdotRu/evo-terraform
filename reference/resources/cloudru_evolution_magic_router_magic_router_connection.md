@@ -1,4 +1,3 @@
-
 # cloudru_evolution_magic_router_magic_router_connection (Resource)
 
 
@@ -7,13 +6,24 @@
 
 ```terraform
 resource "cloudru_evolution_magic_router_magic_router_connection" "resource_magic_router_connection" {
-  magic_router_id = "88fded9e-af51-490d-8288-828852883074"
-  target_mr_id    = "096f57a0-75e5-4685-b213-691aef0584a3"
-  name            = "af0862bb-dc36-4e49-9d41-84e19c017265"
+  magic_router_id = "f47ac10b-58cc-0372-8567-0e02b2c3d479"
+  target_mr_id    = "f47ac10b-58cc-0372-8567-0e02b2c3d479"
+  name            = "magic-link-01"
   # Нужно заполнить одно из значений - description
-  description = "e765a674-6e4e-4a81-bd98-32673aa35e0d"
+  description = "Description"
   # Нужно заполнить одно из значений - comment
-  comment = "c83ef395-69e3-4811-89d9-74345a868f82"
+  comment = "Comment"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -30,6 +40,7 @@ resource "cloudru_evolution_magic_router_magic_router_connection" "resource_magi
 
 - `comment` (String) Комментарий, видимый обеими сторонами, но создаваемый и редактируемый только инициатором.
 - `description` (String) Описание соединения.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
@@ -39,3 +50,12 @@ resource "cloudru_evolution_magic_router_magic_router_connection" "resource_magi
 - `project_id` (String) Идентификатор проекта, которому принадлежит Magic Router.
 - `status` (String) Статус подключения.
 - `updated_at` (String) Время последнего изменения подключения.
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).

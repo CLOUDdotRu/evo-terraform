@@ -1,4 +1,3 @@
-
 # cloudru_evolution_iam_group (Resource)
 
 
@@ -7,16 +6,27 @@
 
 ```terraform
 resource "cloudru_evolution_iam_group" "resource_group" {
-  name        = "201acd7c-efca-4468-95d0-f817b10f7446"
-  description = "63b36857-96da-47b6-b406-6ffec71e9090"
+  name        = "a647c3ed-0ec3-4cd1-b540-faa9645eb4d4"
+  description = "639a3c52-8dd4-4e6b-b669-b364b46f7516"
   target = {
     # Нужно заполнить одно из значений - customer_id, project_id.
-    customer_id = "887b80e6-edf4-40cd-bba3-c4dcee9d3e5f"
-    project_id  = "2886e7b6-120d-4052-be48-d8eb797eff2a"
+    customer_id = "b61d6910-81de-4e9f-9e37-20186f46265e"
+    project_id  = "74ff3b72-cc9b-4629-a67f-8893617cdd51"
   }
   ldap_attributes = {
-    distinguished_name = "13d79707-7b00-4470-be8e-7f380f393719"
-    provider_id        = "ffafeaac-c9fb-4756-ba52-998704fa1c19"
+    distinguished_name = "aca699c8-0ec3-45a5-afb3-63716a615770"
+    provider_id        = "c52a7e15-8210-407c-9540-e07e7abad107"
+  }
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
   }
 }
 ```
@@ -33,6 +43,7 @@ resource "cloudru_evolution_iam_group" "resource_group" {
 
 - `description` (String) Description - описание группы.
 - `ldap_attributes` (Attributes) LDAPAttributes - LDAP атрибуты группы. (see [below for nested schema](#nestedatt--ldap_attributes))
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
@@ -56,3 +67,13 @@ Required:
 
 - `distinguished_name` (String) DistinguishedName - LDAP distinguished name группы.
 - `provider_id` (String) ProviderID - идентификатор LDAP провайдера.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).

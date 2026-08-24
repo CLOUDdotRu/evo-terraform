@@ -1,4 +1,3 @@
-
 # cloudru_evolution_baremetal_reserved_server (Resource)
 
 
@@ -22,6 +21,17 @@ resource "cloudru_evolution_baremetal_reserved_server" "resource_reserved_server
   log_group_id  = "4846d669-228d-4fd0-9226-fe586cb59c31"
   sds_disks_ids = ["6e4b294d-ee30-4b1d-9dbc-07b0a1f8c03f", "bcf52e6d-9b61-4ed9-8861-de073047ab80"]
   without_fip   = true
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -44,10 +54,11 @@ resource "cloudru_evolution_baremetal_reserved_server" "resource_reserved_server
 ### Optional
 
 - `description` (String) Описание сервера.
-- `dns_servers` (List of String) Адреса DNS-серверов, используемые в сети арендованного сервера. ВНИМАНИЕ: поле устарело. ДНС серверы нужно указывать в подсетях (cloudru/iaas/baremetal/v2/subnet.proto), в поле dns_servers.
+- `dns_servers` (List of String, Deprecated) Адреса DNS-серверов, используемые в сети арендованного сервера. ВНИМАНИЕ: поле устарело. ДНС серверы нужно указывать в подсетях (cloudru/iaas/baremetal/v2/subnet.proto), в поле dns_servers.
 - `ip_id` (String) Идентификатор адреса в VPC.
 - `log_group_id` (String) Идентификатор лог-группы.
 - `sds_disks_ids` (List of String) Идентификаторы SDS-дисков, которые будут подключены к серверу.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 - `without_fip` (Boolean) Должен ли сервер арендоваться без публичного IP.
 
 ### Read-Only
@@ -70,6 +81,16 @@ resource "cloudru_evolution_baremetal_reserved_server" "resource_reserved_server
 - `updated_at` (String) Дата последнего обновления записи.
 - `updated_by` (Attributes) Информация о субъекте, который внес последние изменения в запись. (see [below for nested schema](#nestedatt--updated_by))
 - `vpc` (Attributes) Информация о VPC, к которому привязан арендованный сервер. (see [below for nested schema](#nestedatt--vpc))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--attributes"></a>
 ### Nested Schema for `attributes`

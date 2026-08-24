@@ -1,4 +1,3 @@
-
 # cloudru_evolution_compute_external_ip (Resource)
 
 
@@ -7,17 +6,28 @@
 
 ```terraform
 resource "cloudru_evolution_compute_external_ip" "resource_external_ip" {
-  project_id = "6b64856a-a17b-4cdd-8a24-ce6e4ef4ddf4"
+  project_id = "a7fb6dd0-e52f-4b62-b3dd-cd8d27ff5dba"
   zone = {
     # Нужно заполнить одно из значений - id, name.
-    id   = "03d7d0d6-3d7c-4760-b2ea-ebe52dc9b2bc"
-    name = "02450333-bcf2-4bc5-89cd-55f725dd531a"
+    id   = "1843250e-b7b4-44b2-ac6a-9235977a321a"
+    name = "4e9b0686-37a8-420d-95e6-a706f5981f0a"
   }
-  name        = "f828068d-562b-4926-9de8-7bdeba9a8ddf"
-  description = "d66c6ee6-4d26-4ced-a174-83204892f89b"
+  name        = "fefd79d0-5f6f-469c-94e7-3bbaa5089480"
+  description = "e5d3bbf1-0825-4608-9c5b-dbbfa4e92d84"
   # Нужно заполнить одно из значений - interface
   network_interface = {
-    id = "75d1adfc-630f-4f3b-8cd2-258c45ee7045"
+    id = "13f701bc-f3bc-48c9-bc99-f905f8eddfc8"
+  }
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
   }
 }
 ```
@@ -34,6 +44,7 @@ resource "cloudru_evolution_compute_external_ip" "resource_external_ip" {
 
 - `description` (String) Описание публичного IP-адреса.
 - `network_interface` (Attributes) Параметры сетевого интерфейса. (see [below for nested schema](#nestedatt--network_interface))
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 - `zone` (Attributes) Параметры зоны доступности. (see [below for nested schema](#nestedatt--zone))
 
 ### Read-Only
@@ -57,6 +68,16 @@ Read-Only:
 
 - `name` (String) Название сетевого интерфейса.
 - `status` (String) Статус сетевого интерфейса.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
 
 
 <a id="nestedatt--zone"></a>

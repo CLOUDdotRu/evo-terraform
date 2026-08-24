@@ -1,4 +1,3 @@
-
 # cloudru_evolution_redis_cluster (Resource)
 
 
@@ -25,8 +24,19 @@ resource "cloudru_evolution_redis_cluster" "resource_cluster" {
     "client-output-buffer-limit-normal|hard-limit" = "1048576"
   }
   user_description = "Some short text."
-  subnet_id        = "00000000-0000-0000-0000-000000000000"
+  subnet_ids       = ["00000000-0000-0000-0000-000000000000","00000000-0000-0000-0000-000000000000"]
   project_id       = "00000000-0000-0000-0000-000000000000"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -40,7 +50,6 @@ resource "cloudru_evolution_redis_cluster" "resource_cluster" {
 - `replicas` (Number) Количество реплик.
 - `shards` (Number) Количество шардов.
 - `specification_id` (String) Идентификатор спецификации кластера.
-- `subnet_id` (String) Идентификатор подсети.
 - `type` (String) Тип кластера.
 - `version_id` (String) Идентификатор версии.
 
@@ -48,9 +57,12 @@ resource "cloudru_evolution_redis_cluster" "resource_cluster" {
 
 - `logging` (Attributes) Параметры интеграции с сервисом Клиентского логирования. (see [below for nested schema](#nestedatt--logging))
 - `parameters` (Map of String) Параметры кластера <имя параметра, значение>. Список поддерживаемых параметров и их описание доступны в разделе документации [Параметры кластера](https://cloud.ru/docs/redis/ug/topics/guides__parameters__available-parameters-list).
-- `storage_gb` (Number) Размер диска в гигабайтах. Используйте поле `storage_gib` вместо `storage_gb`.
+- `storage_gb` (Number, Deprecated) Размер диска в гигабайтах. Используйте поле `storage_gib` вместо `storage_gb`.
 - `storage_gib` (Number) Размер диска в гигабайтах.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 - `user_description` (String) Пользовательское описание кластера.
+- `subnet_id` (String) Идентификатор подсети. Deprecated: Устарело. Используйте поле `subnet_ids`.
+- `subnet_ids` (List of String) Идентификаторы подсетей. Список подсетей и их описание можно получить через API сервиса виртуальных машин в разделе [Subnets](https://cloud.ru/docs/virtual-machines/ug/topics/api-ref-v3#tag/Subnets).
 
 ### Read-Only
 
@@ -60,6 +72,7 @@ resource "cloudru_evolution_redis_cluster" "resource_cluster" {
 - `id` (String) Идентификатор кластера.
 - `redis_hosts` (List of String) Адреса кластера.
 - `status` (String) Статус кластера.
+- `zone_ids` (List of String) Идентификаторы зон доступности кластера.
 
 <a id="nestedatt--logging"></a>
 ### Nested Schema for `logging`
@@ -68,3 +81,13 @@ Optional:
 
 - `enabled` (Boolean) Признак отправки логов кластера. По умолчанию `false` — логи не отправляются.
 - `log_group_id` (String) Идентификатор лог-группы, в которую отправляются логи. Если значение не задано, будет использоваться лог-группа проекта по умолчанию — `default`.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).

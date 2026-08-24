@@ -1,4 +1,3 @@
-
 # cloudru_evolution_magic_router_magic_router (Resource)
 
 
@@ -7,15 +6,25 @@
 
 ```terraform
 resource "cloudru_evolution_magic_router_magic_router" "resource_magic_router" {
-  project_id = "06609d1e-2306-4fb1-9d1d-611623d996c8"
-  name       = "719fbe06-99cf-47c6-92ee-058da1eb0f72"
-  # Нужно заполнить одно из значений - description
-  description = "85bfb14f-9eb7-45c3-8b1e-ba68ffd40c6a"
-  tag_ids     = ["8bf3c55f-ea9e-4614-a3db-697fa567a910", "44b5a4f4-faf6-4b4a-a3e0-90b49e7d67f3", "ef7ac492-6df4-4e0f-baec-b364d2fdec05", "0ce1c871-7091-484f-962c-c77f22f8f5fd", "7559d248-49ea-43ef-bc29-3ebccab0ca50", "a24b7915-ec6e-4ee4-a769-80d924445c0c", "802ed938-729a-4ed7-ad9f-86d30f0fc559", "77c50203-b0cb-4457-a950-6a608ca39f62", "d4157fcc-aaca-4786-b6f6-d0d1a21b1220", "5e209cef-b1cf-4443-80a2-39459063aa9d"]
+  project_id = "f47ac10b-58cc-0372-8567-0e02b2c3d479"
+  name       = "magic-router-01"
+  description = "Description"
+  tag_ids     = ["f47ac10b-58cc-0372-8567-0e02b2c3d479"]
   vpc_connections = [{
-    vpc_id = "6e379ebd-033c-4954-866b-6e140f2dc8d7"
-    name   = "24fbdf0c-b85f-4c93-ae81-3d4159791e95"
+    vpc_id = "f47ac10b-58cc-0372-8567-0e02b2c3d479"
+    name   = "vpc-connection-01"
   }]
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -31,6 +40,7 @@ resource "cloudru_evolution_magic_router_magic_router" "resource_magic_router" {
 
 - `description` (String) Описание Magic Router.
 - `tag_ids` (List of String) Список идентификаторов тегов, привязанных к Magic Router.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 - `vpc_connections` (Attributes List) Список подключений к VPC для Magic Router. (see [below for nested schema](#nestedatt--vpc_connections))
 
 ### Read-Only
@@ -39,6 +49,16 @@ resource "cloudru_evolution_magic_router_magic_router" "resource_magic_router" {
 - `id` (String) Идентификатор Magic Router.
 - `status` (String) Статус Magic Router.
 - `updated_at` (String) Время последнего изменения Magic Router.
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--vpc_connections"></a>
 ### Nested Schema for `vpc_connections`

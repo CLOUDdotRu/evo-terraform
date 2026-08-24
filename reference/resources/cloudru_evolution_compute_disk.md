@@ -1,4 +1,3 @@
-
 # cloudru_evolution_compute_disk (Resource)
 
 
@@ -7,26 +6,37 @@
 
 ```terraform
 resource "cloudru_evolution_compute_disk" "resource_disk" {
-  project_id = "cb5ee1d2-e383-48e5-ad35-75db8a8115cb"
+  project_id = "53b4aa1a-2bc2-4c34-b96a-578568f718f4"
   zone = {
     # Нужно заполнить одно из значений - id, name.
-    id   = "98b73c75-62b5-498d-b965-3f493fb2ec33"
-    name = "7ca703d5-b265-4f99-a45e-5c5461bd841e"
+    id   = "805b382c-eeaa-442a-9f54-0fb120066890"
+    name = "f42b7671-58af-47e3-b3f3-7abdebd0e965"
   }
-  name        = "40b3f0a5-321e-4696-bc53-be601ad4a676"
-  description = "7c579f9a-3ba5-4391-8db7-54c44b287038"
-  size        = 2062837016
+  name        = "a740b75d-9581-400a-9cde-59fc38d43e9b"
+  description = "8c34b64f-6759-4a1d-bf7b-7da4cd932aa5"
+  size        = 1522714750
   readonly    = false
   shared      = true
   encrypted   = true
   bootable    = false
   disk_type = {
     # Нужно заполнить одно из значений - id, name.
-    id   = "a8f253d4-7296-485a-b0ee-9de2d3cee3f3"
-    name = "87c1ab53-cf45-444d-be0e-777b824193a7"
+    id   = "2c5fbf7e-167b-4246-a46f-0d73c3fa3ba8"
+    name = "1038331e-3823-4fa8-856e-a741c544e70b"
   }
   image = {
-    id = "b96c36f2-af41-4c40-833f-55e097c0a779"
+    id = "9489e6de-952c-4bf0-b48b-31ce4e510957"
+  }
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
   }
 }
 ```
@@ -50,6 +60,7 @@ resource "cloudru_evolution_compute_disk" "resource_disk" {
 - `image` (Attributes) Параметры образа. (see [below for nested schema](#nestedatt--image))
 - `readonly` (Boolean) Признак диска только для чтения.
 - `shared` (Boolean) Признак общедоступного диска.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
@@ -96,6 +107,16 @@ Optional:
 Read-Only:
 
 - `name` (String) Название образа.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
 
 
 <a id="nestedatt--vms"></a>

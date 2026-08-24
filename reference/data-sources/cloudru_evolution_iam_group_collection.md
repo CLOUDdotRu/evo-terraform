@@ -1,4 +1,3 @@
-
 # cloudru_evolution_iam_group_collection (Data Source)
 
 
@@ -9,10 +8,19 @@
 data "cloudru_evolution_iam_group_collection" "datasource_group" {
   target = {
     # Нужно заполнить одно из значений - customer_id, project_id.
-    customer_id = "565cf457-db84-4938-8113-ad0445103b37"
-    project_id  = "3ccf4778-7959-4581-95b6-68b6ccb8f16a"
+    customer_id = "34e8f692-4dd1-4ca8-9126-c4735eaeea16"
+    project_id  = "c4bc4ecd-4ecf-4edd-a822-11f0a1182d1e"
   }
-  page_size = 8898218516828971703
+  page_size = 3767926062358832080
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-group" {
@@ -30,6 +38,7 @@ output "data-group" {
 ### Optional
 
 - `page_size` (Number) PageSize - количество элементов на странице.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
@@ -42,6 +51,14 @@ Optional:
 
 - `customer_id` (String) CustomerID - идентификатор организации, если группа создана на уровне организации.
 - `project_id` (String) ProjectID - идентификатор проекта, если группа создана на уровне проекта.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
 
 
 <a id="nestedatt--groups"></a>

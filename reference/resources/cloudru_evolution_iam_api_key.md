@@ -1,4 +1,3 @@
-
 # cloudru_evolution_iam_api_key (Resource)
 
 
@@ -7,22 +6,33 @@
 
 ```terraform
 resource "cloudru_evolution_iam_api_key" "resource_api_key" {
-  name               = "a8ace115-c27f-4394-b4fd-88d3fe5ad221"
-  description        = "83c6086a-84db-4607-80a5-9ba42a806075"
-  service_account_id = "d934cf0f-e482-4a07-86b0-8c1f42c45f0e"
-  product_codes      = ["b0f0346d-c064-460f-8a7a-9f3ab10a5dad", "d75c5373-0acc-4a5b-b577-73f3082e0c3d", "9aa4d703-f881-4803-af77-e1f8e487db05", "dc24cc95-387d-4535-8567-b05d803cf86a", "5ca769aa-63b1-4f8c-a7f0-bcf3f1f44e80", "6c602a5e-f90e-41be-b194-42a1251ec3ea", "8657ddba-83ef-48fc-b86d-a2765f430de9", "f082e121-d60f-4562-b353-a91093b34eb2", "0d1ea6ff-a519-4255-a652-03faf80aa4d2", "6e357d0c-4ef2-452e-bb9f-60d893d8518a"]
+  name               = "12234b51-0969-48f8-9201-756cb9741210"
+  description        = "c26644fc-3f60-4d45-82c7-e7bc29167486"
+  service_account_id = "e26b2083-6aa2-449d-bcf6-f026e1fcd8c9"
+  product_codes      = ["monaas", "audit"]
   restrictions = {
-    ip_addresses = ["45cc3fdf-2843-49a9-979d-1f5f72f1116b", "97686d9f-3907-436d-bac1-40a1d0316565", "2f966684-6a4d-43a3-b380-bdb221d625d1", "7915882b-db5c-4003-bbc2-f62d7a587f6b", "ea071377-f658-4005-a92f-5b660998242a", "bfb6920f-3ec3-44f2-beab-71aa9bad95ec", "65abdf81-2c7d-41ab-9b69-03d694bb3111", "9d1f67c2-d689-4b69-93b5-2d56f1acc98f", "351653b8-b153-476a-94b0-31bfcc089d52", "9db90858-4ee5-4678-ae8a-0031f70cf071"]
+    ip_addresses = ["dd5ed234-dbd8-4237-8d00-c496778ded88", "31758311-fa76-408e-9e39-77fb88d325c3", "d760d440-93c0-496b-9361-7b8d6c42fa43", "3b9e1884-761e-4a11-a805-26e7e381661d", "38c5050d-f383-4193-972a-ca8b44183b45", "a9bad756-9f53-41e0-861b-f64f503b5dcd", "5ee903d6-82d6-42b6-8806-4446057183ba", "254c1441-289a-4ab0-ace3-992b0423aad6", "9abcca87-5154-4fe3-b5f3-51d41bf9d3ea", "62b5ae85-ca18-42e6-8331-87f70a7dbe0d"]
     time_range = {
       time_slots = [{
-        start = 1451651059
-        end   = 1906732899
+        start = 751791614
+        end   = 404971762
       }]
-      timezone = 217574206
+      timezone = 1130565080
     }
   }
-  enabled    = false
-  expires_at = "Fri, 24 Jul 2026 15:22:02 UTC"
+  enabled    = true
+  expires_at = "Fri, 14 Aug 2026 15:45:40 UTC"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -33,7 +43,7 @@ resource "cloudru_evolution_iam_api_key" "resource_api_key" {
 
 - `enabled` (Boolean) Enabled - флаг активности API ключа.
 - `name` (String) Name - название API ключа.
-- `product_codes` (Set of String) ProductCodes - список кодов продуктов, для которых может быть применим API ключ.
+- `product_codes` (Set of String) ProductCodes - список кодов продуктов, для которых может быть применим API ключ. Все возможные варианты значения этого поля можно получить испоьзуя APIKeyProductService/List или datasource cloudru_evolution_iam_api_key_product_collection
 - `service_account_id` (String) ServiceAccountID - идентификатор сервисного аккаунта, для которого был выпущен API ключ.
 
 ### Optional
@@ -41,6 +51,7 @@ resource "cloudru_evolution_iam_api_key" "resource_api_key" {
 - `description` (String) Description - описание API ключа.
 - `expires_at` (String) ExpiresAt - дата истечения API ключа.
 - `restrictions` (Attributes) Restrictions - ограничения использования API ключа. (see [below for nested schema](#nestedatt--restrictions))
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
@@ -75,3 +86,15 @@ Required:
 
 - `end` (Number) End - конец диапазона в часах.
 - `start` (Number) Start - начало диапазона в часах.
+
+
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).

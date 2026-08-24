@@ -1,4 +1,3 @@
-
 # cloudru_evolution_kafka_cluster (Resource)
 
 
@@ -26,6 +25,17 @@ resource "cloudru_evolution_kafka_cluster" "resource_cluster" {
   ui_enabled                            = false
   cruise_control_enabled                = false
   cruise_control_rebalance_auto_enabled = false
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -50,6 +60,7 @@ resource "cloudru_evolution_kafka_cluster" "resource_cluster" {
 - `description` (String) Описание кластера.
 - `logging` (Attributes) Параметры интеграции с сервисом Клиентского логирования. (see [below for nested schema](#nestedatt--logging))
 - `parameters` (Map of String) Параметры кластера <имя параметра, значение>. Список поддерживаемых параметров и их описание доступны в разделе документации [Параметры кластера](https://cloud.ru/docs/paas-kafka/ug/topics/guides__parameters__available-parameters-list).
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
@@ -69,3 +80,13 @@ Optional:
 
 - `enabled` (Boolean) Признак отправки логов кластера. По умолчанию `false` — логи не отправляются.
 - `log_group_id` (String) Идентификатор лог-группы, в которую отправляются логи. Если значение не задано, будет использоваться лог-группа проекта по умолчанию — `default`.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).

@@ -1,4 +1,3 @@
-
 # cloudru_evolution_compute_interface (Resource)
 
 
@@ -7,42 +6,53 @@
 
 ```terraform
 resource "cloudru_evolution_compute_interface" "resource_interface" {
-  project_id = "18932b0d-0262-4250-a98d-1640469301fe"
+  project_id = "1000b928-fee9-4c82-bb0f-2cadd50b0e92"
   zone = {
     # Нужно заполнить одно из значений - id, name.
-    id   = "c479c8c8-5929-419a-ab6d-133c9c73ec26"
-    name = "7b94e036-0877-4a91-9e8f-30b7bbe3f15a"
+    id   = "9c995816-ffdc-412e-a4b8-a523b797c282"
+    name = "0042a9da-e837-4d8c-bd8e-18bf89368edc"
   }
-  name                       = "c6fec850-b83f-4f86-b77b-cb608455699c"
-  description                = "18c0f7c8-5165-479e-b81f-a51118314c3c"
-  ip_address                 = "d66d6edf-bd66-4f7c-b3e0-62d8146378f4"
-  interface_security_enabled = true
+  name                       = "4bcc9ac8-442f-4a8f-8334-5ca0c085d33f"
+  description                = "cbdfaa92-760c-41a6-9e8e-8893253f1365"
+  ip_address                 = "0837d8b3-bc78-4bf0-b505-72a264eccbeb"
+  interface_security_enabled = false
   # Нужно заполнить одно из значений - new_external_ip, attach_external_ip
   attach_external_ip = {
     # Нужно заполнить одно из значений - id, name.
-    id   = "b153be71-ed04-4ccf-9f93-dfea9d5af667"
-    name = "a8e36805-0a92-4f14-869a-5f9e0a4bb8fe"
+    id   = "aa5b6870-2a20-488c-a9ee-8eecda034ccb"
+    name = "fdb059f0-4236-440f-b66b-fc87a159ab53"
   }
   allowed_address_pairs = {
     value = [{
-      ip_address  = "08302a5f-fb0b-4223-b01e-efd85ada1e8e"
-      mac_address = "c78f4c5e-76c6-4ec6-a25d-f9a2f8bb16b2"
+      ip_address  = "00f843aa-8d69-4a02-a37b-dd3e26d7d080"
+      mac_address = "5e3c6420-fe96-4603-844a-db1fe9772aaf"
     }]
   }
   # Варианты значений параметра type:
   # INTERFACE_TYPE_REGULAR, INTERFACE_TYPE_SYSTEM, INTERFACE_TYPE_SERVICE, INTERFACE_TYPE_GATEWAY, INTERFACE_TYPE_FIP, INTERFACE_TYPE_DIRECT_IP, INTERFACE_TYPE_VIP
-  type = "INTERFACE_TYPE_VIP"
+  type = "INTERFACE_TYPE_GATEWAY"
   vm = {
-    id = "d1bfdad6-4609-4507-b6ab-8ed7cb57d3d9"
+    id = "de0b6417-500b-4742-b1f2-7b3499426356"
   }
   subnet = {
-    id = "d4a84bd0-945b-45dd-95ac-468254a7493a"
+    id = "1ba4e613-5fda-40d6-a239-8fe7289d496a"
   }
   security_groups = [{
     # Нужно заполнить одно из значений - id, name.
-    id   = "4c4abd20-902c-4c48-8b9c-e7679a139412"
-    name = "09766674-df01-4cb6-aa92-a4a159f77fdd"
+    id   = "c9de45b9-434b-4d59-b593-3e5b93bc70b6"
+    name = "a276f000-5554-46d3-8fc5-56f4287db4ba"
   }]
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -55,7 +65,6 @@ resource "cloudru_evolution_compute_interface" "resource_interface" {
 - `project_id` (String) Идентификатор проекта.
 - `security_groups` (Attributes List) Параметры групп безопасности. (see [below for nested schema](#nestedatt--security_groups))
 - `subnet` (Attributes) Параметры подсети. (see [below for nested schema](#nestedatt--subnet))
-- `vm` (Attributes) Параметры виртуальной машины. (see [below for nested schema](#nestedatt--vm))
 - `zone` (Attributes) Параметры зоны доступности. (see [below for nested schema](#nestedatt--zone))
 
 ### Optional
@@ -65,7 +74,9 @@ resource "cloudru_evolution_compute_interface" "resource_interface" {
 - `description` (String) Описание интерфейса.
 - `interface_security_enabled` (Boolean) Возможность добавить сетевой интерфейс в группу безопасности: true — можно, false — нельзя.
 - `ip_address` (String) IP-адрес.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 - `type` (String) Тип интерфейса, определяемый параметрами подсети и виртуальной машины. В публичном API доступны следующие типы:DIRECT_IP, REGULAR. Внутри системы поддерживаются дополнительные типы для системных и сервисных объектов.
+- `vm` (Attributes) Параметры виртуальной машины. (see [below for nested schema](#nestedatt--vm))
 
 ### Read-Only
 
@@ -99,19 +110,6 @@ Read-Only:
 
 - `name` (String) Название подсети.
 - `status` (String) Статус подсети.
-
-
-<a id="nestedatt--vm"></a>
-### Nested Schema for `vm`
-
-Optional:
-
-- `id` (String) Идентификатор виртуальной машины.
-
-Read-Only:
-
-- `name` (String) Название виртуальной машины.
-- `status` (String) Статус виртуальной машины.
 
 
 <a id="nestedatt--zone"></a>
@@ -159,3 +157,26 @@ Read-Only:
 
 - `ip_address` (String) Публичный IP-адрес.
 - `status` (String) Статус публичного IP-адреса.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
+
+<a id="nestedatt--vm"></a>
+### Nested Schema for `vm`
+
+Optional:
+
+- `id` (String) Идентификатор виртуальной машины.
+
+Read-Only:
+
+- `name` (String) Название виртуальной машины.
+- `status` (String) Статус виртуальной машины.

@@ -1,4 +1,3 @@
-
 # cloudru_evolution_baremetal_distribution_collection (Data Source)
 
 
@@ -9,6 +8,15 @@
 data "cloudru_evolution_baremetal_distribution_collection" "datasource_distribution" {
   page_size = 50
   filter    = "name='Alma Linux'"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-distribution" {
@@ -23,10 +31,19 @@ output "data-distribution" {
 
 - `filter` (String) Фильтрующее выражение. Условие имеет форму `<поле><operator><значение>`: 1. `<поле>` имя поля для фильтрации; 2. `<operator>` логический оператор `=` (равно); 3. `<значение>` значение поля. Зарезервировано для дальнейшего расширения.
 - `page_size` (Number) Максимальное количество результатов на странице ответа. Если значение больше [page_size], сервис возвращает [next_page_token], который используется в [ListResponse]. Значение [page_size] по-умолчанию: 50. Максимальное значение: 100.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `distributions` (Attributes List) Список дистрибутивов. (see [below for nested schema](#nestedatt--distributions))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--distributions"></a>
 ### Nested Schema for `distributions`

@@ -1,4 +1,3 @@
-
 # cloudru_evolution_spark_spark (Resource)
 
 
@@ -38,6 +37,17 @@ resource "cloudru_evolution_spark_spark" "resource_spark" {
     password_secret_id = "0000-0000-0000-0000-0000"
   }
   version_id = "0000-0000-0000-0000-0000"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -53,28 +63,29 @@ resource "cloudru_evolution_spark_spark" "resource_spark" {
 - `name` (String) Название.
 - `network_configuration` (Attributes) Конфигурация сети. (see [below for nested schema](#nestedatt--network_configuration))
 - `project_id` (String) Идентификатор проекта.
-- `user` (Attributes) Пользователь spark для доступа к spark history. (see [below for nested schema](#nestedatt--user))
+- `user` (Attributes) Пользователь Managed Spark для доступа к Spark History. (see [below for nested schema](#nestedatt--user))
 
 ### Optional
 
 - `description` (String) Описание.
-- `external_s3_config` (Attributes) Конфигурация параметров внешнего s3. (see [below for nested schema](#nestedatt--external_s3_config))
-- `internal_s3_config` (Attributes) Конфигурация параметров внутреннего s3. (see [below for nested schema](#nestedatt--internal_s3_config))
+- `external_s3_config` (Attributes) Конфигурация параметров внешнего хранилища S3. (see [below for nested schema](#nestedatt--external_s3_config))
+- `internal_s3_config` (Attributes) Конфигурация параметров Object Storage. (see [below for nested schema](#nestedatt--internal_s3_config))
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 - `version_id` (String) Идентификатор версии Managed Spark.
 
 ### Read-Only
 
 - `created_at` (String) Время создания.
-- `created_by` (String) Идентификатор пользователя, кем создан.
-- `hs_external_host` (String) URL внешнего хоста spark history server.
-- `hs_internal_host` (String) URL внутреннего хоста spark history server.
-- `id` (String) Идентификатор spark.
-- `s3_eventlog_url` (String) URL к директории spark логов в s3.
-- `spark_connect_id` (String) Идентификатор spark-connect, если существует.
-- `status` (String) Статус.
+- `created_by` (String) Идентификатор создавшего пользователя.
+- `hs_external_host` (String) URL внешнего хоста Spark History.
+- `hs_internal_host` (String) URL внутреннего хоста Spark History.
+- `id` (String) Идентификатор инстанса Managed Spark.
+- `s3_eventlog_url` (String) URL директории с логами Spark в хранилище S3.
+- `spark_connect_id` (String) Идентификатор Spark Connect.
+- `status` (String) Статус инстанса Managed Spark.
 - `updated_at` (String) Время обновления.
-- `updated_by` (String) Идентификатор пользователя, кем обновлен.
-- `version` (Attributes) Spark version ID. (see [below for nested schema](#nestedatt--version))
+- `updated_by` (String) Идентификатор обновившего пользователя.
+- `version` (Attributes) Версия Managed Spark. (see [below for nested schema](#nestedatt--version))
 
 <a id="nestedatt--compute_configuration"></a>
 ### Nested Schema for `compute_configuration`
@@ -111,7 +122,7 @@ Required:
 
 - `access_key_secret_id` (String) Access key в формате secret manager secret_id.
 - `bucket` (String) Имя бакета.
-- `endpoint` (String) Endpoint url.
+- `endpoint` (String) URL эндпоинта.
 - `region` (String) Регион, например, ru-central-1.
 - `secret_key_secret_id` (String) Secret key в формате secret manager secret_id.
 
@@ -123,6 +134,16 @@ Required:
 
 - `bucket` (String) Имя бакета.
 - `tenant_id` (String) Идентификатор арендатора.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
 
 
 <a id="nestedatt--version"></a>

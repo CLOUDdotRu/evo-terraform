@@ -1,4 +1,3 @@
-
 # cloudru_evolution_baremetal_sds_disk_collection (Data Source)
 
 
@@ -10,6 +9,15 @@ data "cloudru_evolution_baremetal_sds_disk_collection" "datasource_sds_disk" {
   project_id = "a3dab871-5355-49a8-817a-9c5e59fad149"
   zone_id    = "10B39F12-8041-4F73-BBFF-4AE20B162168"
   page_size  = 50
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-sds_disk" {
@@ -28,10 +36,19 @@ output "data-sds_disk" {
 ### Optional
 
 - `page_size` (Number) Максимальное количество результатов на странице ответа. Если значение больше [page_size], сервис возвращает [next_page_token], который используется в [ListResponse]. Значение [page_size] по-умолчанию: 50. Максимальное значение: 100.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `disks` (Attributes List) Список дисков. (see [below for nested schema](#nestedatt--disks))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--disks"></a>
 ### Nested Schema for `disks`

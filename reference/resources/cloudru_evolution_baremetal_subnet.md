@@ -1,4 +1,3 @@
-
 # cloudru_evolution_baremetal_subnet (Resource)
 
 
@@ -19,6 +18,17 @@ resource "cloudru_evolution_baremetal_subnet" "resource_subnet" {
   # Нужно заполнить одно из значений - vlan_id
   vlan_id = 1
   zone_id = "10B39F12-8041-4F73-BBFF-4AE20B162168"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -40,6 +50,7 @@ resource "cloudru_evolution_baremetal_subnet" "resource_subnet" {
 - `dns_servers` (List of String) Адреса DNS-серверов, используемых в подсети.
 - `is_default` (Boolean) Подсеть по умолчанию для зоны доступности и VPC.
 - `is_primary` (Boolean) Является ли подсеть для сервера основной или дополнительной.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 - `vlan_id` (Number) Идентификатор VLAN.
 
 ### Read-Only
@@ -52,6 +63,16 @@ resource "cloudru_evolution_baremetal_subnet" "resource_subnet" {
 - `modified_time` (String) Время последнего изменения подсети.
 - `state` (String) Состояние подсети.
 - `type` (String) Тип подсети.
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--availability_zone"></a>
 ### Nested Schema for `availability_zone`

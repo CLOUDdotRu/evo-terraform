@@ -1,4 +1,3 @@
-
 # cloudru_evolution_mk8s_node_pool (Resource)
 
 
@@ -10,6 +9,19 @@ resource "cloudru_evolution_mk8s_node_pool" "resource_node_pool" {
   cluster_id = "00000000-0000-0000-0000-000000000000"
   name       = "cloudru-example-nodepool"
   version    = "v1.34.1"
+  machine_configuration = {
+    disk = {
+      type_name = "SSD"
+      size      = 40
+    }
+    flavor = {
+      flavor_id = "00000000-0000-0000-0000-000000000000"
+    }
+  }
+  network_configuration = {
+    nodes_subnet_id   = "00000000-0000-0000-0000-000000000000"
+    security_group_id = "00000000-0000-0000-0000-000000000000"
+  }
   update_configuration = {
     strategy = "NODE_POOL_UPDATE_STRATEGY_ROLLING_UPDATE"
     rolling_update_policy = {
@@ -37,7 +49,7 @@ resource "cloudru_evolution_mk8s_node_pool" "resource_node_pool" {
   }
   labels = {
     labels = {
-    "83f4e072-8e07-4c8b-bdd3-895e9556f4b6" = "c3e1a044-06f2-43ff-a973-aa72fd9c948c" }
+    "20ff253e-5f37-4e2e-beb7-7eabcffc9b19" = "278ff941-f7ef-49b2-b89c-f2a69db085b4" }
   }
   remote_access = {
     ssh_key_id = "00000000-0000-0000-0000-000000000000"
@@ -46,16 +58,16 @@ resource "cloudru_evolution_mk8s_node_pool" "resource_node_pool" {
   auto_repair = {
     enabled = true
   }
-  machine_configuration_request = {
-    flavor_id = "00000000-0000-0000-0000-000000000000"
-    disk = {
-      type_name = "SSD"
-      size      = 30
-    }
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
   }
-  network_configuration_request = {
-    nodes_subnet_id   = "00000000-0000-0000-0000-000000000000"
-    security_group_id = "00000000-0000-0000-0000-000000000000"
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
   }
 }
 ```
@@ -75,9 +87,11 @@ resource "cloudru_evolution_mk8s_node_pool" "resource_node_pool" {
 
 ### Optional
 
+- `auto_repair` (Attributes) Параметры автоматического восстановления узлов. (see [below for nested schema](#nestedatt--auto_repair))
 - `labels` (Attributes) Набор меток (labels), применяемых к узлам в группе. (see [below for nested schema](#nestedatt--labels))
 - `remote_access` (Attributes) Конфигурация удаленного доступа к виртуальной машине в группе. (see [below for nested schema](#nestedatt--remote_access))
 - `taints` (Attributes) Список ограничений (taints), применяемых к узлам в группе. (see [below for nested schema](#nestedatt--taints))
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
@@ -196,6 +210,14 @@ Optional:
 
 
 
+<a id="nestedatt--auto_repair"></a>
+### Nested Schema for `auto_repair`
+
+Optional:
+
+- `enabled` (Boolean) Включение автоматического восстановления группы узлов. Возможные значения: true — автоматическое восстановление включено, false — автоматическое восстановление выключено. По умолчанию восстановление группы узлов включено.
+
+
 <a id="nestedatt--labels"></a>
 ### Nested Schema for `labels`
 
@@ -232,6 +254,16 @@ Optional:
 
 - `effect` (String) Применяемый эффект. Возможные значения: * `EFFECT_NO_EXECUTE` — запрещается планирование новых подов без соответствующих tolerations на узлах группы. Запущенные поды перемещаются на узлы других групп. * `EFFECT_NO_SCHEDULE` — запрещается планирование новых подов без соответствующих tolerations на узлах группы. Запущенные поды продолжат работу. * `EFFECT_PREFER_NO_SCHEDULE` — планирование подов без соответствующих tolerations на узлах в группе разрешается только, если на узлах других групп нет свободных ресурсов.
 
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
 
 
 <a id="nestedatt--upgrade_info"></a>

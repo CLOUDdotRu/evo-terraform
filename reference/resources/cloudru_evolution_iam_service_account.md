@@ -1,4 +1,3 @@
-
 # cloudru_evolution_iam_service_account (Resource)
 
 
@@ -9,12 +8,23 @@
 resource "cloudru_evolution_iam_service_account" "resource_service_account" {
   target = {
     # Нужно заполнить одно из значений - customer_id, project_id.
-    customer_id = "3c2a1a9b-d875-47fe-a508-8b364f7bf6bf"
-    project_id  = "da23e8c1-22ff-4d49-be9a-6b22d3147094"
+    customer_id = "67bc907a-68a0-4b12-a7aa-0f3b5bc4db3e"
+    project_id  = "f3b1a4eb-b810-4f25-93a2-989be78df392"
   }
-  name        = "3bc2457e-7843-418f-a2c2-7366e5231798"
-  description = "03463b37-916d-4950-b1ff-589358b280d0"
+  name        = "8d174f23-5c17-44d9-b93f-794f2fc79d94"
+  description = "6f7a2ede-31d2-4c4d-96aa-136066ca6dfe"
   enabled     = true
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -30,6 +40,7 @@ resource "cloudru_evolution_iam_service_account" "resource_service_account" {
 
 - `description` (String) Description - описание сервисного аккаунта.
 - `enabled` (Boolean) Enabled - флаг активности сервисного аккаунта. Используется только в update request. После создания будет true. После создания в update request поддерживается обновление значения.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
@@ -45,3 +56,13 @@ Optional:
 
 - `customer_id` (String) CustomerID - идентификатор организации, если сервисный аккаунт создан на уровне организации.
 - `project_id` (String) ProjectID - идентификатор проекта, если сервисный аккаунт создан на уровне проекта.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).

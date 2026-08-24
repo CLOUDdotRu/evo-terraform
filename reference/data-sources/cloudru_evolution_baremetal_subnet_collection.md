@@ -1,4 +1,3 @@
-
 # cloudru_evolution_baremetal_subnet_collection (Data Source)
 
 
@@ -10,6 +9,15 @@ data "cloudru_evolution_baremetal_subnet_collection" "datasource_subnet" {
   project_id = "a3dab871-5355-49a8-817a-9c5e59fad149"
   filter     = "name='subnetFoo' AND is_primary=true"
   page_size  = 50
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-subnet" {
@@ -28,10 +36,19 @@ output "data-subnet" {
 
 - `filter` (String) Фильтрующее выражение. Условие имеет форму `<поле><operator><значение>`: 1. `<поле>` имя поля для фильтрации; 2. `<operator>` логический оператор `=` (равно); 3. `<значение>` значение поля. В выражении можно использовать несколько условий, объединив оператором `AND`. Строки должны быть в кавычках. Пример использования: "name='subnetFoo' AND is_primary=true". Поддерживаемые поля: - "name" (string) - название подсети; - "zone_id" (string) - идентификатор зоны доступности; - "subnet_address" (string) - адрес, с которым связана подсеть; - "vpc_id" (string) - идентификатор VPC; - "reserved_server_id" (string) - идентификатор арендованного сервера; - "is_primary" (bool) - выводить только primary подсети.
 - `page_size` (Number) Максимальное количество результатов на странице ответа. Если значение больше [page_size], сервис возвращает [next_page_token], который используется в [ListResponse]. Значение [page_size] по-умолчанию: 50. Максимальное значение: 100.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `subnets` (Attributes List) Список подсетей. (see [below for nested schema](#nestedatt--subnets))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--subnets"></a>
 ### Nested Schema for `subnets`

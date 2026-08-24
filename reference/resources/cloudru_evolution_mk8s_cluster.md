@@ -1,4 +1,3 @@
-
 # cloudru_evolution_mk8s_cluster (Resource)
 
 
@@ -9,36 +8,21 @@
 resource "cloudru_evolution_mk8s_cluster" "resource_cluster" {
   name       = "cloudru-example-cluster"
   project_id = "00000000-0000-0000-0000-000000000000"
-  logging_service = {
-    enabled      = true
-    log_group_id = "00000000-0000-0000-0000-000000000000"
+  control_plane = {
+    zones   = ["00000000-0000-0000-0000-000000000000"]
+    count   = 1
+    version = "v1.34.1"
+    machine_configuration = {
+      flavor = {
+        flavor_id = "00000000-0000-0000-0000-000000000000"
+      }
+    }
   }
-  monitoring_service = {
-    enabled = true
-  }
-  # Варианты значений параметра release_channel:
-  # RELEASE_CHANNEL_RAPID, RELEASE_CHANNEL_REGULAR, RELEASE_CHANNEL_STABLE
-  release_channel = "RELEASE_CHANNEL_STABLE"
-  audit_service = {
-    enabled = true
-  }
-  identity_configuration = {
-    cluster_sa_id = "00000000-0000-0000-0000-000000000000"
-  }
-  key_management_service = {
-    enabled = true
-    kek_id  = "00000000-0000-0000-0000-000000000000"
-  }
-  control_plane_zones   = ["00000000-0000-0000-0000-000000000000"]
-  control_plane_version = "v1.34.1"
-  sizing_configuration = {
-    master_count = 1
-    flavor_id    = "00000000-0000-0000-0000-000000000000"
-  }
-  network_configuration_request = {
-    services_subnet_cidr = "10.96.0.0/12"
-    pods_subnet_cidr     = "10.1.0.0/16"
-    kube_api_internet    = true
+  network_configuration = {
+    services_subnet_cidr  = "10.96.0.0/12"
+    pods_subnet_cidr      = "10.1.0.0/16"
+    kube_api_internet     = true
+    private_vip_subnet_id = "00000000-0000-0000-0000-000000000000"
     network_plugin = {
       # Нужно заполнить одно из значений - cilium, calico.
       cilium = {
@@ -54,7 +38,26 @@ resource "cloudru_evolution_mk8s_cluster" "resource_cluster" {
         app_version = "v3.29.3"
       }
     }
-    private_vip_subnet_id = "00000000-0000-0000-0000-000000000000"
+  }
+  logging_service = {
+    enabled      = true
+    log_group_id = "00000000-0000-0000-0000-000000000000"
+  }
+  monitoring_service = {
+    enabled = true
+  }
+  # Варианты значений параметра release_channel:
+  # RELEASE_CHANNEL_RAPID, RELEASE_CHANNEL_REGULAR, RELEASE_CHANNEL_STABLE
+  release_channel = "RELEASE_CHANNEL_RAPID"
+  audit_service = {
+    enabled = true
+  }
+  identity_configuration = {
+    cluster_sa_id = "00000000-0000-0000-0000-000000000000"
+  }
+  key_management_service = {
+    enabled = true
+    kek_id  = "00000000-0000-0000-0000-000000000000"
   }
   bootstrap_managed_addons = {
     horizontal_pod_autoscaling = {
@@ -69,6 +72,17 @@ resource "cloudru_evolution_mk8s_cluster" "resource_cluster" {
     coredns = {
       enabled = true
     }
+  }
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
   }
 }
 ```
@@ -92,6 +106,7 @@ resource "cloudru_evolution_mk8s_cluster" "resource_cluster" {
 - `logging_service` (Attributes) Параметры логирования событий компонентов кластера. (see [below for nested schema](#nestedatt--logging_service))
 - `monitoring_service` (Attributes) Параметры мониторинга компонентов кластера. (see [below for nested schema](#nestedatt--monitoring_service))
 - `release_channel` (String) Релизный канал, на который подписан кластер.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
@@ -194,8 +209,8 @@ Optional:
 Read-Only:
 
 - `cp_endpoints` (Attributes List) Адреса плоскости управления. (see [below for nested schema](#nestedatt--network_configuration--cp_endpoints))
-- `nodes_subnet_cidr` (String) Адрес подсети узлов плоскости управления.
-- `nodes_subnet_id` (String) Идентификатор подсети узлов плоскости управления.
+- `nodes_subnet_cidr` (String, Deprecated) Адрес подсети узлов плоскости управления.
+- `nodes_subnet_id` (String, Deprecated) Идентификатор подсети узлов плоскости управления.
 - `vpc_id` (String) Идентификатор VPC.
 
 <a id="nestedatt--network_configuration--network_plugin"></a>
@@ -312,6 +327,16 @@ Optional:
 Optional:
 
 - `enabled` (Boolean) Включение/выключение мониторинга компонентов кластера. Возможные значения: true — мониторинг включен, false — мониторинг выключен. По умолчанию мониторинг включен.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
 
 
 <a id="nestedatt--node_pools"></a>

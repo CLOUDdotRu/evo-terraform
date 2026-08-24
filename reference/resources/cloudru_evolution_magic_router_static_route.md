@@ -1,4 +1,3 @@
-
 # cloudru_evolution_magic_router_static_route (Resource)
 
 
@@ -7,14 +6,24 @@
 
 ```terraform
 resource "cloudru_evolution_magic_router_static_route" "resource_static_route" {
-  magic_router_id = "7e96b4a5-37d3-4b59-ae2c-c98dc772fa08"
-  subnet          = "ae9c7cd6-d228-4139-a96a-3f149a05e02f"
-  # Нужно заполнить одно из значений - description
-  description = "a9af5697-b8a2-4052-a80d-14248f299eaf"
+  magic_router_id = "f47ac10b-58cc-0372-8567-0e02b2c3d479"
+  subnet          = "192.168.0.0/24"
+  description = "Description"
   # Нужно заполнить одно из значений - next_hop_vpc, next_hop_magic_router
   next_hop_vpc = {
-    az_name           = "017f71c2-07da-44c6-87b3-99f5a8533450"
-    vpc_connection_id = "9b444e80-f170-46cd-973b-b09389f1534e"
+    az_name           = "ru.AZ-1"
+    vpc_connection_id = "f47ac10b-58cc-0372-8567-0e02b2c3d479"
+  }
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
   }
 }
 ```
@@ -29,12 +38,13 @@ resource "cloudru_evolution_magic_router_static_route" "resource_static_route" {
 
 ### Optional
 
-- `az_name` (String) Название зоны доступности (AZ), в которой создается маршрут. Устарело, используйте поле azName в nextHop.
+- `az_name` (String, Deprecated) Название зоны доступности (AZ), в которой создается маршрут. Устарело, используйте поле azName в nextHop.
 - `description` (String) Описание маршрута.
 - `next_hop_magic_router` (Attributes) Заполняется для создания маршрута на межпроектном соединении. (see [below for nested schema](#nestedatt--next_hop_magic_router))
 - `next_hop_vpc` (Attributes) Идентификатор VPC. Заполняется при создании маршрута через соединение с VPC. (see [below for nested schema](#nestedatt--next_hop_vpc))
-- `next_hop_vpc_id` (String) Идентификатор подключения к VPC. Устарело, используйте поле vpcConnectionId в nextHop.
-- `vpc_connection_id` (String) Идентификатор подключения к VPC. Устарело, используйте поле vpcConnectionId в nextHop.
+- `next_hop_vpc_id` (String, Deprecated) Идентификатор подключения к VPC. Устарело, используйте поле vpcConnectionId в nextHop.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
+- `vpc_connection_id` (String, Deprecated) Идентификатор подключения к VPC. Устарело, используйте поле vpcConnectionId в nextHop.
 
 ### Read-Only
 
@@ -50,7 +60,7 @@ resource "cloudru_evolution_magic_router_static_route" "resource_static_route" {
 Required:
 
 - `az_name` (String) Имя зоны доступности (AZ), в которой создан маршрут.
-- `magic_router_connection_id` (String) Идентификатор Magic router, в проекте назначения.
+- `magic_router_connection_id` (String) Идентификатор соединения Magic Link.
 
 
 <a id="nestedatt--next_hop_vpc"></a>
@@ -60,3 +70,13 @@ Required:
 
 - `az_name` (String) Имя зоны доступности (AZ), в которой создан маршрут.
 - `vpc_connection_id` (String) Идентификатор VPC, в которой находится сеть назначения.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).

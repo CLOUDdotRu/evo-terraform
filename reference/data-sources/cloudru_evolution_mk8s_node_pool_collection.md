@@ -1,4 +1,3 @@
-
 # cloudru_evolution_mk8s_node_pool_collection (Data Source)
 
 
@@ -11,6 +10,15 @@ data "cloudru_evolution_mk8s_node_pool_collection" "datasource_node_pool" {
   order_by   = "cpu desc"
   filter     = "cpu = 4"
   page_size  = 10
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-node_pool" {
@@ -30,16 +38,26 @@ output "data-node_pool" {
 - `filter` (String) Параметры фильтрации списка групп узлов в виде "field condition value" или "field:value"(include). Возможные значения для field: name, status, nodeCount, cpu, ram, disk, createdAt. Возможные значения для condition: =, !=, >, >=, <, <=.
 - `order_by` (String) Параметры сортировки списка групп узлов в виде "field direction". Возможные значения для field: name, nodeCount, cpu, ram, disk, createdAt. Возможные значения для direction: asc, desc.
 - `page_size` (Number) Максимальное количество результатов на странице.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `node_pools` (Attributes List) Список групп узлов. (see [below for nested schema](#nestedatt--node_pools))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--node_pools"></a>
 ### Nested Schema for `node_pools`
 
 Read-Only:
 
+- `auto_repair` (Attributes) Параметры автоматического восстановления узлов. (see [below for nested schema](#nestedatt--node_pools--auto_repair))
 - `cluster_id` (String) Идентификатор кластера, в котором развернута группа узлов.
 - `created_at` (String) Дата и время создания группы узлов.
 - `created_by` (String) Идентификатор пользователя, создавшего группу узлов.
@@ -59,6 +77,14 @@ Read-Only:
 - `version` (String) Версия Kubernetes, которая используется на узлах группы.
 - `version_upgrade` (Attributes) Информация о доступных версиях Kubernetes для обновления группы узлов. (see [below for nested schema](#nestedatt--node_pools--version_upgrade))
 - `zone` (String) Зона доступности, в которой размещены узлы группы.
+
+<a id="nestedatt--node_pools--auto_repair"></a>
+### Nested Schema for `node_pools.auto_repair`
+
+Read-Only:
+
+- `enabled` (Boolean) Включение автоматического восстановления группы узлов. Возможные значения: true — автоматическое восстановление включено, false — автоматическое восстановление выключено. По умолчанию восстановление группы узлов включено.
+
 
 <a id="nestedatt--node_pools--labels"></a>
 ### Nested Schema for `node_pools.labels`

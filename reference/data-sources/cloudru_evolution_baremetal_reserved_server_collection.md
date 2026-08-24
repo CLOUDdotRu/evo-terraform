@@ -1,4 +1,3 @@
-
 # cloudru_evolution_baremetal_reserved_server_collection (Data Source)
 
 
@@ -16,6 +15,15 @@ data "cloudru_evolution_baremetal_reserved_server_collection" "datasource_reserv
   # Варианты значений параметра direction:
   # DIRECTION_ASC, DIRECTION_DESC
   direction = "DIRECTION_DESC"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-reserved_server" {
@@ -36,10 +44,19 @@ output "data-reserved_server" {
 - `filter` (String) Фильтрующее выражение. Условие имеет форму `<поле><operator><значение>`: 1. `<поле>` имя поля для фильтрации; 2. `<operator>` логический оператор `=` (равно); 3. `<значение>` значение поля. В выражении можно использовать несколько условий, объединив оператором `AND`. Строки должны быть в кавычках. Пример использования: "name='reserve_name'". Поддерживаемые поля: - "name" (string) - "zone_id" (string) - идентификатор зоны доступности; - "flavor_id" (string) - идентификатор конфигурации сервера; - "os_distribution_slug" (string) - машиночитаемое название дистрибутива операционной системы; - "os_kernel_slug" (string) - машиночитаемое название ядра операционной системы; - "ip_id" (string) - IP-адрес; - "status" (string) - статус сервера из перечисления [StatusType].
 - `order_by` (String) По какому полю сортировать ответ.
 - `page_size` (Number) Максимальное количество результатов на странице ответа. Если значение больше [page_size], сервис возвращает [next_page_token], который используется в [GetReservedServersResponse]. Значение [page_size] по-умолчанию: 50. Максимальное значение: 100.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `reserved_servers` (Attributes List) Список арендованных серверов в проекте. (see [below for nested schema](#nestedatt--reserved_servers))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--reserved_servers"></a>
 ### Nested Schema for `reserved_servers`
@@ -53,7 +70,7 @@ Read-Only:
 - `deleted_at` (String) Дата и время прекращения аренды сервера.
 - `description` (String) Описание сервера.
 - `distribution` (Attributes) Информация о дистрибутиве операционной системы. (see [below for nested schema](#nestedatt--reserved_servers--distribution))
-- `dns_servers` (List of String) Адреса DNS-серверов, используемые в сети арендованного сервера. ВНИМАНИЕ: поле устарело. ДНС серверы нужно указывать в подсетях (cloudru/iaas/baremetal/v2/subnet.proto), в поле dns_servers.
+- `dns_servers` (List of String, Deprecated) Адреса DNS-серверов, используемые в сети арендованного сервера. ВНИМАНИЕ: поле устарело. ДНС серверы нужно указывать в подсетях (cloudru/iaas/baremetal/v2/subnet.proto), в поле dns_servers.
 - `flavor` (Attributes) Информация о конфигурации сервера. (see [below for nested schema](#nestedatt--reserved_servers--flavor))
 - `hostname` (String) Имя хоста арендованного сервера.
 - `id` (String) Виртуальный идентификатор сервера, указывающий на объект аренды физического сервера. Если в случае проблем будет заменен физический сервер, то данный идентификатор никак не изменится.

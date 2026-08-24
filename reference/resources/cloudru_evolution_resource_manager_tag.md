@@ -1,4 +1,3 @@
-
 # cloudru_evolution_resource_manager_tag (Resource)
 
 
@@ -7,16 +6,27 @@
 
 ```terraform
 resource "cloudru_evolution_resource_manager_tag" "resource_tag" {
-  description = "a5747509-3c83-471a-adb0-4bbfaaa1bc4f"
+  description = "8f756acf-5ce7-458f-923f-982e3d52366e"
   # Варианты значений параметра color:
   # GREY, PRIMARY, RED, ORANGE, YELLOW, GREEN, BLUE, VIOLET, PINK
-  color = "BLUE"
+  color = "ORANGE"
   # Варианты значений параметра status:
   # ENABLED, DISABLED
-  status     = "DISABLED"
-  project_id = "d1f516e8-ec8a-4c7f-a435-b38d37888d0b"
-  key        = "364516a1-5fe2-44c3-87f3-e6a539adf2d9"
-  value      = "89f17a8b-c962-4263-86dd-2c1980639c79"
+  status     = "ENABLED"
+  project_id = "36c1895c-6cd7-4e99-8999-0eb8bf484e26"
+  key        = "b4e34931-71db-4e41-8c3b-101b0549dfa0"
+  value      = "48f9280d-160c-49c2-8f2d-2c8ed322ec9f"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -33,6 +43,7 @@ resource "cloudru_evolution_resource_manager_tag" "resource_tag" {
 - `color` (String) Цвет тега.
 - `description` (String) Описание тега.
 - `status` (String) Статус тега.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 - `value` (String) Наименование значения тега.
 
 ### Read-Only
@@ -42,3 +53,12 @@ resource "cloudru_evolution_resource_manager_tag" "resource_tag" {
 - `id` (String) Идентификатор тега.
 - `tag_key_value` (String) Тег в формате ключ:значение.
 - `updated_at` (String) Дата обновления группы ресурсов.
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).

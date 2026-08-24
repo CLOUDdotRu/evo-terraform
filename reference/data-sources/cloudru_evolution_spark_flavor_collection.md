@@ -1,4 +1,3 @@
-
 # cloudru_evolution_spark_flavor_collection (Data Source)
 
 
@@ -9,6 +8,15 @@
 data "cloudru_evolution_spark_flavor_collection" "datasource_flavor" {
   project_id = "0000-0000-0000-0000-0000"
   page_size  = 100
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-flavor" {
@@ -26,10 +34,19 @@ output "data-flavor" {
 ### Optional
 
 - `page_size` (Number) Максимальное количество результатов на странице ответа. Если значение больше [page_size], сервис возвращает [next_page_token], который используется в [ListSparkFlavorsResponse]. Значение [page_size] по умолчанию 1000.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `flavors` (Attributes List) Список флейворов. (see [below for nested schema](#nestedatt--flavors))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--flavors"></a>
 ### Nested Schema for `flavors`
@@ -38,11 +55,11 @@ Read-Only:
 
 - `availability_zones` (Attributes List) Зоны доступности. (see [below for nested schema](#nestedatt--flavors--availability_zones))
 - `cpu` (Number) Количество ядер CPU для данного флейвора.
-- `gpu_configuration` (Attributes) Конфигурация gpu. (see [below for nested schema](#nestedatt--flavors--gpu_configuration))
+- `gpu_configuration` (Attributes) Конфигурация GPU. (see [below for nested schema](#nestedatt--flavors--gpu_configuration))
 - `id` (String) Идентификатор флейвора.
-- `max_node_count` (Number) Максимальное количество узлов для флэйвора.
+- `max_node_count` (Number) Максимальное количество узлов для флейвора.
 - `memory` (Number) Объем памяти для данного флейвора.
-- `min_node_count` (Number) Минимальное количество узлов для флэйвора.
+- `min_node_count` (Number) Минимальное количество узлов для флейвора.
 - `name` (String) Имя флейвора.
 
 <a id="nestedatt--flavors--availability_zones"></a>
@@ -50,8 +67,8 @@ Read-Only:
 
 Read-Only:
 
-- `id` (String) id зоны доступности.
-- `name` (String) название зоны доступности.
+- `id` (String) Идентификатор зоны доступности.
+- `name` (String) Название зоны доступности.
 
 
 <a id="nestedatt--flavors--gpu_configuration"></a>
@@ -59,5 +76,5 @@ Read-Only:
 
 Read-Only:
 
-- `gpu` (Number) Количество gpu.
-- `type` (String) Тип gpu.
+- `gpu` (Number) Количество GPU.
+- `type` (String) Тип GPU.

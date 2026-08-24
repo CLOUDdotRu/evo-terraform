@@ -1,4 +1,3 @@
-
 # cloudru_evolution_kafka_topic_collection (Data Source)
 
 
@@ -10,6 +9,15 @@ data "cloudru_evolution_kafka_topic_collection" "datasource_topic" {
   cluster_id                   = "00000000-0000-0000-0000-000000000000"
   page_size                    = 20
   filter_by_partial_topic_name = "some_topic_name"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-topic" {
@@ -28,20 +36,26 @@ output "data-topic" {
 
 - `filter_by_partial_topic_name` (String) Фильтр по полному или частичному имени топика.
 - `page_size` (Number) Максимальное количество результатов на странице.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `topics` (Attributes List) Список топиков. (see [below for nested schema](#nestedatt--topics))
 
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
+
 <a id="nestedatt--topics"></a>
 ### Nested Schema for `topics`
 
-Required:
-
-- `name` (String) Имя Топика.
-
 Read-Only:
 
+- `name` (String) Имя Топика.
 - `num_partitions` (Number) Количество партиций.
 - `parameters` (Map of String) Параметры топика <имя параметра, значение>. Список поддерживаемых параметров и их описание доступны в разделе документации [Параметры топиков](https://cloud.ru/docs/paas-kafka/ug/topics/guides__topics-parameters).
 - `replication_factor` (Number) Фактор репликации.

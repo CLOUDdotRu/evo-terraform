@@ -1,4 +1,3 @@
-
 # cloudru_evolution_compute_subnet_collection (Data Source)
 
 
@@ -7,10 +6,19 @@
 
 ```terraform
 data "cloudru_evolution_compute_subnet_collection" "datasource_subnet" {
-  project_id = "64f711e8-476c-4144-a076-25b6650c8699"
-  page_size  = 7655648911020586700
-  filter     = "ee1c7990-5d31-473c-8551-681e8d77f905"
-  order_by   = "3e04e642-4bf0-45ef-bf5e-6fdeccadf608"
+  project_id = "4e3408ea-797a-4f7a-bc09-f4ee1394ea5f"
+  page_size  = 5748386582461724870
+  filter     = "bdd1a869-1222-46d0-9a1f-c940bcdfd057"
+  order_by   = "97280ba3-8c95-4664-9ff1-f6ba85c7564b"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-subnet" {
@@ -30,10 +38,19 @@ output "data-subnet" {
 - `filter` (String) Выражение фильтрующее ответ.
 - `order_by` (String) Имя поля по которому производится сортировка.
 - `page_size` (Number) Максимальное количество результатов на странице ответа.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `subnets` (Attributes List) Список подсетей. (see [below for nested schema](#nestedatt--subnets))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--subnets"></a>
 ### Nested Schema for `subnets`

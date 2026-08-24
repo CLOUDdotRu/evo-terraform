@@ -1,4 +1,3 @@
-
 # cloudru_evolution_compute_image (Resource)
 
 
@@ -7,20 +6,31 @@
 
 ```terraform
 resource "cloudru_evolution_compute_image" "resource_image" {
-  project_id = "987490e7-27ee-4bf3-b568-7271ee10fe49"
+  project_id = "470114d3-65b5-40d0-bb14-ec1229a2be27"
   zones = [{
     # Нужно заполнить одно из значений - id, name.
-    id   = "97dd4730-839e-4ab5-982b-2d114e393456"
-    name = "5287ca18-f448-4283-83b6-2a21c31f1c18"
+    id   = "7afb22bd-3d9a-4577-b21e-8d44f0c6cb21"
+    name = "95342095-a978-4efe-b472-d5a028ba0e30"
   }]
-  name               = "d7f14063-d2ff-4539-98e2-94a9429f9d59"
-  description        = "bbfbba0a-fcb1-4335-9674-f06f3fe2e4af"
-  display_name       = "6b9380aa-bbbc-4d3b-9d0a-75558238a80a"
-  icon               = "89df8e46-a470-4146-9911-251aec476b68"
-  min_cpu            = 424119647
-  min_ram            = 2084378903
-  min_disk           = 345506228
-  user_data_template = "8c4233cf-084d-45d3-85a5-8458f23a56ec"
+  name               = "523e5b13-df4b-4e49-9a62-6ad0a1f42349"
+  description        = "df7fb2e8-b3a1-4c91-858f-c0816716619d"
+  display_name       = "1f8a1178-051e-4c57-99d1-295640e2974e"
+  icon               = "31c0c088-011b-4666-9b11-0227fe5d0e63"
+  min_cpu            = 386577477
+  min_ram            = 253303559
+  min_disk           = 817240788
+  user_data_template = "9d580297-2804-4cc9-b993-5e699b49beba"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -41,6 +51,7 @@ resource "cloudru_evolution_compute_image" "resource_image" {
 - `min_cpu` (Number) Минимальное количество vCPU.
 - `min_disk` (Number) Минимальный размер диска в ГБ.
 - `min_ram` (Number) Минимальный объем оперативной памяти в ГБ.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 - `user_data_template` (String) Шаблон пользовательских данных.
 
 ### Read-Only
@@ -62,6 +73,16 @@ Optional:
 Read-Only:
 
 - `enabled` (Boolean) Флаг указывающий, доступна ли зона для использования.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
 
 
 <a id="nestedatt--image_metadata"></a>

@@ -1,4 +1,3 @@
-
 # cloudru_evolution_compute_subnet (Resource)
 
 
@@ -7,23 +6,34 @@
 
 ```terraform
 resource "cloudru_evolution_compute_subnet" "resource_subnet" {
-  project_id = "2d9e3231-8953-4eb7-81a1-aefa1f922d5d"
+  project_id = "2453ed5c-f3dc-458d-b7e1-110d50801503"
   zone = {
     # Нужно заполнить одно из значений - id, name.
-    id   = "7169a50c-4672-4f42-b5e1-2049d49539f5"
-    name = "d457a0a1-94e8-47d8-8200-2a3cb21eaf17"
+    id   = "b3b13300-624b-42d7-8d5a-03bfe7802e74"
+    name = "0f6a45d0-e458-40f3-8d4a-3e60aafb202a"
   }
-  name            = "c5f69c2d-43e2-4d1b-b68c-5ab8ae5f47f5"
-  description     = "e33d6c1a-1415-4228-bf92-81ffd99ffff5"
-  vpc_id          = "8db69e7d-fb25-4080-a1f1-8da146b142e8"
+  name            = "3aa06b7c-f26f-481f-a805-5b69640fe96d"
+  description     = "10bb5cb5-5361-4981-975b-d49d3a49ef82"
+  vpc_id          = "c6957d60-98d9-4690-b840-eadbefd7f66d"
   default         = false
-  subnet_address  = "3eb96d43-3263-4950-91b0-235927a9ebed"
+  subnet_address  = "4538400f-179d-424d-b6a4-90714a8fc2d6"
   routed_network  = true
-  default_gateway = "577a1955-7e70-45b9-a1d6-25d6db2ff169"
+  default_gateway = "c8ee4f5d-1c18-438f-b6fe-5e6a93ff1068"
   dns_servers = {
-    value = ["52291664-30ea-4369-b63e-2ca3c920148b", "f2ab4922-31aa-4cc3-8f79-9a5d401f132e", "8790bd89-37f0-4de3-a6b0-c0421359260b", "83f398ca-bf12-480f-88d3-ad6e45ab9772", "e8b4d6d4-13af-4675-9c72-cd30bdf56e6a", "61088022-0b85-4ff2-862c-3ca8994a2449", "5c5d0e01-31c6-4fa9-9b0b-8784ec46f86c", "7fbeaaf3-1c8b-481f-b468-8a0479869fff", "3251139b-c355-42bf-a125-a9b388382ebe", "bf0f46f1-869b-4e55-ae7c-692b2f6894e8"]
+    value = ["080b6fa1-a668-4239-b9a7-fcc55040e0d6", "dd59cd29-cde2-4c3e-b426-2197f7d479d2", "78ca5dd7-063f-4c99-976f-f45a9d46bad5", "a9c734f8-92df-4338-9b1a-e6becc02ce92", "b0dca2d4-51e8-4125-96c8-ef40100d7b45", "bab36dab-98e2-4bdd-bda7-056d0f2f1c0e", "6113951a-23c0-41a5-a13f-4ccec5b8309d", "11abfb9a-ec1d-44ec-b4d7-3d4643a574aa", "1b9d264f-b0ae-49fd-bba7-c6a07b7ee711", "b588b24b-7a34-4fa2-b91e-d93dfd9fadd7"]
   }
-  prefix_length = 1137625968
+  prefix_length = 1545874920
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -45,6 +55,7 @@ resource "cloudru_evolution_compute_subnet" "resource_subnet" {
 - `prefix_length` (Number) Маска подсети.
 - `routed_network` (Boolean) Признак маршрутизируемой подсети.
 - `subnet_address` (String) Адрес подсети.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 - `vpc_id` (String) Идентификатор виртуальной сети (VPC).
 
 ### Read-Only
@@ -73,3 +84,13 @@ Read-Only:
 Optional:
 
 - `value` (List of String) The repeated string value.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).

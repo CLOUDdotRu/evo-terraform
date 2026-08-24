@@ -1,4 +1,3 @@
-
 # cloudru_evolution_iam_user (Resource)
 
 
@@ -7,14 +6,25 @@
 
 ```terraform
 resource "cloudru_evolution_iam_user" "resource_user" {
-  email   = "272bf348-da81-4c9d-a0b9-2cebe1a8145b"
-  enabled = false
+  email   = "6a4afcd5-1a3e-4295-bb5f-30110a15ab23"
+  enabled = true
   # Варианты значений параметра account_type:
   # USER_ACCOUNT_TYPE_FEDERATED, USER_ACCOUNT_TYPE_LOCAL
-  account_type = "USER_ACCOUNT_TYPE_FEDERATED"
-  customer_id  = "fa9fe98c-cfce-4185-a9ab-9cd82b40282a"
+  account_type = "USER_ACCOUNT_TYPE_LOCAL"
+  customer_id  = "646232a1-e01f-4144-afec-5c875a98ae39"
   # Нужно заполнить одно из значений - idp_id
-  idp_id = "aef9da8e-bd09-4c10-8cf9-77c2dbe3e7ca"
+  idp_id = "250ed800-ac22-4f0c-92e8-7c395578f679"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -31,9 +41,19 @@ resource "cloudru_evolution_iam_user" "resource_user" {
 
 - `enabled` (Boolean) Enabled - флаг активности пользователя.
 - `idp_id` (String) IDPID - идентификатор провайдера идентификации. Поддерживается только для федеративных пользователей.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `created_at` (String) CreatedAt - время создания пользователя.
 - `id` (String) ID - идентификатор пользователя.
 - `updated_at` (String) UpdatedAt - время последнего обновления пользователя.
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).

@@ -1,4 +1,3 @@
-
 # cloudru_evolution_compute_vm_collection (Data Source)
 
 
@@ -7,10 +6,19 @@
 
 ```terraform
 data "cloudru_evolution_compute_vm_collection" "datasource_vm" {
-  project_id = "3fcc0d2d-cab6-4870-b032-f3888ac3022a"
-  page_size  = 3830471844655911120
-  filter     = "09c3ac1c-4db3-4f78-9739-db4fe41ece7d"
-  order_by   = "c3f68246-df1e-48fd-8e46-d90cf03725a3"
+  project_id = "fbefe293-8c43-4690-84f0-b0025c1aa081"
+  page_size  = 1188625425685569524
+  filter     = "d2076a88-92fd-40cf-b026-e74d41543ab5"
+  order_by   = "1b2279f2-9f0e-42cd-b091-b8042d685c87"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-vm" {
@@ -30,10 +38,19 @@ output "data-vm" {
 - `filter` (String) Выражение фильтрующее ответ.
 - `order_by` (String) Имя поля по которому производится сортировка.
 - `page_size` (Number) Максимальное количество результатов на странице ответа.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `vms` (Attributes List) Список виртуальных машин. (see [below for nested schema](#nestedatt--vms))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--vms"></a>
 ### Nested Schema for `vms`

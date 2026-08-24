@@ -1,4 +1,3 @@
-
 # cloudru_evolution_compute_image_collection (Data Source)
 
 
@@ -7,10 +6,19 @@
 
 ```terraform
 data "cloudru_evolution_compute_image_collection" "datasource_image" {
-  project_id = "a06c4ec0-dbbc-4311-af41-6b62f6e616d6"
-  page_size  = 8217065949452828249
-  filter     = "0898534b-90c2-4e94-bc5c-3a098f3d6098"
-  order_by   = "7e451d80-0bb1-4d17-b646-1ed28a51d244"
+  project_id = "3de92bf7-25e9-401a-9be9-6e43f786c787"
+  page_size  = 8350732794943854563
+  filter     = "e483ad6d-1172-4645-acb4-2864ff22ade4"
+  order_by   = "fe953076-5f38-4ff7-80a3-e119d2023cb4"
+  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
+  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 
 output "data-image" {
@@ -30,10 +38,19 @@ output "data-image" {
 - `filter` (String) Выражение фильтрующее ответ.
 - `order_by` (String) Имя поля по которому производится сортировка.
 - `page_size` (Number) Максимальное количество результатов на странице ответа.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `images` (Attributes List) Список образов. (see [below for nested schema](#nestedatt--images))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--images"></a>
 ### Nested Schema for `images`
