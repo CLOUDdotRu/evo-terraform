@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     cloudru = {
-      source  = "cloud.ru/cloudru/cloud"
+      source  = "cloudru/cloud"
       version = "2.1.2"
     }
   }
@@ -87,7 +87,7 @@ provider "cloudru" {
     object_storage_endpoint = "https://s3.cloud.ru"
 
     # Работа с организациями
-    cloudplatform_endpoint = "organization.api.cloud.ru:443"
+    cloud_platform_endpoint = "organization.api.cloud.ru:443"
 
     rm_endpoint = "resource-manager.api.cloud.ru"
   }

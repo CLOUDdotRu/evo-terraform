@@ -1,0 +1,43 @@
+{{start-after text-blocks-outline__code-block-mac-arm64}}
+    
+.. code-block:: 
+             
+   cd \
+     && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/v2.1.2/darwin_arm64/terraform-provider-cloud_2.1.2_darwin_arm64 \
+     https://github.com/cloud-ru/evo-terraform/releases/download/v2.1.2/terraform-provider-cloud_2.1.2_darwin_arm64 \
+     && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/v2.1.2/darwin_arm64/terraform-provider-cloud_2.1.2_darwin_arm64   
+
+{{end-before text-blocks-outline__code-block-mac-arm64}}
+
+{{start-after text-blocks-outline__code-block-mac-amd64}}
+
+.. code-block::       
+                   
+   cd \        
+     && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/v2.1.2/darwin_amd64/terraform-provider-cloud_2.1.2_darwin_amd64 \
+     https://github.com/cloud-ru/evo-terraform/releases/download/v2.1.2/terraform-provider-cloud_2.1.2_darwin_amd64 \
+     && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/v2.1.2/darwin_amd64/terraform-provider-cloud_2.1.2_darwin_amd64   
+
+{{end-before text-blocks-outline__code-block-mac-amd64}}
+
+
+{{start-after text-blocks-outline__code-block-win}}
+
+.. code-block::
+
+   curl -L -o terraform-provider-cloud_2.1.2_windows_amd64 https://github.com/cloud-ru/evo-terraform/releases/download/v2.1.2/terraform-provider-cloud_2.1.2_windows_amd64
+   mkdir -p %APPDATA%\terraform.d\plugins\cloud.ru\cloudru\cloud\v2.1.2\windows_amd64
+   move terraform-provider-cloud_2.1.2_windows_amd64 %APPDATA%\terraform.d\plugins\cloud.ru\cloudru\cloud\v2.1.2\windows_amd64   
+
+{{end-before text-blocks-outline__code-block-win}}
+
+{{start-after text-blocks-outline__code-block-linux}}
+
+.. code-block:: 
+         
+   cd \
+     && curl -L --create-dirs -o .terraform.d/plugins/cloud.ru/cloudru/cloud/v2.1.2/linux_amd64/terraform-provider-cloud_2.1.2_linux_amd64 \
+     https://github.com/cloud-ru/evo-terraform/releases/download/v2.1.2/terraform-provider-cloud_2.1.2_linux_amd64 \
+     && chmod +x .terraform.d/plugins/cloud.ru/cloudru/cloud/v2.1.2/linux_amd64/terraform-provider-cloud_2.1.2_linux_amd64   
+
+{{end-before text-blocks-outline__code-block-linux}}
