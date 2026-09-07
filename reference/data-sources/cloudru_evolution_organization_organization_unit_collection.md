@@ -1,4 +1,3 @@
-
 # cloudru_evolution_organization_organization_unit_collection (Data Source)
 
 
@@ -7,9 +6,13 @@
 
 ```terraform
 data "cloudru_evolution_organization_organization_unit_collection" "datasource_organization_unit" {
-  customer_ids          = ["82f6ed94-1e5c-45f7-b537-46d2e96a73a3", "87b6c892-c834-40e0-ae4f-154cff602d00", "e568cb48-db51-4b1f-916a-46b52960369f", "5ef8a0df-6f2a-4f4d-b5b3-3fa4939b23ce", "2f9a4c8a-a8ed-4c8f-af28-5d16154bd825", "2bda45ee-5699-4edc-a03c-923453f1a2bf", "271d9367-372b-4bb0-b138-c26451eef096", "87c050d5-0dc6-46eb-bd21-4d59592f7549", "6c69a79d-e0ab-4a70-b4a8-ca9ec6e007b0", "b79fcef4-53eb-4280-8d8b-e378f3e5c1e9"]
-  organization_unit_ids = ["0a5c737a-1a69-41bc-a848-3179c3fce75e", "416aa2d2-dddb-4fa7-91d8-65f8546a3f2c", "bf058e2c-dd96-493a-ad76-f8826aa1efe8", "d8ef6be6-88f5-4d01-badb-70de30604570", "8090871b-03d1-4e48-9be4-9512cffac030", "1c6ed7ce-0f65-4184-b8b1-25b1838e394b", "11fdcea5-03b6-48e2-a997-1e4e545ae951", "e21ea989-1934-4539-9090-8e9abf1c504f", "75d98df4-0220-45b0-a51f-dfac49c2201b", "bd0a3b13-e1fe-44b4-b638-de6ef6bc6566"]
-  page_size             = 7035506335033779526
+  customer_ids          = ["6f19eb1c-9718-43a3-9e13-e3ae7d591275", "8b69b438-5b38-46c3-b8c4-134e4de135d3", "4fe21fe7-14de-44c8-8752-74c00415a8e8", "7b7582fe-33b0-42db-87a1-1add746e2f4f", "66217378-1ebd-4059-9c1c-8ed805f7d007", "0c123b6c-f070-4822-9e15-81cb5de7078c", "b4d4b17f-7a98-4ec9-98c9-cde8eda4cab3", "7541fe15-f46f-49b0-80bd-3487fef48792", "438b306a-dc9a-4cfe-9acb-592427cb65ea", "ed119a88-96c9-4b64-8287-31994bc7f4b0"]
+  organization_unit_ids = ["fe997e63-768d-4114-bf44-48cf86d06932", "41d0d89a-1550-409f-a10d-d6b92995f0f9", "e03e1b4d-5caf-41a0-b436-02cf2338fe5a", "e0405186-8211-44e8-993e-2b3e6c8a3935", "c48753f9-9f70-47b8-855b-9b211531b1b4", "6e1ce13e-200d-4718-9a07-125212089924", "ac6deed3-cbab-4962-918b-2ac980d22285", "4aa5c8be-5d62-4c2a-9116-28c4e6ba3d19", "1d49ee93-17eb-4898-b895-8b00b2cf8caa", "fd015b16-bc40-44df-b8bd-d5f4c7da8c87"]
+  page_size             = 4742042857459109350
+  # Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
 }
 
 output "data-organization_unit" {
@@ -25,10 +28,19 @@ output "data-organization_unit" {
 - `customer_ids` (List of String) Фильтр поиска по идентификаторам клиентов.
 - `organization_unit_ids` (List of String) Фильтр поиска по идентификаторам департаментов.
 - `page_size` (Number) Максимальное количество результатов на странице ответа.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `organization_units` (Attributes List) Список департаментов. (see [below for nested schema](#nestedatt--organization_units))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--organization_units"></a>
 ### Nested Schema for `organization_units`

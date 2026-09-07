@@ -20,3 +20,57 @@ resource "cloudru_evolution_compute_attach_disk" "demo_attach" {
 ### Optional
 
 - `primary` (Boolean) Признак загрузочного диска.
+
+## 0) Как импортировать ресурс подключенных дисков
+
+terraform import cloudru_evolution_compute_attach_disk.demo_attach <vm_id>:<disk_id>
+
+## 1) Как подключить диск к vm
+
+Пример для загрузочного диска
+```tf
+resource "cloudru_evolution_compute_attach_disk" "demo_attach" {
+        disk_id = "00000000-0000-0000-0000-000000000000"
+        vm_id = "00000000-0000-0000-0000-000000000000"
+        primary = true
+}
+```
+
+Пример для дополнительного диска
+```tf
+resource "cloudru_evolution_compute_attach_disk" "demo_attach" {
+        disk_id = "00000000-0000-0000-0000-000000000000"
+        vm_id = "00000000-0000-0000-0000-000000000000"
+        primary = false
+}
+```
+
+Для подключения выполняем 
+
+```bash
+terraform apply
+```
+
+## 2) Как отключить диск от vm 
+
+Изменяем disk_id и выполняем.
+
+```bash
+terraform apply
+```
+
+Также, если нужно просто отключить ранее подключенный диск от vm можно выполнить команду
+
+```bash
+terraform destroy
+```
+
+## 3) Как поменять загрузочный диск
+
+Прежде чем менять загрузочный диск нужно выполнить импорт текущего загрузочного диска и vm.
+
+terraform import cloudru_evolution_compute_attach_disk.demo_attach <vm_id>:<disk_id>
+
+Затем нужно выполнить terraform apply. 
+
+Во время выполнения команды vm будет остановлена, загрузочный диск будет отключен, затем подключен другой загрузочный диск и vm будет вновь включена.

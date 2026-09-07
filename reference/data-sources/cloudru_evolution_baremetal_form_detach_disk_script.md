@@ -24,3 +24,20 @@ output "demo-detach_script" {
 
 - `detach_script` (String) Скрипт для отключения дисков.
 - `script_expired_at` (String) Срок действия скрипта.
+
+## Получение скрипта для подключения дисков на сервере
+
+После выполнения команды отключения в ресурсе cloudru_evolution_baremetal_attach_disk, нужно с помощью датасорса получить скрипт для отключения диска на сервере.
+
+```tf
+data "cloudru_evolution_baremetal_form_detach_disk_script" "demo_detach_script" {
+    reserved_server_id = "00000000-0000-0000-0000-000000000000"
+    disk_ids = [""00000000-0000-0000-0000-000000000000""]
+}
+
+output "demo-detach_script" {
+    value = data.cloudru_evolution_baremetal_form_detach_disk_script.demo_detach_script.detach_script
+}
+```
+
+Подробнее в документации от команды baremetal: https://cloud.ru/docs/bare-metal-evolution/ug/topics/guides__ssh-connection?source-platform=Evolution

@@ -1,4 +1,3 @@
-
 # cloudru_evolution_trino_trino (Resource)
 
 
@@ -7,29 +6,42 @@
 
 ```terraform
 resource "cloudru_evolution_trino_trino" "resource_trino" {
-  cluster_id  = "df91e644-c363-49b7-844e-51fcc7e22ff9"
-  project_id  = "f74babe3-5282-4a32-b131-0edc561a3101"
-  name        = "053f685c-769e-4b44-8589-32f0b06a9a4f"
-  description = "07720874-0929-4640-81b1-a16f3c22916d"
+  # Поле cluster_id является неизменяемым. При изменении значения ресурс будет пересоздан.
+  cluster_id = "a9bbe1c6-8ea9-472a-8631-21865ed998dd"
+  # Поле project_id является неизменяемым. При изменении значения ресурс будет пересоздан.
+  project_id  = "96893b19-cab3-4d76-832e-e2e706ae784f"
+  name        = "f48977f7-1c62-4926-aca8-89eb32076f1c"
+  description = "c60582d1-23a3-4354-95fc-25e25d67fa2b"
   network_configuration = {
-    subnet_id = "c60cf98b-5371-4691-86bc-a82fe6ac7db9"
-    zone_id   = "89811537-a79a-485f-b4cc-59c0f9756a92"
+    subnet_id = "4df54007-c9c8-4f0a-98bb-f8cd07d1bf41"
+    zone_id   = "1f276b64-6ec3-4bd6-95d0-6fb9987b4410"
   }
   node_configuration = {
-    flavor_id = "4023b1d7-346e-498f-aded-f4c6931c96d6"
-    min_count = 1507496920
-    max_count = 2118776669
+    flavor_id = "b570f7d9-76dd-4869-8f7e-a998ad58d3b7"
+    min_count = 140925146
+    max_count = 685940844
   }
   enable_public_host = true
   basic_auth = {
     users = [{
-      username           = "0145fde1-14a0-494d-9d22-e84a8428ab0a"
-      password_secret_id = "79a508b6-e856-4303-9328-dc5396d6efb2"
+      username           = "2581292e-67c5-415c-9c95-2ba39963e476"
+      password_secret_id = "b5829284-0be9-400b-af0c-d9af13a805b2"
     }]
   }
-  log_group_id = "a1093b00-6e46-424f-92d4-d5de0f41eb62"
-  catalog_ids  = ["83c358d4-8deb-484a-bf7a-d564997aa8cf", "82588dcc-eadb-4e20-9927-2e68a43b740d", "a3ce7647-5281-4b08-80c8-7b7756dae6e8", "97eb342f-b298-4866-88d3-7a67e1511a3d", "b335b4b2-f27f-44bf-b4d9-3635c2ac08be", "cc617d6a-a8e3-4efe-ac41-f1d8d21eeee7", "54b2e842-2e62-4b81-999b-b773a4050035", "0bef9035-9fef-453a-9051-04ee3f3a1f12", "6f95f4ca-37c6-44ee-922d-f96133a37ec6", "90eaf358-9900-4239-a0a4-bb4117e56e17"]
-  version_id   = "ad1edef4-6b3f-4ac5-9b5d-99a339d669d2"
+  log_group_id = "5823fbbf-b6ad-4f31-bb88-03bdc6dfbc9b"
+  catalog_ids  = ["bcc608de-6559-4065-92f2-554b64e7469b", "49ce1092-8af6-454f-b40f-73d06ccfbb96", "d4cc41fe-223a-482b-9103-fd8bd518496c", "9d760ae4-c650-4b03-91d7-55b2cba067d3", "76600577-d296-4511-a050-8d995666f3c8", "5481e8f6-19e8-496a-981e-aac9998cbdc4", "157195d3-1cec-4e1d-8995-7139cae00ef6", "15aa2ec5-7592-4868-8ec3-85b603183410", "e101ccf5-f1a5-4355-8940-4bbaaefcba72", "bbea683a-136a-4b21-82c7-d6e7d4dca5be"]
+  version_id   = "4889e3c5-f819-4374-ac95-da7e16c6c891"
+  # Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  # Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  # Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -51,6 +63,7 @@ resource "cloudru_evolution_trino_trino" "resource_trino" {
 - `basic_auth` (Attributes) Конфигурация basic auth. (see [below for nested schema](#nestedatt--basic_auth))
 - `catalog_ids` (List of String) Список подключаемых Trino каталогов.
 - `description` (String) Описание Trino.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 - `version_id` (String) Идентификатор версии Trino.
 
 ### Read-Only
@@ -99,6 +112,16 @@ Required:
 - `password_secret_id` (String) Идентификатор секрета пароля пользователя из сервиса secret manager.
 - `username` (String) Имя пользователя.
 
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
 
 
 <a id="nestedatt--version"></a>

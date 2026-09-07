@@ -1,4 +1,3 @@
-
 # cloudru_evolution_organization_agreement_collection (Data Source)
 
 
@@ -7,7 +6,11 @@
 
 ```terraform
 data "cloudru_evolution_organization_agreement_collection" "datasource_agreement" {
-  customer_ids = ["290bcbf8-4b40-469f-9fc6-a5bd8f603d08", "1d034719-5d2c-4783-af46-0a8d777fc0a3", "bfb98920-a948-4db1-b007-f1bf2e4f2424", "17f6876f-e8a8-40fb-8bc2-2bf188fb90ed", "3ebcf350-ca56-4a4e-921a-1f023e411f63", "e981063a-6192-47e5-a46c-e58b07914610", "050126d8-8fae-4267-82fd-e7e260adccf2", "8f78bbfa-33e4-4243-b613-047dcb725a3b", "81410789-97c4-40af-8a64-61a2b50a1053", "3fcc1b8d-5638-47c5-8177-33103925f995"]
+  customer_ids = ["c28efe6a-b494-4db1-99f7-25d0fa47b3f3", "b59804aa-0951-4419-9dba-951fc7324e33", "38bc9faf-1a12-432e-9dd2-f91737685fb0", "cf53e651-4c53-444d-b2c5-28b38b0fc56e", "2086beda-7e3a-460f-abea-57603c72dc68", "93882e5f-7fc5-455e-9c95-21e075dc5c29", "717784d0-62a0-44bf-a87d-f42a3644eb7c", "a1b109e7-f8a0-4c1f-9ce7-264c68c58ee4", "36c676cd-89b7-43c1-a997-78ba50ce1ff0", "aa63b830-1f1e-4c56-bee2-368a8e215ba2"]
+  # Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
 }
 
 output "data-agreement" {
@@ -21,10 +24,19 @@ output "data-agreement" {
 ### Optional
 
 - `customer_ids` (List of String) Список идентификаторов клиентов.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `agreements` (Attributes List) Список договоров. (see [below for nested schema](#nestedatt--agreements))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--agreements"></a>
 ### Nested Schema for `agreements`

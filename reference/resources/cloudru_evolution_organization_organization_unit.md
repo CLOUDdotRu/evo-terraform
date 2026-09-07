@@ -1,4 +1,3 @@
-
 # cloudru_evolution_organization_organization_unit (Resource)
 
 
@@ -7,9 +6,20 @@
 
 ```terraform
 resource "cloudru_evolution_organization_organization_unit" "resource_organization_unit" {
-  customer_id = "c5e4afd4-a654-4e88-806c-e7024aae08c0"
-  name        = "42e24556-0829-4c1d-8224-6efef7dbfcfd"
-  description = "af3b29cf-d16f-4d55-88cb-b413b08a8cc6"
+  customer_id = "b16142a6-a32a-4b0b-810d-ab27657f311c"
+  name        = "e61849b0-13b5-4001-88aa-8603c5a6e5b4"
+  description = "6cf528e2-45c7-4a72-b101-a2db442f708f"
+  # Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  # Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  # Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -24,9 +34,19 @@ resource "cloudru_evolution_organization_organization_unit" "resource_organizati
 ### Optional
 
 - `description` (String) Описание департамента.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `created_at` (String) Дата создания департамента.
 - `id` (String) Идентификатор департамента.
 - `updated_at` (String) Дата последнего обновления департамента.
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).

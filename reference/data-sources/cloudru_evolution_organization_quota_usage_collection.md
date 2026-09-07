@@ -1,4 +1,3 @@
-
 # cloudru_evolution_organization_quota_usage_collection (Data Source)
 
 
@@ -7,12 +6,16 @@
 
 ```terraform
 data "cloudru_evolution_organization_quota_usage_collection" "datasource_quota_usage" {
-  resource_type_codes = ["a22ce5be-0a12-4dee-a315-ff7332acd662", "c86b638b-fdd4-4b2a-993f-9efd66d7bb2b", "b3314924-a699-48df-9ad3-69e4496ab27b", "2e666b90-f0d0-46ee-9462-6af6c22066ff", "c893045f-5e48-405d-848b-4c20ac184b17", "0d7ec3e2-2e40-4426-bed7-1e1512abde42", "88209f25-2597-43e8-970a-029abe2b23e4", "95453709-6603-42ce-b48e-766ea496d291", "4c95c69b-8a46-4c9f-a879-f4c5fb52c96f", "c7abebb8-8601-4683-bc80-f79aec8b0eb8"]
+  resource_type_codes = ["11e74420-7a4e-4f5b-bf26-898fdbce7ed9", "3be7f72a-78bd-4a20-aa01-253116edbaa3", "fdf97a4a-3626-4689-957a-dfdaa3f947b8", "7b6d719f-1f8b-49e3-9911-b0230e13ea01", "272e6538-9c69-4b6e-88b5-eeb23c6ce9ea", "407d2625-0a6e-48de-ad47-a685d6281cb5", "2aa3b064-4ee0-4563-a29f-01f8cf93b645", "e9c52cb6-85ff-44b3-b39d-d4c24934a5c3", "7a17682b-7551-43c9-a0ac-1deb6fe53266", "fb4471d4-40e9-45a5-a87b-da9b8490d10a"]
   # Варианты значений параметра subject_type_codes:
   # QUOTA_SUBJECT_TYPE_CUSTOMER, QUOTA_SUBJECT_TYPE_ORGANIZATION_UNIT, QUOTA_SUBJECT_TYPE_PROJECT
-  subject_type_codes = ["QUOTA_SUBJECT_TYPE_CUSTOMER", "QUOTA_SUBJECT_TYPE_ORGANIZATION_UNIT", "QUOTA_SUBJECT_TYPE_ORGANIZATION_UNIT", "QUOTA_SUBJECT_TYPE_PROJECT", "QUOTA_SUBJECT_TYPE_ORGANIZATION_UNIT", "QUOTA_SUBJECT_TYPE_CUSTOMER", "QUOTA_SUBJECT_TYPE_ORGANIZATION_UNIT", "QUOTA_SUBJECT_TYPE_ORGANIZATION_UNIT", "QUOTA_SUBJECT_TYPE_CUSTOMER", "QUOTA_SUBJECT_TYPE_ORGANIZATION_UNIT"]
-  subject_ids        = ["46668905-7cec-4b1d-aa29-f892d22dbbc6", "c1ae0e2a-288b-4379-b969-5202ad2c1548", "3a265bb6-7eb9-46e3-a231-625e1ee1e944", "ab2876ce-f549-48ca-916c-54a71e93a190", "c124dcaa-96fe-4610-bc6b-72a66be71865", "6026f0ef-52f8-4095-9b4e-1660787ca7a5", "87f787c2-9097-4036-8b4e-74632700d44b", "111a0f67-da22-4506-b426-31ceb98b1e13", "77805d06-8136-42d3-bc26-3240bcaefd42", "20b9053e-3590-4919-9065-f2f62f03a82c"]
-  page_size          = 5383898982151027688
+  subject_type_codes = ["QUOTA_SUBJECT_TYPE_ORGANIZATION_UNIT", "QUOTA_SUBJECT_TYPE_CUSTOMER", "QUOTA_SUBJECT_TYPE_CUSTOMER", "QUOTA_SUBJECT_TYPE_PROJECT", "QUOTA_SUBJECT_TYPE_ORGANIZATION_UNIT", "QUOTA_SUBJECT_TYPE_CUSTOMER", "QUOTA_SUBJECT_TYPE_CUSTOMER", "QUOTA_SUBJECT_TYPE_CUSTOMER", "QUOTA_SUBJECT_TYPE_CUSTOMER", "QUOTA_SUBJECT_TYPE_CUSTOMER"]
+  subject_ids        = ["34937c2d-02ff-45e2-a77f-6dc103913ca3", "b8ef928a-1e4e-4a01-a2ab-3c67224caadd", "bce03d14-cf43-4a2d-9aba-8f0a44e23b14", "64e99aa8-0c31-4fae-881b-b16d8b8c238e", "ab052aee-81f8-42c3-ba1e-5f78d0b24ff0", "3e02128e-b310-4155-982b-bffd0fbda9fd", "6b769d60-223c-44a3-8ef0-d1d22ff410a4", "11a9dc3d-cbfe-4de4-8214-9807bb84bce2", "2781c58f-9572-4222-a34f-e02251ca39cd", "630cfd44-6e37-40d5-911e-9b3e3c5a336c"]
+  page_size          = 4807086903187494542
+  # Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
 }
 
 output "data-quota_usage" {
@@ -29,10 +32,19 @@ output "data-quota_usage" {
 - `resource_type_codes` (List of String) Список кодов ресурсных типов.
 - `subject_ids` (List of String) Список идентификаторов субъектов.
 - `subject_type_codes` (List of String) Список кодов субъектных типов.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `usages` (Attributes List) Список потреблений квот. (see [below for nested schema](#nestedatt--usages))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--usages"></a>
 ### Nested Schema for `usages`

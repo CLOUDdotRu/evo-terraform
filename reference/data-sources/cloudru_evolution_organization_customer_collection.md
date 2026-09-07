@@ -1,4 +1,3 @@
-
 # cloudru_evolution_organization_customer_collection (Data Source)
 
 
@@ -7,7 +6,11 @@
 
 ```terraform
 data "cloudru_evolution_organization_customer_collection" "datasource_customer" {
-  page_size = 2360200378860607439
+  page_size = 4673140925678047181
+  # Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
 }
 
 output "data-customer" {
@@ -21,10 +24,19 @@ output "data-customer" {
 ### Optional
 
 - `page_size` (Number) Максимальное количество результатов на странице ответа.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `customers` (Attributes List) Список клиентов. (see [below for nested schema](#nestedatt--customers))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--customers"></a>
 ### Nested Schema for `customers`

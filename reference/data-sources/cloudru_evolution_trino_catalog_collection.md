@@ -1,4 +1,3 @@
-
 # cloudru_evolution_trino_catalog_collection (Data Source)
 
 
@@ -7,9 +6,13 @@
 
 ```terraform
 data "cloudru_evolution_trino_catalog_collection" "datasource_catalog" {
-  project_id = "a44c954a-9d80-4e9e-92f7-a522ff30db38"
-  page_size  = 1322127699933913679
-  filter     = "2d547b64-bcff-4bcb-be24-8c1f5f38c12b"
+  project_id = "ab7632ac-bf7c-424c-8adc-b58c933e2a69"
+  page_size  = 3866209382127266487
+  filter     = "9690f837-4155-4fd6-87fd-eb342cdc32fd"
+  # Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
 }
 
 output "data-catalog" {
@@ -28,10 +31,19 @@ output "data-catalog" {
 
 - `filter` (String) Фильтр для фильтриции списка кластеров. Фильтрацию можно произвести по полю [Catalog.name]. Пример: name=trinocatalog1
 - `page_size` (Number) Максимальное количество результатов на странице ответа. Если значение больше [page_size], сервис возвращает [next_page_token], который используется в [ListCatalogsResponse]. Значение [page_size] по умолчанию 1000.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `catalogs` (Attributes List) Список каталогов Trino. (see [below for nested schema](#nestedatt--catalogs))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--catalogs"></a>
 ### Nested Schema for `catalogs`

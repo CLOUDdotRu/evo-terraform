@@ -1,4 +1,3 @@
-
 # cloudru_evolution_postgresql_cluster (Resource)
 
 
@@ -7,9 +6,13 @@
 
 ```terraform
 resource "cloudru_evolution_postgresql_cluster" "resource_cluster" {
-  name             = "awesome-postgres-cluster"
-  description      = "Production PostgreSQL cluster"
-  project_id       = "00000000-0000-0000-0000-000000000000"
+  # Поле name является неизменяемым. При изменении значения ресурс будет пересоздан.
+  name = "awesome-postgres-cluster"
+  # Поле description является неизменяемым. При изменении значения ресурс будет пересоздан.
+  description = "Production PostgreSQL cluster"
+  # Поле project_id является неизменяемым. При изменении значения ресурс будет пересоздан.
+  project_id = "00000000-0000-0000-0000-000000000000"
+  # Поле version является неизменяемым. При изменении значения ресурс будет пересоздан.
   version          = 17
   instances        = 2
   subnet_ids       = ["00000000-0000-0000-0000-000000000000", "11111111-1111-1111-1111-111111111111"]
@@ -29,6 +32,7 @@ resource "cloudru_evolution_postgresql_cluster" "resource_cluster" {
     schedule              = "0 3 * * 0"
     retention_policy_days = 14
   }
+  # Поле logging является неизменяемым. При изменении значения ресурс будет пересоздан.
   logging = {
     enabled      = true
     log_group_id = "00000000-0000-0000-0000-000000000000"
@@ -40,6 +44,17 @@ resource "cloudru_evolution_postgresql_cluster" "resource_cluster" {
     cluster_id = "00000000-0000-0000-0000-000000000000"
     pitr       = "Thu, 01 Jan 2026 12:00:00 UTC"
     backup_id  = "00000000-0000-0000-0000-000000000000"
+  }
+  # Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  # Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  # Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
   }
 }
 ```
@@ -65,11 +80,12 @@ resource "cloudru_evolution_postgresql_cluster" "resource_cluster" {
 - `instances` (Number) Количество узлов кластера. Допустимые значения зависят от режима развертывания кластера: 1-2 узла для `standard`, 1-3 узла для `business`. Если в `subnet_ids` указано несколько подсетей, кластер считается мультизональным, и количество узлов должно совпадать с количеством подсетей.
 - `logging` (Attributes) Параметры интеграции с сервисом Клиентского логирования. (see [below for nested schema](#nestedatt--logging))
 - `pooler_config` (Attributes) Конфигурация пулера соединений PgBouncer. (see [below for nested schema](#nestedatt--pooler_config))
-- `primary_standby_mode` (Boolean) Устарело. Используйте поле `instances`.
+- `primary_standby_mode` (Boolean, Deprecated) Устарело. Используйте поле `instances`.
 - `recovery_spec` (Attributes) Параметры восстановления кластера. (see [below for nested schema](#nestedatt--recovery_spec))
-- `subnet_id` (String) Устарело. Используйте поле `subnet_ids`.
+- `subnet_id` (String, Deprecated) Устарело. Используйте поле `subnet_ids`.
 - `subnet_ids` (List of String) Идентификаторы подсетей. Подсети определяют зоны доступности кластера. Если указано несколько подсетей, кластер считается мультизональным. Мультизональный режим доступен только для кластеров типа `business`. В этом случае количество подсетей должно совпадать с количеством узлов `instances`, а каждая подсеть должна находиться в отдельной зоне доступности. Список подсетей и их описание можно получить через API сервиса виртуальных машин в разделе [Subnets](https://cloud.ru/docs/virtual-machines/ug/topics/api-ref-v3#tag/Subnets).
-- `sync_replication_enabled` (Boolean) Не имеет эффекта.
+- `sync_replication_enabled` (Boolean, Deprecated) Не имеет эффекта.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
@@ -131,3 +147,13 @@ Optional:
 
 - `backup_id` (String) BackupID — идентификатор резервной копии, из которой необходимо восстановить кластер.
 - `pitr` (String) PITR — восстановление на момент времени (point-in-time-recovery). Введите время восстановления в формате временной метки.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).

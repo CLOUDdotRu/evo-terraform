@@ -1,4 +1,3 @@
-
 # cloudru_evolution_trino_version_collection (Data Source)
 
 
@@ -7,7 +6,11 @@
 
 ```terraform
 data "cloudru_evolution_trino_version_collection" "datasource_version" {
-  project_id = "f9329eae-cf55-4414-b9ab-77f4ab973177"
+  project_id = "ddd97ff1-8b4c-44f4-8290-0063b645d7f1"
+  # Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
 }
 
 output "data-version" {
@@ -22,9 +25,21 @@ output "data-version" {
 
 - `project_id` (String) Идентификатор проекта.
 
+### Optional
+
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
+
 ### Read-Only
 
 - `trino_versions` (Attributes List) Список версий Trino. (see [below for nested schema](#nestedatt--trino_versions))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--trino_versions"></a>
 ### Nested Schema for `trino_versions`

@@ -1,4 +1,3 @@
-
 # cloudru_evolution_postgresql_cluster_collection (Data Source)
 
 
@@ -7,10 +6,13 @@
 
 ```terraform
 data "cloudru_evolution_postgresql_cluster_collection" "datasource_cluster" {
-  project_id = "00000000-0000-0000-0000-000000000000"
-  page_size  = 100
-  # Нужно заполнить одно из значений - product_type
+  project_id   = "00000000-0000-0000-0000-000000000000"
+  page_size    = 100
   product_type = "postgres"
+  # Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
 }
 
 output "data-cluster" {
@@ -29,10 +31,19 @@ output "data-cluster" {
 
 - `page_size` (Number) Максимальное количество результатов на странице ответа. Значение по умолчанию — 100. Максимальное значение — 1000.
 - `product_type` (String) Название продукта. По умолчанию `postgres`.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `clusters` (Attributes List) Список кластеров в указанном проекте. (see [below for nested schema](#nestedatt--clusters))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--clusters"></a>
 ### Nested Schema for `clusters`
@@ -54,9 +65,9 @@ Read-Only:
 - `specification_id` (String) Идентификатор спецификации кластера. Ресурсы кластера типа `standard` нельзя изменить после создания.
 - `status` (String) Статус кластера.
 - `storage` (Attributes) Размеры дисков кластера. (see [below for nested schema](#nestedatt--clusters--storage))
-- `subnet_id` (String) Устарело. Используйте поле `subnet_ids`.
+- `subnet_id` (String, Deprecated) Устарело. Используйте поле `subnet_ids`.
 - `subnet_ids` (List of String) Идентификаторы подсетей. Подсети определяют зоны доступности кластера. Если указано несколько подсетей, кластер считается мультизональным. Мультизональный режим доступен только для кластеров типа `business`. В этом случае количество подсетей должно совпадать с количеством узлов `instances`, а каждая подсеть должна находиться в отдельной зоне доступности. Список подсетей и их описание можно получить через API сервиса виртуальных машин в разделе [Subnets](https://cloud.ru/docs/virtual-machines/ug/topics/api-ref-v3#tag/Subnets).
-- `sync_replication_enabled` (Boolean) Не имеет эффекта.
+- `sync_replication_enabled` (Boolean, Deprecated) Не имеет эффекта.
 - `version` (String) Версия продукта.
 
 <a id="nestedatt--clusters--backup"></a>
@@ -93,4 +104,4 @@ Read-Only:
 Read-Only:
 
 - `pg_data_gb` (Number) Размер основного диска с данными в гигабайтах.
-- `pg_wal_gb` (Number) Размер диска с WAL-журналом предзаписи в гигабайтах. При указании WAL-журнал будет размещен на отдельном диске. Размер должен составлять не менее 20% от основного диска. Значение является опциональным.
+- `pg_wal_gb` (Number) Размер диска с WAL-журналом предзаписи в гигабайтах. При указании WAL-журнал будет размещен на отдельном диске. Размер должен составлять не менее 20% от основного диска. Значение является опциональным. Кластер типа Standart не поддерживает этот параметр.

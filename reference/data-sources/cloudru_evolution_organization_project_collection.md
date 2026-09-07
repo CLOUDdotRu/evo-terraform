@@ -1,4 +1,3 @@
-
 # cloudru_evolution_organization_project_collection (Data Source)
 
 
@@ -9,11 +8,15 @@
 data "cloudru_evolution_organization_project_collection" "datasource_project" {
   # Варианты значений параметра status:
   # PROJECT_STATUS_ENABLED, PROJECT_STATUS_DISABLED, PROJECT_STATUS_TERMINATING, PROJECT_STATUS_TERMINATED
-  status                = "PROJECT_STATUS_TERMINATING"
-  project_ids           = ["a893261b-5de3-4e75-9290-b46c416dc631", "afcde426-d40c-43ff-a639-592d6ac72f71", "00dd4461-b1e3-4301-abfb-0209e55832a1", "d6849210-60ce-4705-b095-38239520ea02", "e221b27b-708c-4e72-8853-d98c27258a0c", "5c02b090-b33a-4c8d-b891-f2ddf03275d1", "8bbc11bc-aeb6-45ee-add6-04f9c83d5aa9", "59fd4819-b213-4131-81df-0ee9b5f21adc", "8bda6555-cb65-473e-8ee7-1be9e0b2e8a9", "25d128d8-ce83-4857-919e-0a3540cc1f07"]
-  customer_ids          = ["e297d08f-0098-485c-9da7-060880922557", "91b7e13e-9533-4648-b364-ee64ec0d5511", "788997fd-b548-4b06-a725-ccc739ac553b", "6b9d0a2c-62e9-4e59-9821-5aceb5c18a5b", "78717b7e-2ee3-4313-b29c-3c1cbf08687a", "fe6e0b8b-9499-458a-a725-c9ce54c913d0", "d18cd66f-0c6a-42a1-916e-d2c2b650ab86", "515c1d8d-511d-40a0-9358-b5ec6945e458", "c2354a40-85bc-4fe6-b4d7-109b6d728274", "b36d4238-89be-40f7-aac2-189cdde77938"]
-  organization_unit_ids = ["19b0ffbb-1015-4ba9-945a-2a4026e76360", "df0a82db-4de5-4824-a96b-bfd13caa0a4a", "9cb0e97c-17d3-4c0d-9e80-b2f0f4dfd670", "d2821d89-a908-472b-b244-4bc3f52c2137", "436218cc-4437-4bbe-b618-527e2ac4ef3e", "550a4ffc-53a7-4da1-86c3-c1c68d874f0e", "4f18c20d-9ee0-4dcf-9f46-abf94ec6909e", "099866cc-c898-4a36-badf-0b227fa0434d", "369475a0-84ec-42b4-9539-2f4f689e5327", "d2b7ea64-fc15-4a95-a90c-327c475a49e1"]
-  page_size             = 1645426675907231638
+  status                = "PROJECT_STATUS_DISABLED"
+  project_ids           = ["5ee0d456-2d24-4152-8802-c171cbad5976", "0a99d1c2-edd5-4e2e-a343-9c520c5f60b6", "46b8b73f-865b-49bb-9901-5e194b03ca53", "d4cdfd1e-3f3e-41e7-9d2e-48fe51024e31", "7f125790-7bc0-45bf-909f-ba8341ae009e", "763bbdc3-b282-4768-8dac-bc2583e7d7af", "d615fe89-5ac2-4876-aad8-0a5bbef314b7", "ec769f9b-6116-46a1-b7b9-d86caa568342", "4f70e9ed-dec3-4b78-bc8a-e93582514893", "06ba0508-33b2-42e8-a9fb-831094da8027"]
+  customer_ids          = ["8eb8ae66-29af-4d94-a232-6f0feee3ebc2", "048783a6-b925-4c4a-bab6-2a1e24716ee0", "97edfca6-722e-4c68-852c-755f3126f185", "ebb207e2-db90-48f7-abde-db88d5606ed5", "67ceb5b6-46e4-4dda-8d3b-bddc8b88c024", "e435a424-9bf4-423e-9366-6c5e27908203", "3af48af2-209f-4f78-915a-958acff9ce85", "80f45395-7c45-4f0c-a44f-a8a811d85705", "3d54c91f-1355-4e60-a359-8b65ebbc9fcd", "33d78fd5-b247-4154-a4c5-f4590cc362f9"]
+  organization_unit_ids = ["3ea3f18d-3ea5-4b91-b8ca-f8268ca0b343", "a364ecf4-f558-4cda-8995-390fded9b940", "373cc61f-e4d0-4392-9dce-e9ae0d272ff9", "3ef8b83c-7438-47cc-a5ce-801972a6a9a4", "9b7f7dad-57e5-4c39-a42f-aa669c269044", "7cddf02b-369a-46c6-9a3c-c536bb6effef", "3d1cc46e-989e-40ae-9f0e-fb76aa545768", "b37981fb-edaa-49a1-be74-297c1928e3a6", "10c3c00c-c9f9-4c2d-9f20-0033ce795283", "c19804f0-576e-4a20-ba05-cb4edf9c8e51"]
+  page_size             = 5937270992764158408
+  # Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
 }
 
 output "data-project" {
@@ -31,10 +34,19 @@ output "data-project" {
 - `page_size` (Number) Максимальное количество результатов на странице ответа.
 - `project_ids` (List of String) Фильтр по списку проектов.
 - `status` (String) Фильтр по статусу проекта.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `projects` (Attributes List) Список проектов. (see [below for nested schema](#nestedatt--projects))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--projects"></a>
 ### Nested Schema for `projects`

@@ -19,3 +19,41 @@ resource "cloudru_evolution_baremetal_attach_subnet" "demo_attach" {
 ### Read-Only
 
 - `subnet_ids` (List of String) Список идентификаторов подсетей.
+
+## 0) Как импортировать ресурс подсетей
+
+terraform import cloudru_evolution_baremetal_attach_subnet.demo_attach <reserved_server_id>
+
+Таким образом в state запишется список идентификаторов подсетей, подключенных к серверу.
+
+## 1) Подключение подсети
+
+```tf
+resource "cloudru_evolution_baremetal_attach_subnet" "demo_attach" {
+        id = "00000000-0000-0000-0000-000000000000"
+        reserved_server_id = "00000000-0000-0000-0000-000000000000"
+}
+```
+
+Нужно выполнить terraform apply и подсеть будет подключена.
+
+## 2) Отключение подсети
+
+Нужно выполнить
+
+```bash
+terraform destroy
+```
+
+3) ## Обновление подсети
+
+Пока не поддерживается. Текущая реализация api не позволяет выполнить отключение одной подсети и подключения вместо нее другой.
+
+Нужно выполнить
+
+```bash
+# Для отключения текущей подсети (указанной в поле id)
+terraform destory
+# После этого меняем id на нужный и выполняем команду
+terraform apply
+```

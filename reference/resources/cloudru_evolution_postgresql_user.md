@@ -1,4 +1,3 @@
-
 # cloudru_evolution_postgresql_user (Resource)
 
 
@@ -7,9 +6,23 @@
 
 ```terraform
 resource "cloudru_evolution_postgresql_user" "resource_user" {
-  name       = "username"
+  name = "username"
+  granted_roles = [{
+    name = "pg_read_all_data"
+  }]
   cluster_id = "00000000-0000-0000-0000-000000000000"
   password   = "SecurePass123!"
+  # Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  # Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  # Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -22,9 +35,13 @@ resource "cloudru_evolution_postgresql_user" "resource_user" {
 - `name` (String) Имя пользователя.
 - `password` (String) Пароль.
 
-### Read-Only
+### Optional
 
 - `granted_roles` (Attributes List) Назначенные роли. (see [below for nested schema](#nestedatt--granted_roles))
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
+
+### Read-Only
+
 - `supported_roles` (Attributes List) Доступные роли. (see [below for nested schema](#nestedatt--supported_roles))
 
 <a id="nestedatt--granted_roles"></a>
@@ -33,6 +50,16 @@ resource "cloudru_evolution_postgresql_user" "resource_user" {
 Optional:
 
 - `name` (String) Название роли.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
 
 
 <a id="nestedatt--supported_roles"></a>

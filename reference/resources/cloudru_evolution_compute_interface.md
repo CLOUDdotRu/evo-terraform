@@ -6,50 +6,56 @@
 
 ```terraform
 resource "cloudru_evolution_compute_interface" "resource_interface" {
-  project_id = "1000b928-fee9-4c82-bb0f-2cadd50b0e92"
+  # Поле project_id является неизменяемым. При изменении значения ресурс будет пересоздан.
+  project_id = "3832ed54-fb89-457b-aadd-10769945ef27"
   zone = {
     # Нужно заполнить одно из значений - id, name.
-    id   = "9c995816-ffdc-412e-a4b8-a523b797c282"
-    name = "0042a9da-e837-4d8c-bd8e-18bf89368edc"
+    id   = "d8dab8d8-ed19-4d08-aa62-e8ca98ef0b8a"
+    name = "3c5e45bc-7df8-4839-8701-28c04b6a3411"
   }
-  name                       = "4bcc9ac8-442f-4a8f-8334-5ca0c085d33f"
-  description                = "cbdfaa92-760c-41a6-9e8e-8893253f1365"
-  ip_address                 = "0837d8b3-bc78-4bf0-b505-72a264eccbeb"
-  interface_security_enabled = false
+  # Поле name является неизменяемым. При изменении значения ресурс будет пересоздан.
+  name        = "23693a38-b4ef-4237-a6ff-556ee21afc4e"
+  description = "44d254ef-16ff-4a4c-85ed-a539e6bc2a04"
+  # Поле ip_address является неизменяемым. При изменении значения ресурс будет пересоздан.
+  ip_address                 = "dd7a38ce-1439-463b-ad24-4876d47cf28c"
+  interface_security_enabled = true
   # Нужно заполнить одно из значений - new_external_ip, attach_external_ip
   attach_external_ip = {
     # Нужно заполнить одно из значений - id, name.
-    id   = "aa5b6870-2a20-488c-a9ee-8eecda034ccb"
-    name = "fdb059f0-4236-440f-b66b-fc87a159ab53"
+    id   = "3cb2cd87-ba7c-4372-a7e0-3020ac0d40c4"
+    name = "136452b8-4982-4041-931e-604d08f1e87b"
   }
   allowed_address_pairs = {
     value = [{
-      ip_address  = "00f843aa-8d69-4a02-a37b-dd3e26d7d080"
-      mac_address = "5e3c6420-fe96-4603-844a-db1fe9772aaf"
+      ip_address  = "0b527e39-81d0-4a87-80e1-925d1d4ec617"
+      mac_address = "640d0254-c2b6-4ee8-acee-00909befcb05"
     }]
   }
+  # Поле type является неизменяемым. При изменении значения ресурс будет пересоздан.
   # Варианты значений параметра type:
   # INTERFACE_TYPE_REGULAR, INTERFACE_TYPE_SYSTEM, INTERFACE_TYPE_SERVICE, INTERFACE_TYPE_GATEWAY, INTERFACE_TYPE_FIP, INTERFACE_TYPE_DIRECT_IP, INTERFACE_TYPE_VIP
   type = "INTERFACE_TYPE_GATEWAY"
   vm = {
-    id = "de0b6417-500b-4742-b1f2-7b3499426356"
+    # Поле id является неизменяемым. При изменении значения ресурс будет пересоздан.
+    id = "68c2320f-c94f-4778-9fd4-e129aa78d2ee"
   }
   subnet = {
-    id = "1ba4e613-5fda-40d6-a239-8fe7289d496a"
+    # Поле id является неизменяемым. При изменении значения ресурс будет пересоздан.
+    id = "2dc90bff-dec0-4bdc-8e44-20c079249538"
   }
   security_groups = [{
     # Нужно заполнить одно из значений - id, name.
-    id   = "c9de45b9-434b-4d59-b593-3e5b93bc70b6"
-    name = "a276f000-5554-46d3-8fc5-56f4287db4ba"
+    id   = "871940c4-00c1-467d-9c46-2ad4cdd39ee8"
+    name = "caac4476-03b1-4494-b8a2-8cf4fedac913"
   }]
-  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  # Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
   timeouts {
     create = "60m"
     update = "30m"
     delete = "20m"
   }
-  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
-  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  # Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  # Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
   lifecycle {
     ignore_changes = [timeouts]
   }

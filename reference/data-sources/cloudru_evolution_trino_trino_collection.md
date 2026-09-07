@@ -1,4 +1,3 @@
-
 # cloudru_evolution_trino_trino_collection (Data Source)
 
 
@@ -7,9 +6,13 @@
 
 ```terraform
 data "cloudru_evolution_trino_trino_collection" "datasource_trino" {
-  project_id = "c6a340ce-6aef-4a70-a684-1542fc57d191"
-  page_size  = 8840814003360746337
-  filter     = "07e06483-f01f-4792-af71-bb00d2e80a9b"
+  project_id = "01561527-7270-408e-8f35-9e5e2d882c51"
+  page_size  = 7505228429724666631
+  filter     = "fc3b6d27-2480-456c-be6a-1d101982c40c"
+  # Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
 }
 
 output "data-trino" {
@@ -28,10 +31,19 @@ output "data-trino" {
 
 - `filter` (String) Фильтр для фильтриции списка кластеров. Фильтрацию можно произвести по полю [Trino.name,Trino.cluster_id]. Пример: cluster_id=20354d7a-e4fe-47af-8ff6-187bca92f3f9
 - `page_size` (Number) Максимальное количество результатов на странице ответа. Если значение больше [page_size], сервис возвращает [next_page_token], который используется в [ListTrinosResponse]. Значение [page_size] по умолчанию 1000.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `trinos` (Attributes List) Список инстансов Trino. (see [below for nested schema](#nestedatt--trinos))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--trinos"></a>
 ### Nested Schema for `trinos`

@@ -1,4 +1,3 @@
-
 # cloudru_evolution_metastore_metastore (Resource)
 
 
@@ -7,19 +6,24 @@
 
 ```terraform
 resource "cloudru_evolution_metastore_metastore" "resource_metastore" {
-  cluster_id  = "8fcc33c4-4580-4146-9b7f-e58943de078e"
+  # Поле cluster_id является неизменяемым. При изменении значения ресурс будет пересоздан.
+  cluster_id = "8fcc33c4-4580-4146-9b7f-e58943de078e"
+  # Поле project_id является неизменяемым. При изменении значения ресурс будет пересоздан.
   project_id  = "8fcc33c4-4580-4146-9b7f-e58943de078e"
   name        = "my-metastore"
   description = "Metastore description"
+  # Поле network_configuration является неизменяемым. При изменении значения ресурс будет пересоздан.
   network_configuration = {
     subnet_id = "8fcc33c4-4580-4146-9b7f-e58943de078e"
     zone_id   = "8fcc33c4-4580-4146-9b7f-e58943de078e"
   }
   compute_configuration = {
+    # Поле flavor_id является неизменяемым. При изменении значения ресурс будет пересоздан.
     flavor_id = "8fcc33c4-4580-4146-9b7f-e58943de078e"
     min_nodes = 1
     max_nodes = 3
   }
+  # Поле log_group_id является неизменяемым. При изменении значения ресурс будет пересоздан.
   log_group_id = "8fcc33c4-4580-4146-9b7f-e58943de078e"
   # Нужно заполнить одно из значений - fs_internal_s_3, fs_external_s_3
   fs_internal_s3 = {
@@ -28,7 +32,19 @@ resource "cloudru_evolution_metastore_metastore" "resource_metastore" {
     bucket_dir = "/"
     s3_region  = "ru-central-1"
   }
+  # Поле version_id является неизменяемым. При изменении значения ресурс будет пересоздан.
   version_id = "8fcc33c4-4580-4146-9b7f-e58943de078e"
+  # Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  # Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  # Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
+  }
 }
 ```
 
@@ -49,6 +65,7 @@ resource "cloudru_evolution_metastore_metastore" "resource_metastore" {
 - `description` (String) Описание Metastore.
 - `fs_external_s3` (Attributes) Параметры файловой системы. Внешний пользователький s3. (see [below for nested schema](#nestedatt--fs_external_s3))
 - `fs_internal_s3` (Attributes) Параметры файловой системы. Внутреннее объектное хранилище s3. (see [below for nested schema](#nestedatt--fs_internal_s3))
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 - `version_id` (String) Идентификатор версии Metastore.
 
 ### Read-Only
@@ -108,6 +125,16 @@ Required:
 Optional:
 
 - `s3_region` (String) S3 регион.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
 
 
 <a id="nestedatt--version"></a>

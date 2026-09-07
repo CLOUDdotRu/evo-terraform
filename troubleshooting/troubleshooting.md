@@ -66,7 +66,7 @@ The host "registry.terraform.io" given in provider source address "registry.terr
 terraform {
   required_providers {
     cloudru = {
-      source = "cloud-ru/cloudru"
+      source = "cloudru/cloud"
       version = ">= 1.0.0"
     }
   }
@@ -83,7 +83,7 @@ provider "cloudru" {
 
 ```
 Error: Failed to query available provider packages
-Could not retrieve the list of available versions for provider cloud-ru/cloudru:
+Could not retrieve the list of available versions for provider cloudru/cloud:
 could not connect to registry.terraform.io: dial tcp: i/o timeout
 ```
 
@@ -304,7 +304,7 @@ terraform plan
 ## Дополнительная информация
 
 - [Документация Terraform Provider для Cloud.ru](https://cloud.ru/docs/terraform-evolution/ug/index?source-platform=Evolution)
-- [Примеры конфигураций](https://cloud.ru/docs/terraform-evolution/ug/topics/reference?source-platform=Evolution)
+- [Примеры ресурсов и датасорсов](https://cloud.ru/docs/terraform-evolution/ug/topics/reference?source-platform=Evolution)
 - [Репозиторий провайдера на GitHub](https://github.com/cloud-ru/evo-terraform)
 
 Если проблема не решается с помощью этого руководства, обратитесь [в техническую поддержку Cloud.ru](https://cloud.ru/docs/overview/support/index), предоставив:

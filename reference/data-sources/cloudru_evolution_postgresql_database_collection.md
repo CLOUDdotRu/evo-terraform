@@ -1,4 +1,3 @@
-
 # cloudru_evolution_postgresql_database_collection (Data Source)
 
 
@@ -8,6 +7,10 @@
 ```terraform
 data "cloudru_evolution_postgresql_database_collection" "datasource_database" {
   cluster_id = "00000000-0000-0000-0000-000000000000"
+  # Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
 }
 
 output "data-database" {
@@ -22,9 +25,21 @@ output "data-database" {
 
 - `cluster_id` (String) Идентификатор кластера.
 
+### Optional
+
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
+
 ### Read-Only
 
 - `databases` (Attributes List) Список баз данных продукта. (see [below for nested schema](#nestedatt--databases))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--databases"></a>
 ### Nested Schema for `databases`

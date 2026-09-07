@@ -6,7 +6,7 @@
 
 ```terraform
 resource "cloudru_evolution_compute_security_group_rule" "resource_security_group_rule" {
-  description = "bea325fd-8e94-4e05-9198-3b725e491736"
+  description = "e712e5b6-1eb3-4fd2-acbd-4a0bf650f5e1"
   # Варианты значений параметра direction:
   # TRAFFIC_DIRECTION_INGRESS, TRAFFIC_DIRECTION_EGRESS
   direction = "TRAFFIC_DIRECTION_EGRESS"
@@ -15,24 +15,23 @@ resource "cloudru_evolution_compute_security_group_rule" "resource_security_grou
   ether_type = "ETHER_TYPE_IPV4"
   # Варианты значений параметра ip_protocol:
   # IP_PROTOCOL_TCP, IP_PROTOCOL_UDP, IP_PROTOCOL_ICMP, IP_PROTOCOL_ANY
-  ip_protocol      = "IP_PROTOCOL_UDP"
-  port_range       = "ddb92cc0-2e2b-4563-95d9-fb90d40cecbb"
-  remote_ip_prefix = "06d0fc4b-1489-42ea-996d-12e581aafdb7"
-  # Нужно заполнить одно из значений - remote_security_group
+  ip_protocol      = "IP_PROTOCOL_ANY"
+  port_range       = "de665cdd-8d27-47e0-a86c-102bb2782ad7"
+  remote_ip_prefix = "6ae88d9f-8b48-4294-a44e-19e26a34efee"
   remote_security_group = {
     # Нужно заполнить одно из значений - id, name.
-    id   = "0d0f884c-4b76-413d-bf33-5832ac91bc0d"
-    name = "9cefb7ab-317c-43e2-af13-547d7bd9587a"
+    id   = "b02ffd98-3ffc-48d4-8bb5-cc763aa87c1c"
+    name = "38c3cc1d-50c6-4067-bbdf-670305650efc"
   }
-  security_group_id = "06059bf0-9d71-4e50-b81c-735b0f6cb31a"
-  // Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  security_group_id = "ac3aee1e-7175-4bb6-9923-a0b3c7e9a526"
+  # Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
   timeouts {
     create = "60m"
     update = "30m"
     delete = "20m"
   }
-  // Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
-  // Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  # Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  # Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
   lifecycle {
     ignore_changes = [timeouts]
   }

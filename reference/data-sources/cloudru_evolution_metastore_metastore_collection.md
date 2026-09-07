@@ -1,4 +1,3 @@
-
 # cloudru_evolution_metastore_metastore_collection (Data Source)
 
 
@@ -11,6 +10,10 @@ data "cloudru_evolution_metastore_metastore_collection" "datasource_metastore" {
   project_id = "8fcc33c4-4580-4146-9b7f-e58943de078e"
   page_size  = 100
   filter     = "name=metastore123,project_id=26d37ffe-1077-4f4f-bd77-de538276b29a"
+  # Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    read = "10m"
+  }
 }
 
 output "data-metastore" {
@@ -30,10 +33,19 @@ output "data-metastore" {
 
 - `filter` (String) Фильтр для фильтрации списка метасторов. Фильтрацию можно произвести по полям [Metastore.name], [Metastore.project_id].
 - `page_size` (Number) Максимальное количество результатов на странице ответа. Если значение больше [page_size], сервис возвращает [next_page_token], который используется в [ListMetastoreResponse]. Значение [page_size] по умолчанию 1000.
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
 - `metastores` (Attributes List) Список метасторов. (see [below for nested schema](#nestedatt--metastores))
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `read` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+
 
 <a id="nestedatt--metastores"></a>
 ### Nested Schema for `metastores`

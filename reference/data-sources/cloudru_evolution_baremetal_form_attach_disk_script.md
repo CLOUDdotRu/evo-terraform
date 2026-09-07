@@ -23,3 +23,19 @@ output "demo-attach_script" {
 
 - `attach_script` (String) Скрипт для подключения дисков к арендованному серверу.
 - `expired_at` (String) Срок действия скрипта.
+
+## Получение скрипта для подключения дисков на сервере
+
+После выполнения команды подключения в ресурсе cloudru_evolution_baremetal_attach_disk, нужно с помощью датасорс получить скрипт для подключения диска на сервере.
+
+```tf
+data "cloudru_evolution_baremetal_form_attach_disk_script" "demo_attach_script" {
+    reserved_server_id = "00000000-0000-0000-0000-000000000000"
+}
+
+output "demo-attach_script" {
+    value = data.cloudru_evolution_baremetal_form_attach_disk_script.demo_attach_script.attach_script
+}
+```
+
+Подробнее в документации от команды baremetal: https://cloud.ru/docs/bare-metal-evolution/ug/topics/guides__ssh-connection?source-platform=Evolution

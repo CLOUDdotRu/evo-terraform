@@ -1,4 +1,3 @@
-
 # cloudru_evolution_trino_catalog (Resource)
 
 
@@ -7,18 +6,30 @@
 
 ```terraform
 resource "cloudru_evolution_trino_catalog" "resource_catalog" {
-  project_id  = "bc50ddca-2d30-4194-9448-4ec6587797a9"
-  name        = "e1c379f6-dbbb-42f9-b246-79becd579357"
-  description = "c3e94146-45dd-4fdd-8071-ae57a6a48bed"
+  # Поле project_id является неизменяемым. При изменении значения ресурс будет пересоздан.
+  project_id  = "ed3db96a-0afb-4a9f-9416-b9ef44c330fb"
+  name        = "bf7a4428-1d9e-48a3-954d-abae03fa2613"
+  description = "0397be23-5e10-4c84-a338-00ece96df9fc"
   # Нужно заполнить одно из значений - postgresql, mysql, oracle, mariadb, mssql, clickhouse, mongodb, metastore, iceberg, connection_hub, kafka
   postgresql = {
-    host               = "6dec43d9-8127-4297-ace3-adebdc7d8e9a"
-    port               = 1934969966
-    user               = "4f99ea97-ee36-469b-889f-8a24ae9de041"
-    password_secret_id = "c3134701-5b5f-470d-898b-b79d82d28141"
-    database           = "fc01f66b-6ed1-4287-90fd-9ac2736e30d6"
+    host               = "09c1d586-18a0-4df1-b367-f44c012773fc"
+    port               = 1386331128
+    user               = "08d53a66-16f0-4d34-9814-9912b5a6cf70"
+    password_secret_id = "de5a53cc-55cc-4e57-ac6a-a2affcfb7efb"
+    database           = "71254ff9-a30e-41f2-9d6b-ccb63c5b4394"
     extra_properties = {
-    "5938e5a2-f57a-4de3-a8d4-5e7d54a284d3" = "75b43cb0-5277-4501-8b83-5bcd0c04d17f" }
+    "3710df65-f678-4476-95b0-572c7bd5cd2d" = "514bef2f-a8bf-4171-91d3-72b7f3d288fa" }
+  }
+  # Позволяет переопределить дефолтный таймаут провайдера для определенного метода. Если нужно указать бесконечный таймаут, то нужно указать например 0s, тогда таймаута не будет.
+  timeouts {
+    create = "60m"
+    update = "30m"
+    delete = "20m"
+  }
+  # Игнорировать изменения таймаутов: это предотвращает  лишние обновления ресурса при смене значений таймаутов в конфигурации
+  # Но следует учитывать, что метод delete в ресурсе читает значение таймаута из стейта и, если его нужно изменить, то этот блок стоит закомментировать
+  lifecycle {
+    ignore_changes = [timeouts]
   }
 }
 ```
@@ -45,6 +56,7 @@ resource "cloudru_evolution_trino_catalog" "resource_catalog" {
 - `mysql` (Attributes) Конфигурация для MySQL. (see [below for nested schema](#nestedatt--mysql))
 - `oracle` (Attributes) Конфигурация для Oracle. (see [below for nested schema](#nestedatt--oracle))
 - `postgresql` (Attributes) Конфигурация для PostgreSQL. (see [below for nested schema](#nestedatt--postgresql))
+- `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
 
 ### Read-Only
 
@@ -382,3 +394,13 @@ Required:
 Optional:
 
 - `extra_properties` (Map of String) Дополнительные свойства коннектора.
+
+
+<a id="nestedblock--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+- `create` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
+- `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
+- `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
