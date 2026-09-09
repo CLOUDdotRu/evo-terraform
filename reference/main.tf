@@ -1,6 +1,9 @@
 terraform {
   required_providers {
     cloudru = {
+      # NOTE: Это обязательные параметр
+      # Если вы используете dev_overrides в .terraformc, то полное имя
+      # провайдера будет cloud.ru/cloudru/cloud
       source  = "cloudru/cloud"
       version = "2.1.3"
     }
